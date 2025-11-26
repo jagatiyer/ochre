@@ -1955,6 +1955,12 @@ ul li a.active{
     border-radius: 8px;
     padding: 12px 15px;
     margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .contact-card h4{
@@ -1962,7 +1968,7 @@ ul li a.active{
     font-size: 16px;
     font-weight: 300;
     color: #fff;
-    margin-bottom: 8px;
+    margin-bottom: 0;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1979,17 +1985,18 @@ ul li a.active{
     margin: 0;
     display: flex;
     flex-direction: column;
-    padding-left: 0;
+    padding-left: 25px;
+    width: 100%;
 }
 
 .contact-benefits li{
     font-family: 'Satoshi', sans-serif;
     font-size: 13px;
-    line-height: 1.4;
+    line-height: 1.6;
     color: #9ca3af;
-    padding-left: 0;
+    padding-left: 25px;
     position: relative;
-    margin-bottom: 0;
+    margin-bottom: 6px;
     display: block;
     width: 100%;
 }
