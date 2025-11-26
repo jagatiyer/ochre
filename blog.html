@@ -17,7 +17,12 @@
             <div class="icon">
                 <a href="index.html"><h2 class="logo">OCH<span class="highlight-r">R</span>E</h2></a>
             </div>
-            <div class="menu">
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="menu" id="menu">
                 <ul>
                     <li><a href="index.html">HOME</a></li>
                     <li><a href="collections.html">COLLECTIONS</a></li>
@@ -95,13 +100,8 @@
 
             <div class="footer-column">
                 <h3 class="footer-heading connect">CONNECT</h3>
-                <div class="footer-social">
-                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
-                </div>
-                <div class="footer-newsletter">
+                <div class="social-connect">
+                    <i class="fa-brands fa-instagram"></i>
                     <p>Follow our journey on social media for exclusive content & updates</p>
                 </div>
             </div>
@@ -123,5 +123,14 @@
             <p class="disclaimer"><span class="dot">•</span>Drink Responsibly. Must be 21+</p>
         </div>
     </footer>
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+        
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            menu.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>

@@ -128,6 +128,39 @@ ul li a.active{
     color: #ff7200;
 }
 
+/* Hamburger Menu */
+.hamburger{
+    display: none;
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001;
+    position: relative;
+}
+
+.hamburger span{
+    width: 25px;
+    height: 3px;
+    background: #fff;
+    margin: 3px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1){
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger.active span:nth-child(2){
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3){
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
 .search{
     width: 330px;
     float: left;
@@ -195,7 +228,7 @@ ul li a.active{
     font-family: 'Playfair Display', serif;
     font-size: 100px;
     font-weight: 400;
-    margin-top: 9%;
+    margin-top: 15%;
     letter-spacing: 2px;
     color: #fff;
     text-align: center;
@@ -906,6 +939,20 @@ ul li a.active{
     gap: 60px;
 }
 
+@media screen and (min-width: 769px) {
+    .footer-main{
+        grid-template-columns: 2fr 1fr 1fr 1.5fr !important;
+    }
+    
+    .footer-column:first-child{
+        grid-column: auto !important;
+    }
+    
+    .footer-column:last-child{
+        grid-column: auto !important;
+    }
+}
+
 .footer-column{
     display: flex;
     flex-direction: column;
@@ -1105,6 +1152,22 @@ ul li a.active{
     align-items: center;
 }
 
+@media screen and (min-width: 769px) {
+    .footer-bottom{
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        text-align: left !important;
+    }
+    
+    .copyright{
+        text-align: left !important;
+    }
+    
+    .disclaimer{
+        text-align: right !important;
+    }
+}
+
 .disclaimer{
     font-family: 'Satoshi', sans-serif;
     font-size: 14px;
@@ -1213,8 +1276,18 @@ ul li a.active{
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 60px;
-    align-items: center;
+    align-items: start;
     padding-bottom: 80px;
+}
+
+@media screen and (min-width: 769px) {
+    .story-content{
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
+
+.story-text{
+    text-align: left;
 }
 
 .story-text h2{
@@ -1223,6 +1296,7 @@ ul li a.active{
     font-weight: 300;
     color: #fff;
     margin-bottom: 30px;
+    text-align: left !important;
 }
 
 .story-text p{
@@ -1231,6 +1305,7 @@ ul li a.active{
     color: #9ca3af;
     line-height: 1.8;
     margin-bottom: 20px;
+    text-align: left !important;
 }
 
 .story-image{
@@ -1268,6 +1343,12 @@ ul li a.active{
     gap: 40px;
     max-width: 1000px;
     margin: 60px auto 0;
+}
+
+@media screen and (min-width: 769px) {
+    .philosophy-grid{
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
 }
 
 .philosophy-item{
@@ -2202,5 +2283,794 @@ ul li a.active{
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+/* ========================================
+   MOBILE RESPONSIVE STYLES
+   ======================================== */
+
+/* Tablet and below (max-width: 768px) */
+@media screen and (max-width: 768px) {
+    
+    /* Reduce gap between content and footer on homepage */
+    .main{
+        min-height: 95vh;
+    }
+    
+    /* Navbar */
+    .navbar{
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .hamburger{
+        display: flex;
+    }
+    
+    .menu{
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: #1a1d1f;
+        transition: right 0.3s ease;
+        z-index: 1000;
+        padding-top: 80px;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+    }
+    
+    .menu.active{
+        right: 0;
+    }
+    
+    .menu ul{
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 30px;
+    }
+    
+    .menu ul li{
+        margin: 0;
+        margin-bottom: 25px;
+        width: 100%;
+    }
+    
+    .menu ul li a{
+        font-size: 16px;
+    }
+    
+    .nav-shop{
+        width: 100%;
+    }
+    
+    .nav-icons{
+        margin-left: 0;
+        justify-content: flex-start;
+    }
+    
+    /* Homepage */
+    .content{
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+    
+    .content h1{
+        font-size: 60px;
+        text-align: center;
+    }
+    
+    .content h1 .craft-spirits{
+        font-size: 18px;
+    }
+    
+    .content .caption{
+        font-size: 14px;
+        text-align: center;
+    }
+    
+    .content .buttons{
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    .content .cn{
+        width: 220px;
+    }
+    
+    /* Experience Section */
+    .experience-content h2{
+        font-size: 36px;
+    }
+    
+    .experience-subheader{
+        font-size: 14px;
+        max-width: 90%;
+    }
+    
+    /* Collections Page */
+    .collections-page{
+        width: 100%;
+        padding: 0;
+    }
+    
+    .collections-page .navbar{
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+    
+    .collections-header{
+        width: 100%;
+        padding: 60px 20px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    
+    .collections-header .craft-spirits{
+        justify-content: center;
+    }
+    
+    .collections-header h1{
+        font-size: 42px;
+        text-align: center;
+    }
+    
+    .collections-header .description{
+        font-size: 16px;
+        text-align: center;
+        margin: 0 auto;
+    }
+    
+    .products-section{
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+    
+    .product-filters{
+        gap: 20px;
+        justify-content: center;
+    }
+    
+    .filter-btn{
+        font-size: 14px;
+    }
+    
+    .experience-section{
+        width: 100%;
+        padding: 40px 20px 80px;
+        box-sizing: border-box;
+    }
+    
+    /* Media Page */
+    .media-page{
+        width: 100%;
+    }
+    
+    .media-page .navbar{
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+    
+    .media-header{
+        width: 100%;
+        padding: 60px 20px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    
+    .media-header .craft-spirits{
+        justify-content: center;
+    }
+    
+    .media-header h1{
+        font-size: 42px;
+        text-align: center;
+    }
+    
+    .media-header .description{
+        font-size: 16px;
+        text-align: center;
+        margin: 0 auto;
+    }
+    
+    .awards-section,
+    .press-section,
+    .all-press-section,
+    .press-kit-section{
+        width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
+        box-sizing: border-box;
+    }
+    
+    .press-cards{
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .press-title{
+        font-size: 28px;
+        text-align: center;
+    }
+    
+    .all-press-title{
+        font-size: 26px;
+        text-align: center;
+    }
+    
+    .press-kit-title{
+        font-size: 26px;
+    }
+    
+    .press-list-item{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    
+    .press-kit-buttons{
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    .press-kit-buttons .cn{
+        width: 100%;
+        max-width: 280px;
+    }
+        width: 100%;
+    }
+    
+    /* Story Page */
+    .story-page{
+        width: 100%;
+        padding: 0 20px 60px;
+        box-sizing: border-box;
+    }
+    
+    .story-header{
+        width: 100%;
+        padding-top: 40px;
+        text-align: center;
+    }
+    
+    .story-header h1{
+        font-size: 56px;
+        text-align: center;
+    }
+    
+    .story-tagline{
+        text-align: center;
+        margin: 0 auto;
+    }
+    
+    .story-content{
+        grid-template-columns: 1fr;
+        gap: 40px;
+        margin: 60px auto 0;
+        padding: 0;
+    }
+    
+    .story-text{
+        text-align: center;
+    }
+    
+    .story-text h2{
+        font-size: 28px;
+        text-align: center;
+    }
+    
+    .story-text p{
+        text-align: center;
+    }
+    
+    .story-philosophy{
+        width: 100%;
+        padding: 60px 20px;
+        box-sizing: border-box;
+    }
+    
+    .philosophy-grid{
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .story-philosophy h2{
+        font-size: 42px;
+    }
+    
+    .story-journey{
+        width: 100%;
+        padding: 60px 20px 80px;
+        box-sizing: border-box;
+    }
+    
+    .story-journey h2{
+        font-size: 42px;
+    }
+    
+    .timeline{
+        padding: 0 20px;
+    }
+    
+    .timeline-item{
+        grid-template-columns: 60px 20px 1fr;
+        gap: 15px;
+    }
+    
+    .timeline-year{
+        font-size: 20px;
+    }
+    
+    .timeline-content h3{
+        font-size: 22px;
+    }
+    
+    .story-experience{
+        width: 100%;
+        padding: 60px 20px 80px;
+        box-sizing: border-box;
+    }
+    
+    .story-experience h2{
+        font-size: 36px;
+    }
+    
+    .experience-buttons{
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    .experience-buttons .cn{
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    /* Blog Page */
+    .blog-page{
+        width: 100%;
+    }
+    
+    .blog-header{
+        width: 100%;
+        padding: 60px 20px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    
+    .blog-header .blog-stories{
+        justify-content: center;
+    }
+    
+    .blog-header h1{
+        font-size: 42px;
+        text-align: center;
+    }
+    
+    .blog-header .description{
+        font-size: 16px;
+        text-align: center;
+        margin: 0 auto;
+    }
+    
+    .articles-section{
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+    
+    /* Shop Page */
+    .shop-page{
+        width: 100%;
+    }
+    
+    .shop-header{
+        width: 100%;
+        padding: 60px 20px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    
+    .shop-header .craft-spirits{
+        justify-content: center;
+    }
+    
+    .shop-header h1{
+        font-size: 42px;
+        text-align: center;
+    }
+    
+    .shop-header .description{
+        text-align: center;
+        margin: 0 auto;
+    }
+    
+    .complete-collection-content{
+        width: 100%;
+        padding: 60px 20px;
+        box-sizing: border-box;
+    }
+    
+    /* Footer */
+    .footer{
+        width: 100%;
+    }
+    
+    .footer-main{
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        width: 100%;
+        padding: 60px 20px;
+        box-sizing: border-box;
+    }
+    
+    .footer-column:first-child{
+        grid-column: 1 / -1;
+    }
+    
+    .footer-column:last-child{
+        grid-column: 1 / -1;
+    }
+    
+    .footer-column{
+        text-align: center;
+    }
+    
+    .footer-experience{
+        width: 100%;
+        padding: 60px 20px;
+        box-sizing: border-box;
+    }
+    
+    .footer-bottom{
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    
+    .footer-experience-buttons{
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    .footer-experience-buttons .cn{
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .footer-experience-buttons .cn a{
+        justify-content: center;
+    }
+    
+    /* Change social connect text to "Instagram" on tablet */
+    .social-connect p{
+        font-size: 0;
+    }
+    
+    .social-connect p::after{
+        content: "Instagram";
+        font-size: 14px;
+    }
+}
+
+/* Mobile (max-width: 480px) */
+@media screen and (max-width: 480px) {
+    
+    /* Reduce gap between content and footer on homepage */
+    .main{
+        min-height: 85vh;
+    }
+    
+    /* Logo */
+    .logo{
+        font-size: 28px;
+    }
+    
+    /* Homepage */
+    .content{
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+    
+    .content h1{
+        font-size: 48px;
+        text-align: center;
+    }
+    
+    .content h1 .craft-spirits{
+        font-size: 16px;
+    }
+    
+    .content .caption{
+        font-size: 12px;
+        letter-spacing: 2px;
+        text-align: center;
+    }
+    
+    .content .buttons{
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+        align-items: center;
+    }
+    
+    .content .cn{
+        width: 100%;
+        font-size: 12px;
+    }
+    
+    /* Experience Section */
+    .experience-content h2{
+        font-size: 28px;
+    }
+    
+    .experience-subheader{
+        font-size: 13px;
+    }
+    
+    .experience-content .buttons{
+        flex-direction: column;
+        width: 100%;
+        padding: 0 20px;
+    }
+    
+    .experience-content .cn{
+        width: 100%;
+    }
+    
+    /* Collections Page */
+    .collections-header{
+        padding: 40px 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .collections-header h1{
+        font-size: 32px;
+        text-align: center;
+    }
+    
+    .collections-header .craft-spirits{
+        font-size: 14px;
+        justify-content: center;
+    }
+    
+    .collections-header .description{
+        font-size: 14px;
+        text-align: center;
+    }
+    
+    /* Media Page */
+    .media-header{
+        padding: 40px 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .media-header h1{
+        font-size: 32px;
+        text-align: center;
+    }
+    
+    .media-header .craft-spirits{
+        font-size: 14px;
+        justify-content: center;
+    }
+    
+    .media-header .description{
+        text-align: center;
+    }
+    
+    .awards-title{
+        font-size: 28px;
+    }
+    
+    .press-title{
+        font-size: 24px;
+    }
+    
+    .all-press-title{
+        font-size: 22px;
+    }
+    
+    .press-kit-title{
+        font-size: 22px;
+    }
+    
+    .article-title{
+        font-size: 20px;
+    }
+    
+    .item-title{
+        font-size: 18px;
+    }
+    
+    /* Story Page */
+    .story-page{
+        width: 100%;
+        padding: 0 20px 60px;
+        box-sizing: border-box;
+    }
+    
+    .story-header{
+        padding-top: 40px;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .story-header h1{
+        font-size: 42px;
+        text-align: center;
+    }
+    
+    .story-tagline{
+        font-size: 16px;
+        text-align: center;
+    }
+    
+    .story-text h2{
+        font-size: 24px;
+        text-align: center;
+    }
+    
+    .story-text p{
+        font-size: 15px;
+        text-align: center;
+    }
+    
+    .story-philosophy{
+        padding: 60px 20px 40px;
+    }
+    
+    .story-philosophy h2{
+        font-size: 32px;
+    }
+    
+    .philosophy-item h3{
+        font-size: 18px;
+    }
+    
+    .philosophy-item p{
+        font-size: 13px;
+    }
+    
+    .story-journey{
+        padding: 40px 20px 80px;
+    }
+    
+    .story-journey h2{
+        font-size: 32px;
+        margin-bottom: 40px;
+    }
+    
+    .timeline-item{
+        grid-template-columns: 50px 15px 1fr;
+        gap: 10px;
+    }
+    
+    .timeline-year{
+        font-size: 18px;
+    }
+    
+    .timeline-content h3{
+        font-size: 20px;
+    }
+    
+    .timeline-content p{
+        font-size: 14px;
+    }
+    
+    .story-experience{
+        padding: 60px 20px 80px;
+    }
+    
+    .story-experience h2{
+        font-size: 28px;
+    }
+    
+    .story-experience p{
+        font-size: 16px;
+    }
+    
+    /* Blog Page */
+    .blog-header{
+        padding: 40px 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .blog-header h1{
+        font-size: 32px;
+        text-align: center;
+    }
+    
+    .blog-header .blog-stories{
+        font-size: 14px;
+        justify-content: center;
+    }
+    
+    .blog-header .description{
+        text-align: center;
+    }
+    
+    /* Shop Page */
+    .shop-header{
+        padding: 40px 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .shop-header h1{
+        font-size: 32px;
+        text-align: center;
+    }
+    
+    .shop-header .craft-spirits{
+        justify-content: center;
+    }
+    
+    .shop-header .description{
+        text-align: center;
+    }
+    
+    .complete-collection-content h2{
+        font-size: 32px;
+    }
+    
+    .collection-subheader{
+        font-size: 16px;
+    }
+    
+    /* Footer */
+    .footer-logo{
+        font-size: 28px;
+    }
+    
+    .footer-heading{
+        font-size: 14px;
+    }
+    
+    .footer-tagline,
+    .footer-links li a{
+        font-size: 13px;
+    }
+    
+    .experience-footer-title{
+        font-size: 32px;
+    }
+    
+    .experience-footer-description{
+        font-size: 14px;
+    }
+    
+    .copyright,
+    .disclaimer{
+        font-size: 12px;
+    }
+    
+    /* Change social connect text to "Instagram" on mobile */
+    .social-connect p{
+        font-size: 0;
+    }
+    
+    .social-connect p::after{
+        content: "Instagram";
+        font-size: 14px;
+    }
 }
 

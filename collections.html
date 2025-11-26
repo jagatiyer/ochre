@@ -17,7 +17,12 @@
             <div class="icon">
                 <a href="index.html"><h2 class="logo">OCH<span class="highlight-r">R</span>E</h2></a>
             </div>
-            <div class="menu">
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="menu" id="menu">
                 <ul>
                     <li><a href="index.html">HOME</a></li>
                     <li><a href="collections.html" class="active">COLLECTIONS</a></li>
@@ -125,5 +130,14 @@
             <p class="disclaimer"><span class="dot">•</span> Please drink responsibly. For 21+ only.</p>
         </div>
     </footer>
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+        
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            menu.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>
