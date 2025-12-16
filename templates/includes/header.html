@@ -1,0 +1,106 @@
+{# templates/includes/header.html #}
+{% load static %}
+{% with current=request.resolver_match.url_name %}
+
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-left icon">
+    <a href="{% url 'home' %}" class="logo-link" aria-label="Home">
+      <h2 class="logo">OCH<span class="highlight-r">R</span>E</h2>
+    </a>
+  </div>
+
+  <div class="menu">
+    <ul class="nav-menu" role="menubar">
+<li>
+  <a href="{% url 'home' %}"
+     class="{% if current == 'home' %}active{% endif %}">
+     HOME
+  </a>
+</li>
+<li>
+  <a href="{% url 'collections_app:collections_index' %}"
+     class="{% if current == 'collections_index' %}active{% endif %}">
+     COLLECTIONS
+  </a>
+</li>
+<li>
+  <a href="{% url 'commercials_index' %}"
+     class="{% if current == 'commercials_index' %}active{% endif %}">
+     COMMERCIALS
+  </a>
+</li>
+      <li><a href="/media/">MEDIA</a></li>
+<li>
+  <a href="{% url 'story:story_page' %}"
+     class="{% if current == 'story_page' %}active{% endif %}">
+     STORY
+  </a>
+</li>
+<li>
+  <a href="{% url 'blog:blog_list' %}"
+     class="{% if current == 'blog_list' %}active{% endif %}">
+     BLOG
+  </a>
+</li>
+<li>
+  <a href="{% url 'contact:contact_page' %}"
+     class="{% if current == 'contact_page' %}active{% endif %}">
+     CONTACT
+  </a>
+</li>
+<li>
+  <a href="{% url 'shop:shop_index' %}"
+     class="{% if current == 'shop_index' %}active{% endif %}">
+     SHOP
+  </a>
+</li>
+
+      <li class="nav-icons" aria-hidden="false">
+        {% if user.is_authenticated %}
+          <div class="user-dropdown-wrapper" id="user-dropdown-wrapper">
+            <button id="user-toggle" class="icon-link user-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="user-dropdown" title="User menu">
+              <i class="fa-regular fa-user" aria-hidden="true"></i>
+            </button>
+
+            <div id="user-dropdown" class="user-dropdown" role="menu" aria-hidden="true" tabindex="-1">
+              <div class="dropdown-header" role="presentation">
+                <span class="u-name">{{ user.first_name|default:user.username }}</span>
+                <span class="u-email">{{ user.email }}</span>
+              </div>
+
+              {# Adjust this URL name as your project uses (users:profile or profile) #}
+              <a href="{% url 'users:profile' %}" class="dropdown-item" role="menuitem">Profile</a>
+
+              <a href="#" class="dropdown-item" role="menuitem">My Orders</a>
+              <a href="#" class="dropdown-item" role="menuitem">My Experiences</a>
+
+              <form method="post" action="{% url 'account_logout' %}" class="dropdown-item logout-form" role="none">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn" role="menuitem">Logout</button>
+              </form>
+            </div>
+          </div>
+         {# Cart link + badge (put inside your .nav-icons section) #}
+
+
+
+        {% else %}
+
+          <a href="{% url 'account_login' %}" class="icon-link" title="Login">
+            <i class="fa-regular fa-user"></i>
+          </a>
+<a href="{% url 'shop:cart_view' %}" class="icon-link cart-link" aria-label="Cart" title="Cart">
+  <i class="fa fa-shopping-cart cart-icon" aria-hidden="true"></i>
+
+  <span class="cart-badge" aria-hidden="{% if cart_count %}false{% else %}true{% endif %}">
+    {{ cart_count|default:0 }}
+  </span>
+</a>
+
+
+        {% endif %}
+      </li>
+    </ul>
+  </div>
+</nav>
+{% endwith %}

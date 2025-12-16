@@ -1,0 +1,217 @@
+{# templates/base.html #}
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Ochre{% endblock %}</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Main stylesheet (versioned) -->
+  <link rel="stylesheet" href="{% static 'style.css' %}?v=27">
+
+  {% block extra_head %}{% endblock %}
+  <style>
+    /* Minimal toast positioning: preserved from your previous file */
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        pointer-events: none; /* prevent blocking clicks */
+    }
+    .toast-msg {
+        background: #f5f6f8; /* light background for contrast */
+        color: #000; /* dark text for readability */
+        padding: 14px 22px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        font-family: 'Satoshi', sans-serif;
+        font-size: 15px;
+        border-left: 4px solid #ff5b5f;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        animation: toast-fade 3s forwards;
+        min-width: 260px;
+        text-align: center;
+        pointer-events: auto; /* allow interaction with toasts */
+    }
+    .toast-msg.success { border-left-color: #00d2c7; }
+    .toast-msg.error   { border-left-color: #ff5b5f; }
+
+    @keyframes toast-fade {
+        0% { opacity: 1; transform: translateY(0); }
+        75% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-10px); }
+    }
+
+    /* small helper so main page content sits below sticky header */
+    main {
+      margin-top: 18px; /* extra gap in case header is sticky; adjust if needed */
+      min-height: calc(100vh - 150px);
+    }
+  </style>
+</head>
+
+<body>
+  {% include "includes/header.html" %}
+
+  <main>
+    {% block content %}
+    {# pages should supply content here #}
+    {% endblock %}
+  </main>
+
+  {% include "includes/footer.html" %}
+
+  {# ---------------- Toast messages ---------------- #}
+  {% if messages %}
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true">
+      {% for message in messages %}
+        <div class="toast-msg {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {# ---------- JS: dropdown + toast cleanup + extension block ---------- #}
+  <script>
+  (function () {
+    /* USER DROPDOWN TOGGLE (safe: only runs if elements exist) */
+    var toggle = document.getElementById('user-toggle');
+    var menu = document.getElementById('user-dropdown');
+    if (toggle && menu) {
+      function openMenu(){
+        menu.classList.add('open');
+        menu.setAttribute('aria-hidden','false');
+        toggle.setAttribute('aria-expanded','true');
+      }
+      function closeMenu(){
+        menu.classList.remove('open');
+        menu.setAttribute('aria-hidden','true');
+        toggle.setAttribute('aria-expanded','false');
+      }
+      toggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (menu.classList.contains('open')) closeMenu(); else openMenu();
+      });
+      document.addEventListener('click', function (e) {
+        if (!menu.contains(e.target) && !toggle.contains(e.target)) closeMenu();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+    }
+
+    /* REMOVE TOASTS after animation ends (so they don't linger in DOM) */
+    var toastContainer = document.getElementById('toast-container');
+    if (toastContainer) {
+      // remove each toast after its animation finishes (3s as defined)
+      setTimeout(function () {
+        if (toastContainer && toastContainer.parentNode) {
+          toastContainer.parentNode.removeChild(toastContainer);
+        }
+      }, 3200);
+    }
+  })();
+  </script>
+<script>
+  (function() {
+    const toggle = document.getElementById('user-toggle');
+    const dropdown = document.getElementById('user-dropdown');
+    const wrapper = document.getElementById('user-dropdown-wrapper');
+
+    if (!toggle || !dropdown) return; // nothing to do
+
+    function openMenu() {
+      toggle.setAttribute('aria-expanded', 'true');
+      dropdown.setAttribute('aria-hidden', 'false');
+      dropdown.focus && dropdown.focus();
+    }
+
+    function closeMenu() {
+      toggle.setAttribute('aria-expanded', 'false');
+      dropdown.setAttribute('aria-hidden', 'true');
+    }
+
+    toggle.addEventListener('click', function(e) {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      if (expanded) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    // close on outside click
+    document.addEventListener('click', function(e) {
+      if (!wrapper.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
+    // close on ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        closeMenu();
+      }
+    });
+
+    // keep it keyboard accessible (close on focusout if losing focus completely)
+    wrapper.addEventListener('focusout', function(e) {
+      // if the new focused element is not inside wrapper, close
+      const newFocus = e.relatedTarget;
+      if (!wrapper.contains(newFocus)) closeMenu();
+    });
+  })();
+</script>
+<script>
+(function(){
+  // helper to update or create cart badge
+  function updateCartBadge(count) {
+    const cartLink = document.querySelector('.cart-link');
+    if (!cartLink) return;
+    let badge = cartLink.querySelector('.cart-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'cart-badge';
+      cartLink.appendChild(badge);
+    }
+    badge.textContent = String(count || 0);
+    badge.setAttribute('aria-hidden', Number(count) === 0 ? 'true' : 'false');
+  }
+
+  // Example: if you use fetch() for add-to-cart, call updateCartBadge with response.cart_count
+  // Generic event hook: listen for a custom event so your add-to-cart code can dispatch
+  document.addEventListener('ochre:cart-updated', function (ev) {
+    if (ev && ev.detail && typeof ev.detail.cart_count !== 'undefined') {
+      updateCartBadge(ev.detail.cart_count);
+    }
+  });
+
+  // Expose helper to global so older inline onclick handlers can call window.updateCartBadge
+  window.updateCartBadge = updateCartBadge;
+
+  // Optionally initialize from server-rendered value (if present)
+  const serverInit = document.querySelector('.cart-badge');
+  if (serverInit) {
+    // nothing to do; it's already rendered
+  } else {
+    // If you want to initialize to 0 on pages with no badge element:
+    // updateCartBadge(0);
+  }
+})();
+</script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

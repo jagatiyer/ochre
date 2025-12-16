@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="collections-page">
+
+    <div class="collections-header">
+        <p class="craft-spirits">
+            <span class="dash">—</span>SHOP<span class="dash">—</span>
+        </p>
+
+        <h1>Premium Mixers & Accessories</h1>
+
+        <p class="description">
+            Elevate your home bar with premium mixers, curated accessories,
+            signature merchandise and immersive Ochre experiences.
+        </p>
+    </div>
+
+    <!-- TAB SELECTOR (centered) -->
+    <div class="tab-selector" style="text-align:center;">
+        <a href="?tab=products{% if filter_type and filter_type != 'ALL' %}&filter={{ filter_type }}{% endif %}"
+           class="filter-btn {% if selected_tab == 'products' %}active{% endif %}">
+            PRODUCTS
+        </a>
+        <a href="?tab=experiences{% if filter_type and filter_type != 'ALL' %}&filter={{ filter_type }}{% endif %}"
+           class="filter-btn {% if selected_tab == 'experiences' %}active{% endif %}">
+            EXPERIENCES
+        </a>
+    </div>
+
+    <!-- CATEGORY FILTERS (centered) -->
+    <div class="product-filters" aria-label="category-filters">
+        {# Use filter_items so chips only show categories that have items for the selected tab #}
+        {% for f in filter_items %}
+            <a href="?tab={{ selected_tab }}&filter={{ f }}"
+               class="filter-btn {% if filter_type == f %}active{% endif %}">
+                {{ f|upper }}
+            </a>
+        {% empty %}
+            <p style="color:#9ca3af;">No categories yet.</p>
+        {% endfor %}
+    </div>
+
+    <!-- ITEMS GRID -->
+    <div class="products-scroll" style="max-width:1200px; margin: 0 auto; padding: 0 20px;">
+        {% if items %}
+            {% for item in items %}
+            <div class="collection-card">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.title }}" style="width:100%; border-radius:8px 8px 0 0;">
+                {% else %}
+                    <div style="height:220px; background:#111; border-radius:8px;"></div>
+                {% endif %}
+
+                <p class="collection-card-category">{{ item.category.name }}</p>
+
+                <h3 class="collection-card-title">{{ item.title }}</h3>
+
+                <p class="collection-card-excerpt">
+                    {{ item.description|truncatewords:20 }}
+                </p>
+
+                {% if not item.is_experience %}
+                    <p style="color:#fff; font-size:16px; margin-bottom:10px;">
+                        {{ item.price_display }}
+                    </p>
+                {% endif %}
+
+                <a href="{% url 'shop:product_detail' item.slug %}" class="collection-card-btn">
+                    View Details →
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-products">No items found.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

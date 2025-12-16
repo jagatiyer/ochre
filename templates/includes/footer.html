@@ -1,0 +1,76 @@
+{% load static %}
+
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-column">
+      <h2 class="footer-logo">OCH<span class="highlight-r">R</span>E</h2>
+      <p class="footer-tagline">
+        Redefining craft spirits with innovation and inclusivity. 
+        Celebrating tradition with a modern twist.
+      </p>
+    </div>
+
+    <div class="footer-column">
+      <h3 class="footer-heading">EXPLORE</h3>
+      <ul class="footer-links">
+        <li><a href="{% url 'collections_app:collections_index' %}">Collections</a></li>
+        <li><a href="{% url 'story:story_page' %}">Our Story</a>
+</li>
+        <li><a href="#">The Process</a></li>
+        {% comment %} <li><a href="{% url 'blog_index' %}">Blog</a></li> {% endcomment %}
+<li><a href="{% url 'blog:blog_list' %}">BLOG</a></li>
+
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3 class="footer-heading support">SUPPORT</h3>
+      <ul class="footer-links">
+        <li><a href="{% url 'contact:contact_page' %}
+">Contact</a></li>
+        <li><a href="#">Events</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3 class="footer-heading connect">CONNECT</h3>
+      <div class="social-connect">
+        <i class="fa-brands fa-instagram"></i>
+        <p>Follow our journey on social media for exclusive content & updates</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-divider"></div>
+
+  <div class="footer-experience">
+    <h2 class="experience-footer-title">
+      Experience <span>Excellence</span>
+    </h2>
+    <p class="experience-footer-description">
+      Discover our collection of exceptional spirits crafted with passion and innovation.
+    </p>
+
+    <div class="footer-experience-buttons">
+      <button class="cn collections">
+        <a href="{% url 'collections_app:collections_index' %}">VIEW COLLECTIONS</a>
+      </button>
+      <button class="cn shop-now">
+        <a href="{% url 'shop:shop_index' %}
+">SHOP NOW</a>
+      </button>
+    </div>
+  </div>
+
+  <div class="footer-divider"></div>
+
+  <div class="footer-bottom">
+    <p class="copyright">© Ochre Spirits. All rights reserved.</p>
+    <p class="disclaimer">
+     <span class="footer-dot">•</span>
+    <span class="footer-text">Please drink responsibly</span>
+    </p>
+  </div>
+</footer>

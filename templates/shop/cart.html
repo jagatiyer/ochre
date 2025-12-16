@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Add spacing below navbar -->
+<div style="height:80px;"></div>
+
+<div class="cart-page-container">
+
+  {% if items %}
+  <div class="cart-grid">
+
+    <!-- LEFT SIDE: CART ITEMS -->
+    <div class="cart-items-box">
+
+      <h1 class="cart-title">Your Cart</h1>
+
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th style="text-align:left;">Item</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for row in items %}
+            {% with product=row.product qty=row.qty unit=row.unit_price total=row.line_total %}
+            <tr>
+
+              <!-- PRODUCT -->
+              <td class="item-info">
+                <div class="item-thumb">
+                  {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                  {% else %}
+                    <div class="thumb-placeholder"></div>
+                  {% endif %}
+                </div>
+
+                <div class="item-text">
+                  <div class="item-name">{{ product.title }}</div>
+                  <div class="item-cat">{{ product.category.name }}</div>
+                </div>
+              </td>
+
+              <!-- QTY -->
+              <td class="qty-cell">{{ qty }}</td>
+
+              <!-- UNIT PRICE -->
+              <td class="price-cell">₹ {{ unit }}</td>
+
+              <!-- LINE TOTAL -->
+              <td class="price-cell">₹ {{ total }}</td>
+
+              <!-- REMOVE -->
+              <td class="remove-cell">
+                <form method="post" action="{% url 'shop:remove_cart_item' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="product_id" value="{{ product.id }}">
+                  <button type="submit" class="remove-btn">×</button>
+                </form>
+              </td>
+
+            </tr>
+            {% endwith %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+
+    <!-- RIGHT SIDE: SUMMARY -->
+    <div class="cart-summary-box">
+
+      <h2 class="summary-title">Summary</h2>
+
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>₹ {{ subtotal }}</span>
+      </div>
+
+      <div class="summary-row">
+        <span>GST (18%)</span>
+        <span>₹ {{ gst }}</span>
+      </div>
+
+      <div class="summary-row grand">
+        <span>Grand Total</span>
+        <span>₹ {{ grand_total }}</span>
+      </div>
+
+      <div class="summary-actions">
+        <a href="{% url 'shop:shop_index' %}" class="btn-outline">Continue Shopping</a>
+
+        {% if user.is_authenticated %}
+          <a href="{% url 'shop:checkout_view' %}" class="btn-primary">Checkout</a>
+        {% else %}
+          <a href="{% url 'account_login' %}?next={% url 'shop:checkout_view' %}" class="btn-primary">
+            Sign in to Checkout
+          </a>
+        {% endif %}
+      </div>
+
+    </div>
+
+  </div>
+
+  {% else %}
+  <!-- EMPTY CART -->
+  <div class="empty-cart">
+    <h2>Your cart is empty.</h2>
+    <a href="{% url 'shop:shop_index' %}" class="btn-primary">Start Shopping</a>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

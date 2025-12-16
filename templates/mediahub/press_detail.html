@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{% static 'style.css' %}?cb=9999">
+{% endblock %}
+{% block content %}
+
+<div class="press-detail-page">
+
+    <div class="press-detail-header">
+
+        <p class="press-detail-meta">
+            <span class="pub">{{ article.publication_name }}</span>
+            <span class="dot">•</span>
+            <span class="date">{{ article.date|date:"F d, Y" }}</span>
+        </p>
+
+        <h1 class="press-detail-title">
+            {{ article.title }}
+        </h1>
+
+        {% if article.external_link %}
+        <a href="{{ article.external_link }}" target="_blank" class="external-link-btn">
+            Read Original <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+        {% endif %}
+    </div>
+
+    {% if article.cover_image %}
+    <div class="press-detail-cover">
+        <img src="{{ article.cover_image.url }}" alt="{{ article.title }}">
+    </div>
+    {% endif %}
+
+    <div class="press-detail-content">
+        {{ article.content|safe }}
+    </div>
+
+    <div class="press-detail-footer">
+        <a href="{% url 'mediahub:media_index' %}" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back to Press & Media
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

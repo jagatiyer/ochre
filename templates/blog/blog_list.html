@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="blog-page">
+
+    <!-- HEADER -->
+    <div class="blog-header">
+        <p class="blog-stories">
+            <span class="dash">—</span>STORIES & INSIGHTS<span class="dash">—</span>
+        </p>
+
+        <h1>The Ochre Journal</h1>
+
+        <p class="description">
+            Dive deep into the world of craft spirits — from distillation secrets 
+            to cocktail innovation, explore the stories behind every bottle.
+        </p>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="articles-section">
+        <div class="article-filters">
+
+            <!-- ALL -->
+            <a href="{% url 'blog:blog_list' %}">
+                <button class="filter-btn {% if active_tag == 'all' %}active{% endif %}">
+                    ALL
+                </button>
+            </a>
+
+            {% for value, label in tags %}
+            <a href="{% url 'blog:blog_by_tag' value %}">
+                <button class="filter-btn {% if active_tag == value %}active{% endif %}">
+                    {{ label }}
+                </button>
+            </a>
+            {% endfor %}
+
+        </div>
+
+        <!-- HORIZONTAL SCROLL POSTS -->
+        <div class="articles-scroll">
+            {% if posts %}
+                {% for post in posts %}
+                <div class="article-card">
+
+                    {% if post.cover_image %}
+                    <img src="{{ post.cover_image.url }}" alt="{{ post.title }}"
+                        style="width:100%; height:230px; object-fit:cover; border-radius:8px; margin-bottom:15px;">
+                    {% endif %}
+
+                    <p class="collection-card-category">
+                        {{ post.get_tag_display }}
+                    </p>
+
+                    <h3>{{ post.title }}</h3>
+
+                    <p>{{ post.excerpt }}</p>
+
+                    <a class="collection-card-btn" 
+                       href="{% url 'blog:blog_detail' slug=post.slug %}">
+                       READ MORE →
+                    </a>
+
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-articles">
+                    <p>No articles found.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

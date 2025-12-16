@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="collection-detail-page">
+
+    <div class="collection-detail-container">
+
+        <!-- LEFT: IMAGE -->
+        <div class="collection-detail-image">
+            {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.title }}">
+            {% else %}
+                <img src="{% static 'images/placeholder.png' %}" alt="No Image">
+            {% endif %}
+        </div>
+
+        <!-- RIGHT: TEXT -->
+        <div class="collection-detail-info">
+
+            <!-- CATEGORY -->
+            <div class="collection-detail-category">
+                {{ item.get_category_display }}
+            </div>
+
+            <!-- TITLE -->
+            <h1 class="collection-detail-title">
+                {{ item.title }}
+            </h1>
+
+            <!-- SHORT EXCERPT -->
+            {% if item.excerpt %}
+                <p class="collection-detail-excerpt">
+                    {{ item.excerpt }}
+                </p>
+            {% endif %}
+
+            <!-- FULL CONTENT -->
+            <div class="collection-detail-content">
+                {{ item.content|safe }}
+            </div>
+
+            <!-- BACK BUTTON -->
+            <a href="{% url 'collections_app:collections_index' %}" class="back-to-collections">
+                ← Back to Collections
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

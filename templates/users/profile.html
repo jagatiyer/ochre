@@ -1,0 +1,43 @@
+{# templates/account/profile.html #}
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<main class="auth-page">
+  <div class="auth-card">
+    <header class="auth-card-header">
+      <p class="craft-spirits"><span class="dash">—</span>ACCOUNT<span class="dash">—</span></p>
+      <h1 class="auth-title">My Profile</h1>
+      <p class="auth-sub">Manage your account details and preferences.</p>
+    </header>
+
+    <div class="auth-body">
+      <div class="profile-grid" style="max-width:700px; margin: 20px auto;">
+        <div style="background:#1a1d1f; padding:20px; border-radius:8px;">
+          <p style="color:#9ca3af; font-size:14px;">Email</p>
+          <p style="color:#fff; font-size:16px; margin-bottom:12px;">{{ request.user.email }}</p>
+
+          <p style="color:#9ca3af; font-size:14px;">Name</p>
+          <p style="color:#fff; font-size:16px; margin-bottom:12px;">
+            {{ request.user.first_name }} {{ request.user.last_name }}
+          </p>
+
+          <p style="color:#9ca3af; font-size:14px;">Joined</p>
+          <p style="color:#fff; font-size:16px; margin-bottom:18px;">
+            {{ request.user.date_joined|date:"F j, Y" }}
+          </p>
+
+          <div style="display:flex; gap:12px; margin-top:12px;">
+            <a href="{% url 'users:profile_edit' %}" class="cn auth-btn" style="background:#ff5b5f; color:#000; padding:10px 18px; text-decoration:none;">Edit profile</a>
+            <a href="{% url 'account_change_password' %}" class="auth-link" style="align-self:center; color:#9ca3af;">Change password</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="max-width:700px; margin: 18px auto;">
+        <a href="{% url 'shop:shop_index' %}" class="back-to-collections">← Back to shop</a>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

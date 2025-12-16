@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="collections-page">
+
+    <!-- HEADER -->
+    <div class="collections-header">
+        <div class="craft-spirits">
+            <span class="dash">—</span> OUR COLLECTIONS <span class="dash">—</span>
+        </div>
+
+        <h1>Craft Selections</h1>
+
+        <p class="description">
+            Discover our unique spirits crafted with innovation and heritage.
+        </p>
+    </div>
+
+
+    <!-- FILTERS (EXACT BLOG STYLE) -->
+    <div class="articles-section">
+        <div class="article-filters">
+
+            <!-- ALL filter -->
+            <a href="{% url 'collections_app:collections_index' %}">
+                <button class="filter-btn {% if active_category == 'all' %}active{% endif %}">
+                    ALL
+                </button>
+            </a>
+
+            <!-- category filters -->
+            {% for value,label in categories %}
+            <a href="{% url 'collections_app:collections_by_category' value %}">
+                <button class="filter-btn {% if active_category == value %}active{% endif %}">
+                    {{ label|upper }}
+                </button>
+            </a>
+            {% endfor %}
+
+        </div>
+    </div>
+
+
+    <!-- COLLECTION CARDS (HORIZONTAL SCROLL EXACT LIKE BLOG) -->
+    <div class="products-section">
+        <div class="products-scroll">
+
+            {% if items %}
+                {% for item in items %}
+                <div class="collection-card">
+
+                    <!-- Image -->
+                    {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                    {% else %}
+                    <img src="{% static 'images/placeholder.png' %}" alt="No Image">
+                    {% endif %}
+
+                    <!-- Title -->
+                    <h3 class="collection-card-title">
+                        {{ item.title }}
+                    </h3>
+
+                    <!-- Excerpt -->
+                    {% if item.excerpt %}
+                    <p class="collection-card-excerpt">
+                        {{ item.excerpt }}
+                    </p>
+                    {% endif %}
+
+                    <!-- View Details -->
+<a href="{% url 'collections_app:collectionitem_detail' item.pk %}"
+                       class="collection-card-btn">
+                        View Details →
+                    </a>
+
+                </div>
+                {% endfor %}
+
+            {% else %}
+
+            <div class="no-products">
+                No items found in this category.
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

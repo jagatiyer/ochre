@@ -1,0 +1,24 @@
+{# templates/account/logout.html #}
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<main class="auth-page">
+  <div class="auth-card small">
+    <header class="auth-card-header">
+      <h1 class="auth-title">Sign Out</h1>
+      <p class="auth-sub">Are you sure you want to sign out?</p>
+    </header>
+
+    <div class="auth-body">
+      <form method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <div class="form-actions">
+          <button type="submit" class="cn auth-btn">Sign out</button>
+          <a href="{% url 'home' %}" class="auth-link">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}
