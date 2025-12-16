@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
-from django.core.files.base import ContentFile
-from shop.models import ShopCategory, ShopItem
 from django.utils.text import slugify
+from shop.models import ShopCategory, ShopItem
+
 
 class Command(BaseCommand):
     help = "Seed shop categories, products and experiences"
@@ -18,38 +18,56 @@ class Command(BaseCommand):
             "EXPERIENCES",
         ]
 
-        created_cats = []
-        for name in categories:
-            cat, _ = ShopCategory.objects.get_or_create(name=name)
-            created_cats.append(cat)
-        self.stdout.write("Categories created.")
+        # --------------------
+        # Categories (slug-safe)
+        # --------------------
+        category_map = {}
 
-        # create a few products for product categories (non-experience)
+        for name in categories:
+            slug = slugify(name)
+
+            cat, created = ShopCategory.objects.get_or_create(
+                slug=slug,
+                defaults={"name": name},
+            )
+
+            category_map[name] = cat
+
+            if created:
+                self.stdout.write(self.style.SUCCESS(f"Created category: {name}"))
+            else:
+                self.stdout.write(f"Category already exists: {name}")
+
+        self.stdout.write(self.style.SUCCESS("Categories ready."))
+
+        # --------------------
+        # Products (non-experience)
+        # --------------------
         samples = [
             {
                 "title": "Ochre Signature T-Shirt (Pack of 3)",
-                "category": ShopCategory.objects.get(name="T-SHIRTS"),
+                "category_name": "T-SHIRTS",
                 "description": "Premium cotton pack — three colours included.",
                 "price": "1999.00",
                 "is_experience": False,
             },
             {
                 "title": "Ochre Glassware Gift Set",
-                "category": ShopCategory.objects.get(name="GLASSWARE"),
+                "category_name": "GLASSWARE",
                 "description": "Two crystal tumblers and tasting guide.",
                 "price": "3499.00",
                 "is_experience": False,
             },
             {
                 "title": "Cocktail Mix Pack — Citrus",
-                "category": ShopCategory.objects.get(name="COCKTAIL-MIX-PACKETS"),
+                "category_name": "COCKTAIL-MIX-PACKETS",
                 "description": "Ready-to-mix syrup packs for your home bar.",
                 "price": "999.00",
                 "is_experience": False,
             },
             {
                 "title": "Party Mixers Box (Sparkling + Tonic)",
-                "category": ShopCategory.objects.get(name="MIXERS-PARTY-BOXES"),
+                "category_name": "MIXERS-PARTY-BOXES",
                 "description": "A curated box with sparkling water, tonic & soda.",
                 "price": "1499.00",
                 "is_experience": False,
@@ -57,48 +75,64 @@ class Command(BaseCommand):
         ]
 
         for s in samples:
-            ShopItem.objects.get_or_create(
-                title=s["title"],
+            slug = slugify(s["title"])
+            category = category_map[s["category_name"]]
+
+            obj, created = ShopItem.objects.get_or_create(
+                slug=slug,
                 defaults={
-                    "category": s["category"],
+                    "title": s["title"],
+                    "category": category,
                     "description": s["description"],
                     "price": s["price"],
                     "is_experience": s["is_experience"],
                 },
             )
-        self.stdout.write("Products created.")
 
-        # create three experiences (is_experience=True)
-        exp_cat, _ = ShopCategory.objects.get_or_create(name="EXPERIENCES")
+            if created:
+                self.stdout.write(self.style.SUCCESS(f"Created product: {obj.title}"))
+            else:
+                self.stdout.write(f"Product already exists: {obj.title}")
+
+        self.stdout.write(self.style.SUCCESS("Products ready."))
+
+        # --------------------
+        # Experiences
+        # --------------------
+        exp_cat = category_map["EXPERIENCES"]
+
         experiences = [
             {
                 "title": "Ochre Signature Mixology Session",
-                "category": exp_cat,
                 "description": "90–120 minute immersive team mixology session.",
-                "is_experience": True,
             },
             {
                 "title": "Curated Dining & Tasting Experience",
-                "category": exp_cat,
                 "description": "Intimate chef-and-mixologist-led tasting for up to 6 guests.",
-                "is_experience": True,
             },
             {
                 "title": "Private Mixology Service",
-                "category": exp_cat,
                 "description": "At-home private mixology for your event.",
-                "is_experience": True,
             },
         ]
 
         for e in experiences:
-            ShopItem.objects.get_or_create(
-                title=e["title"],
+            slug = slugify(e["title"])
+
+            obj, created = ShopItem.objects.get_or_create(
+                slug=slug,
                 defaults={
-                    "category": e["category"],
+                    "title": e["title"],
+                    "category": exp_cat,
                     "description": e["description"],
                     "is_experience": True,
                 },
             )
-        self.stdout.write("Experiences created.")
-        self.stdout.write(self.style.SUCCESS("Seeding complete."))
+
+            if created:
+                self.stdout.write(self.style.SUCCESS(f"Created experience: {obj.title}"))
+            else:
+                self.stdout.write(f"Experience already exists: {obj.title}")
+
+        self.stdout.write(self.style.SUCCESS("Shop seeding completed successfully."))
+
