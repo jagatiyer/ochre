@@ -1,25 +1,42 @@
+# ochre/urls.py
+
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
 from home import views as home_views
+
+# --------------------------------------------------
+# URL PATTERNS (MUST BE DEFINED FIRST)
+# --------------------------------------------------
 
 urlpatterns = [
     path("", home_views.index, name="home"),
 
-    path("blog/", include("blog.urls", namespace="blog")),
-    path("media/", include("mediahub.urls", namespace="mediahub")),
+    # Core site sections
+    path("collections/", include("collections_app.urls", namespace="collections_app")),
     path("commercials/", include("commercials.urls")),
-    path("collections/", include("collections_app.urls")),
-
+    path("mediahub/", include("mediahub.urls")),
+    path("story/", include("story.urls", namespace="story")),
+    path("blog/", include("blog.urls", namespace="blog")),
+    path("contact/", include("contact.urls", namespace="contact")),
     path("shop/", include("shop.urls", namespace="shop")),
 
-    path("contact/", include("contact.urls")),
+    # Auth / users
+    path("profile/", include("users.urls", namespace="users")),
+    path("accounts/", include("allauth.urls")),
 
-    path("story/", include("story.urls")),
-
-    path("accounts/", include("allauth.urls")),  # allauth
+    # Admin
     path("admin/", admin.site.urls),
-
-    # ---- YOUR NEW PROFILE ROUTE ----
-    path("profile/", include("users.urls", namespace="users")),   # <-- note 'users' namespace
-
 ]
+
+# --------------------------------------------------
+# MEDIA FILES (ONLY APPEND AFTER urlpatterns EXISTS)
+# --------------------------------------------------
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )

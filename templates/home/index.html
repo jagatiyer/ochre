@@ -4,18 +4,28 @@
 
 <div class="main">
   <div class="content">
-    <h1>OCH<span class="highlight-r">R</span>E<br>
-      <span class="craft-spirits"><span class="dash">—</span>CRAFT SPIRITS<span class="dash">—</span></span>
-    </h1>
-    <p class="caption">CRAFT. CLARITY. CELEBRATION.</p>
-<div class="buttons">
-  <button class="cn shop"><a href="{% url 'shop:shop_index' %}">SHOP ACCESSORIES</a>
-</button>
-  <button class="cn stories">
-    <a href="{% url 'story:story_page' %}">READ OUR STORIES</a>
-</button>
 
-</div>
+    <!-- BRAND HERO -->
+    <h1 class="hero-title">
+      OCH<span class="highlight-r">R</span>E
+    </h1>
+
+    <p class="craft-spirits">
+      <span class="dash">—</span> CRAFT SPIRITS <span class="dash">—</span>
+    </p>
+
+    <p class="caption">CRAFT. CLARITY. CELEBRATION.</p>
+
+    <!-- CTA BUTTONS -->
+    <div class="buttons">
+      <button class="cn shop">
+        <a href="{% url 'shop:shop_index' %}">SHOP ACCESSORIES</a>
+      </button>
+
+      <button class="cn stories">
+        <a href="{% url 'story:story_page' %}">READ OUR STORIES</a>
+      </button>
+    </div>
 
   </div>
 </div>

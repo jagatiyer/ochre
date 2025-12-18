@@ -1,19 +1,77 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<div class="blog-page">
 
-    <div class="blog-header">
+<div class="blog-detail-page">
+
+  <div class="blog-detail-container">
+
+    <!-- =========================
+         MAIN ARTICLE
+         ========================= -->
+    <article class="blog-main">
+
+      <header class="blog-header">
+        <p class="craft-spirits">
+          <span class="dash">—</span>BLOG<span class="dash">—</span>
+        </p>
+
         <h1>{{ post.title }}</h1>
 
-        <p class="blog-stories">
-            {{ post.created_at|date:"M d, Y" }} — {{ post.get_tag_display }}
+        <p class="blog-meta">
+          {{ post.created_at|date:"F d, Y" }}
         </p>
-    </div>
+      </header>
 
-    <div style="max-width:900px; margin:0 auto; padding:20px; color:#fff;">
+      {% if post.cover_image %}
+        <img
+          src="{{ post.cover_image.url }}"
+          alt="{{ post.title }}"
+          class="blog-hero-image"
+        >
+      {% endif %}
+
+      <div class="blog-content">
         {{ post.content|safe }}
-    </div>
+      </div>
 
+      <div style="margin-top:40px;">
+        <a href="{% url 'blog:blog_list' %}" class="back-to-collections">
+          ← Back to Blog
+        </a>
+      </div>
+
+    </article>
+
+
+    <!-- =========================
+         SIDEBAR
+         ========================= -->
+    <aside class="blog-sidebar">
+
+      {% if recent_posts %}
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Recent Posts</h3>
+
+          <ul class="sidebar-list">
+            {% for p in recent_posts %}
+              <li>
+                <a href="{% url 'blog:blog_detail' p.slug %}">
+                  {{ p.title }}
+                  <span class="sidebar-date">
+                    {{ p.created_at|date:"M d, Y" }}
+                  </span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+    </aside>
+
+  </div>
 </div>
+
 {% endblock %}

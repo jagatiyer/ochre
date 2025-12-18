@@ -5,75 +5,113 @@
 
 <div class="blog-page">
 
-    <!-- HEADER -->
-    <div class="blog-header">
-        <p class="blog-stories">
-            <span class="dash">—</span>STORIES & INSIGHTS<span class="dash">—</span>
-        </p>
+  <!-- =========================
+       PAGE HEADER
+       ========================= -->
+  <div class="blog-header">
+    <p class="blog-stories">
+      <span class="dash">—</span>BLOG<span class="dash">—</span>
+    </p>
 
-        <h1>The Ochre Journal</h1>
+    <h1>Stories & Insights</h1>
 
-        <p class="description">
-            Dive deep into the world of craft spirits — from distillation secrets 
-            to cocktail innovation, explore the stories behind every bottle.
-        </p>
+    <p class="description">
+      Craft, clarity and conversations around spirits and culture.
+    </p>
+  </div>
+
+
+  <!-- =========================
+       BLOG GRID
+       ========================= -->
+  <div class="blog-grid" id="blog-grid">
+
+    {% for post in posts %}
+      <div class="article-card">
+
+        {% if post.cover_image %}
+          <img
+            src="{{ post.cover_image.url }}"
+            alt="{{ post.title }}"
+            class="shop-card-img"
+          >
+        {% endif %}
+
+        <h3>{{ post.title }}</h3>
+
+        {% if post.excerpt %}
+          <p>{{ post.excerpt }}</p>
+        {% endif %}
+
+        <a href="{% url 'blog:blog_detail' post.slug %}"
+           class="collection-card-btn">
+          Read Article →
+        </a>
+
+      </div>
+    {% endfor %}
+
+  </div>
+
+
+  <!-- =========================
+       LOAD MORE
+       ========================= -->
+  {% if total_count > posts|length %}
+    <div class="load-more-wrap" style="text-align:center; margin-top:40px;">
+      <button
+        id="load-more-btn"
+        class="cn collections"
+        data-offset="{{ posts|length }}"
+        style="color:#1a1d1f">
+        Show More
+      </button>
     </div>
-
-    <!-- FILTER BAR -->
-    <div class="articles-section">
-        <div class="article-filters">
-
-            <!-- ALL -->
-            <a href="{% url 'blog:blog_list' %}">
-                <button class="filter-btn {% if active_tag == 'all' %}active{% endif %}">
-                    ALL
-                </button>
-            </a>
-
-            {% for value, label in tags %}
-            <a href="{% url 'blog:blog_by_tag' value %}">
-                <button class="filter-btn {% if active_tag == value %}active{% endif %}">
-                    {{ label }}
-                </button>
-            </a>
-            {% endfor %}
-
-        </div>
-
-        <!-- HORIZONTAL SCROLL POSTS -->
-        <div class="articles-scroll">
-            {% if posts %}
-                {% for post in posts %}
-                <div class="article-card">
-
-                    {% if post.cover_image %}
-                    <img src="{{ post.cover_image.url }}" alt="{{ post.title }}"
-                        style="width:100%; height:230px; object-fit:cover; border-radius:8px; margin-bottom:15px;">
-                    {% endif %}
-
-                    <p class="collection-card-category">
-                        {{ post.get_tag_display }}
-                    </p>
-
-                    <h3>{{ post.title }}</h3>
-
-                    <p>{{ post.excerpt }}</p>
-
-                    <a class="collection-card-btn" 
-                       href="{% url 'blog:blog_detail' slug=post.slug %}">
-                       READ MORE →
-                    </a>
-
-                </div>
-                {% endfor %}
-            {% else %}
-                <div class="no-articles">
-                    <p>No articles found.</p>
-                </div>
-            {% endif %}
-        </div>
-    </div>
+  {% endif %}
 
 </div>
+
+
+<!-- =========================
+     LOAD MORE JS (PLAIN JS)
+     ========================= -->
+<script>
+(function () {
+  const btn = document.getElementById("load-more-btn");
+  if (!btn) return;
+
+  const grid = document.getElementById("blog-grid");
+
+  btn.addEventListener("click", function () {
+    const offset = parseInt(btn.dataset.offset, 10);
+
+    fetch(`/blog/load-more/?offset=${offset}`)
+      .then(res => res.json())
+      .then(data => {
+
+        data.posts.forEach(post => {
+          const html = `
+            <div class="article-card">
+              ${post.image ? `<img src="${post.image}" class="shop-card-img" />` : ""}
+              <h3>${post.title}</h3>
+              ${post.excerpt ? `<p>${post.excerpt}</p>` : ""}
+              <a href="/blog/${post.slug}/" class="collection-card-btn">
+                Read Article →
+              </a>
+            </div>
+          `;
+          grid.insertAdjacentHTML("beforeend", html);
+        });
+
+        btn.dataset.offset = data.next_offset;
+
+        if (!data.has_more) {
+          btn.remove();
+        }
+      })
+      .catch(err => console.error("Load more failed", err));
+  });
+})();
+</script>
 
 {% endblock %}

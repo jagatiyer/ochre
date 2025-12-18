@@ -1,1825 +1,856 @@
 /* ============================================================
-   GLOBAL RESET
-============================================================ */
+   RESET & GLOBAL BASE
+   ============================================================ */
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
 }
 
 body {
-    background-color: #101315;
-    color: #fff;
-    font-family: 'Satoshi', sans-serif;
+  background-color: #101315;
+  color: #ffffff;
+  font-family: 'Satoshi', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ============================================================
-   MAIN WRAPPER
-============================================================ */
+   ROOT VARIABLES (used implicitly, visuals unchanged)
+   ============================================================ */
+
+:root {
+  --bg-main: #101315;
+  --bg-card: #1a1d1f;
+  --bg-dark: #0a0c0d;
+
+  --text-main: #ffffff;
+  --text-muted: #9ca3af;
+  --text-soft: #bfbfbf;
+
+  --accent-red: #ff5b5f;
+  --accent-orange: #ff7200;
+  --accent-cyan: #00d2c7;
+
+  --container-width: 1200px;
+}
+
+/* ============================================================
+   MAIN PAGE WRAPPER
+   ============================================================ */
 
 .main {
-    width: 100%;
-    background: #101315;
-    background-position: center;
-    background-size: cover;
-    min-height: 110vh;
+  width: 100%;
+  min-height: 110vh;
+  background: var(--bg-main);
 }
 
 /* ============================================================
-   NAVBAR
-============================================================ */
+   GENERIC CONTAINER HELPERS
+   ============================================================ */
 
-.navbar {
-    width: 1200px;
-    height: 75px;
-    margin: auto;
-    position: sticky;
-    top: 0;
-    background-color: #101315;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.container,
+.container-wide {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-/* Logo */
+.container-wide {
+  max-width: 1400px;
+}
 
-.icon a {
-    text-decoration: none;
+/* ============================================================
+   TYPOGRAPHY NORMALIZATION
+   ============================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+  color: var(--text-main);
+  font-weight: 300;
+}
+
+p {
+  font-family: 'Satoshi', sans-serif;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ============================================================
+   BUTTON BASE (NO VISUAL CHANGE)
+   ============================================================ */
+
+button {
+  font-family: 'Satoshi', sans-serif;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* ============================================================
+   IMAGE NORMALIZATION
+   ============================================================ */
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+
+
+/* ============================================================
+   NAVBAR (PRIMARY HEADER)
+   ============================================================ */
+
+.navbar {
+  width: 100%;
+  max-width: var(--container-width);
+  height: 75px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-main);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* ------------------------------------------------------------
+   LOGO
+   ------------------------------------------------------------ */
+
+.navbar .icon {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .logo {
-    color: #fff;
-    font-size: 35px;
-    font-family: "Playfair Display", serif;
-    font-weight: 400;
-    padding-left: 20px;
-    padding-top: 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 35px;
+  font-weight: 400;
+  color: var(--text-main);
+  line-height: 1;
 }
 
 .highlight-r {
-    color: #ff5b5f !important;
+  color: var(--accent-red);
 }
 
-/* Menu */
+/* ------------------------------------------------------------
+   MENU (PRIMARY NAV LINKS)
+   ------------------------------------------------------------ */
+
+.menu {
+  display: flex;
+  align-items: center;
+}
 
 .menu ul {
-    display: flex;
-    align-items: center;
-    gap: 60px;
-}
-
-.menu ul li {
-    list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  list-style: none;
 }
 
 .menu ul li a {
-    text-decoration: none;
-    color: white;
-    font-family: 'Satoshi', sans-serif;
-    font-weight: 500;
-    text-transform: uppercase;
-    transition: 0.3s ease-in-out;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 13px;          /* ↓ add this */
+  font-weight: 500;
+  letter-spacing: 1px;      /* ↑ add this */
+  text-transform: uppercase;
+  color: var(--text-main);
+  transition: color 0.25s ease;
+}
 }
 
 .menu ul li a:hover,
 .menu ul li a.active {
-    color: #ff7200;
+  color: var(--accent-orange);
 }
 
-/* Shop button */
+/* ------------------------------------------------------------
+   NAV SHOP BUTTON
+   ------------------------------------------------------------ */
 
 .nav-shop {
-    background: #ff5b5f;
-    border: none;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: 0.4s ease;
+  background: var(--accent-red);
+  padding: 8px 16px;
+  transition: background 0.25s ease;
 }
 
 .nav-shop a {
-    text-decoration: none;
-    color: #000;
-    font-family: 'Satoshi', sans-serif;
-    text-transform: uppercase;
-    font-weight: 500;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #000;
 }
 
-/* Icons */
+/* ------------------------------------------------------------
+   NAV ICONS (RIGHT SIDE)
+   ------------------------------------------------------------ */
 
 .nav-icons {
-    display: flex;
-    gap: 15px;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
+/* Base icon link */
 .icon-link {
-    color: #fff;
-    font-size: 18px;
-    transition: 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  font-size: 18px;
+  color: #f5f5f5;
+  transition: color 0.2s ease;
 }
 
 .icon-link:hover {
-    color: #ff7200;
+  color: var(--accent-red);
 }
 
 /* ============================================================
-   HERO / HOME CONTENT
-============================================================ */
+   CART ICON + BADGE (SINGLE SOURCE OF TRUTH)
+   ============================================================ */
 
-.content {
-    width: 1200px;
-    margin: auto;
-    color: #fff;
-    text-align: center;
-    padding-top: 120px;
+.cart-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 
-.content h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 100px;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
+.cart-icon {
+  font-size: 18px;
+  color: #ffffff;
+  line-height: 1;
 }
 
-.content h1 .craft-spirits {
-    font-size: 25px;
-    color: #9ca3af;
-    font-family: 'Satoshi', sans-serif;
-    text-transform: uppercase;
+/* cart count badge */
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  background: var(--accent-red);
+  color: #000;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+  pointer-events: none;
 }
 
-.content .caption {
-    font-size: 16px;
-    color: #f5f6f8;
-    letter-spacing: 3px;
-    margin-bottom: 30px;
-    font-family: 'Satoshi', sans-serif;
+/* hide badge when empty (if rendered) */
+.cart-badge[aria-hidden="true"] {
+  display: none;
 }
 
-.content .buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+/* ============================================================
+   USER DROPDOWN
+   ============================================================ */
+
+.user-dropdown-wrapper {
+  position: relative;
 }
+
+.user-toggle {
+  background: transparent;
+  border: none;
+  color: #f5f5f5;
+  font-size: 18px;
+  padding: 6px;
+  cursor: pointer;
+}
+
+/* dropdown panel */
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 220px;
+  background: #0e1112;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+  display: none;
+  z-index: 2000;
+}
+
+/* visible state */
+.user-dropdown.open,
+.user-dropdown[aria-hidden="false"] {
+  display: block;
+}
+
+/* dropdown header */
+.user-dropdown .dropdown-header {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  margin-bottom: 8px;
+}
+
+.user-dropdown .u-name {
+  display: block;
+  font-weight: 700;
+  color: #fff;
+}
+
+.user-dropdown .u-email {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* dropdown items */
+.user-dropdown .dropdown-item {
+  display: block;
+  padding: 8px 10px;
+  font-size: 14px;
+  color: #e6e7e8;
+  border-radius: 6px;
+  margin: 4px 0;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.user-dropdown .dropdown-item:hover {
+  background: rgba(255,91,95,0.06);
+  color: var(--accent-red);
+}
+
+/* logout button */
+.logout-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-red);
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: rgba(255,91,95,0.06);
+}
+
+/* ============================================================
+   NAVBAR RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 720px) {
+  .menu ul {
+    gap: 24px;
+  }
+
+  .cart-badge {
+    top: -4px;
+    right: -6px;
+    min-width: 16px;
+    height: 16px;
+    font-size: 10px;
+  }
+}
+
+
+/* ============================================================
+   BUTTONS (CN FAMILY — SINGLE SOURCE)
+   ============================================================ */
 
 .cn {
-    width: 180px;
-    height: 40px;
-    background: #ff7200;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
-
-.cn.shop {
-    background: #ff5b5f;
-}
-
-.cn.stories {
-    background: transparent;
-    border: 2px solid #fff;
+  width: 180px;
+  height: 40px;
+  background: var(--accent-orange);
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cn a {
-    text-decoration: none;
-    color: #fff;
-    font-family: 'Satoshi', sans-serif;
-    font-weight: 500;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  color: #fff;
 }
 
 .cn:hover {
-    background: #fff;
-    color: #000 !important;
+  background: #ffffff;
 }
 
 .cn:hover a {
-    color: #000 !important;
+  color: #000;
 }
 
-/* ============================================================
-   FOOTER
-============================================================ */
-
-.footer {
-    background: #0a0c0d;
-    padding-top: 60px;
-}
-
-.footer-main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 60px 20px;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1.5fr;
-    gap: 60px;
-}
-
-.footer-logo {
-    font-size: 35px;
-    font-family: 'Playfair Display', serif;
-    margin-bottom: 20px;
-}
-
-.footer-tagline {
-    font-size: 14px;
-    color: #9ca3af;
-    line-height: 1.6;
-}
-
-.footer-heading {
-    font-size: 14px;
-    font-weight: 700;
-    font-family: 'Satoshi', sans-serif;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-}
-
-.footer-links {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.footer-links a {
-    color: #9ca3af;
-    text-decoration: none;
-    transition: 0.3s ease;
-}
-
-.footer-links a:hover {
-    color: #fff;
-}
-
-.footer-divider {
-    width: 80%;
-    height: 1px;
-    background: #2a2d2f;
-    margin: 30px auto;
-}
-
-.footer-experience {
-    text-align: center;
-}
-
-.footer-experience-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.footer-bottom {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 30px 20px;
-    display: flex;
-    justify-content: space-between;
-    color: #9ca3af;
-}
-
-.disclaimer .dot {
-    width: 10px;
-    height: 10px;
-    background: #ff5b5f;
-    display: inline-block;
-    border-radius: 50%;
-    margin-right: 8px;
+/* variants */
+.cn.shop { background: var(--accent-red); }
+.cn.stories {
+  background: transparent;
+  border: 2px solid #ffffff;
 }
 
 /* ============================================================
    BLOG PAGE
-============================================================ */
+   ============================================================ */
 
 .blog-page {
-    width: 100%;
-    background: #101315;
-    min-height: 100vh;
-    padding-bottom: 80px;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg-main);
+  padding-bottom: 80px;
 }
 
-/* ---------- BLOG HEADER ----------- */
-
+/* header */
 .blog-header {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 20px 40px;
-    text-align: left;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 80px 20px 40px;
 }
 
 .blog-header .blog-stories {
-    color: #ff5b5f;
-    font-size: 20px;
-    font-family: 'Satoshi', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.blog-header .blog-stories .dash {
-    margin: 0 10px;
-    color: #ff5b5f;
+  color: var(--accent-red);
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .blog-header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 60px;
-    font-weight: 300;
-    line-height: 1.2;
-    color: #fff;
-    margin-bottom: 20px;
+  font-size: 60px;
+  line-height: 1.2;
+  margin-bottom: 20px;
 }
 
 .blog-header .description {
-    max-width: 700px;
-    font-size: 18px;
-    line-height: 1.6;
-    font-family: 'Satoshi', sans-serif;
-    color: #9ca3af;
+  max-width: 700px;
+  font-size: 18px;
+  color: var(--text-muted);
 }
 
-/* ---------- FILTER BAR (REFERENCE FOR COLLECTIONS / BLOG) ----------- */
-
-.articles-section {
-    max-width: 1200px;
-    margin: 50px auto 0;
-    padding: 0 20px;
+/* filters (shared) */
+.article-filters,
+.product-filters {
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 45px;
 }
 
-.article-filters {
-    display: flex;
-    gap: 30px;
-    overflow-x: auto;
-    padding-bottom: 12px;
-    margin-bottom: 45px;
-}
-
-.article-filters::-webkit-scrollbar {
-    height: 6px;
-}
-
-/* Blog / Collections filter button (authoritative) */
+/* filter button */
 .filter-btn {
-    border: none;
-    background: none;
-    color: #9ca3af;
-    font-family: 'Satoshi', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    text-transform: uppercase;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: color 0.3s ease;
-    padding: 6px 0;
-    position: relative;
+  background: none;
+  border: none;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  transition: color 0.2s ease;
 }
 
-.filter-btn:hover {
-    color: #ff5b5f;
-}
-
+.filter-btn:hover,
 .filter-btn.active {
-    color: #ff5b5f;
+  color: var(--accent-red);
 }
 
 .filter-btn.active::after {
-    content: "";
-    position: absolute;
-    height: 2px;
-    background: #ff5b5f;
-    left: 0;
-    right: 0;
-    bottom: -3px;
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  background: var(--accent-red);
 }
 
-/* ---------- BLOG CARDS (REFERENCE FOR COLLECTION CARDS) ---------- */
 
-.articles-scroll {
-    display: flex;
-    gap: 30px;
-    overflow-x: auto;
-    padding-bottom: 20px;
+/* BLOG LIST GRID */
+.blog-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
 }
 
-.articles-scroll::-webkit-scrollbar {
-    height: 6px;
+.blog-card-img {
+  height: 260px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 16px;
 }
 
 .article-card {
-    min-width: 330px;
-    background: #1a1d1f;
-    border-radius: 12px;
-    padding: 22px;
-    transition: 0.3s ease;
+  min-height: 460px; /* more vertical presence */
 }
 
-.article-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(255, 91, 95, 0.1);
+/* SHOW MORE */
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 60px 0;
 }
 
-.article-card h3 {
-    font-size: 22px;
-    font-family: 'Playfair Display', serif;
-    color: #fff;
-    margin-bottom: 10px;
+.load-more-btn {
+  background: transparent;
+  color: #e5e7eb;
+  border: 1px solid #e5e7eb;
+  padding: 14px 34px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 15px;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
-.article-card p {
-    font-size: 15px;
-    color: #bfbfbf;
-    font-family: 'Satoshi', sans-serif;
-    line-height: 1.6;
-    margin-bottom: 20px;
+.load-more-btn:hover {
+  background: #ffffff;
+  color: #000;
+}
+/* BLOG LIST — HARD OPT-OUT OF HORIZONTAL SCROLL */
+.blog-page .blog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
+  overflow-x: visible;
 }
 
-.article-card a {
-    font-size: 14px;
-    color: #ff5b5f;
-    text-decoration: none;
-    font-weight: 500;
+@media (max-width: 900px) {
+  .blog-page .blog-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.no-articles {
-    text-align: center;
-    padding: 20px 0;
+
+/* ============================================================
+   BLOG LIST GRID — OVERRIDE HORIZONTAL SCROLL (BLOG ONLY)
+   ============================================================ */
+
+/* Kill horizontal scroll behaviour ONLY inside blog page */
+.blog-list-page .articles-scroll,
+.blog-list-page .products-scroll {
+  display: block;
+  overflow: visible;
 }
 
-.no-articles p {
-    font-size: 24px;
-    font-family: 'Satoshi', sans-serif;
-    color: #ff5b5f;
-    margin-bottom: 20px;
+/* Canonical blog grid */
+.blog-list-page .blog-grid {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 20px 60px;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .blog-list-page .blog-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Reset card behaviour */
+.blog-list-page .article-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 26px;
+
+  min-width: 0;
+  width: 100%;
+}
+
+/* Image */
+.blog-list-page .blog-card-img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 18px;
+}
+
+/* Text */
+.blog-list-page .blog-card-title {
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.blog-list-page .blog-card-excerpt {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-soft);
+  margin-bottom: 20px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* CTA pinned bottom */
+.blog-list-page .collection-card-btn {
+  margin-top: auto;
+}
+
+/* =========================
+   BLOG DETAIL LAYOUT
+   ========================= */
+
+.blog-detail-page {
+  width: 100%;
+  background: var(--bg-main);
+  padding: 80px 20px 120px;
+}
+
+.blog-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 60px;
+}
+
+/* =========================
+   MAIN ARTICLE
+   ========================= */
+
+.blog-main {
+  width: 100%;
+}
+
+.blog-main h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 56px;
+  font-weight: 300;
+  margin: 20px 0 10px;
+}
+
+.blog-meta {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 30px;
+}
+
+.blog-hero-image {
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 30px 0 40px;
+}
+
+.blog-content {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 17px;
+  line-height: 1.75;
+  color: #c7c7c7;
+}
+
+.blog-content p {
+  margin-bottom: 20px;
+}
+
+.blog-content h2 {
+  font-size: 32px;
+  margin: 40px 0 20px;
+}
+
+.blog-content h3 {
+  font-size: 26px;
+  margin: 30px 0 16px;
+}
+
+/* =========================
+   SIDEBAR
+   ========================= */
+
+.blog-sidebar {
+  position: sticky;
+  top: 120px;
+}
+
+.sidebar-section {
+  margin-bottom: 50px;
+}
+
+.sidebar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  margin-bottom: 18px;
+  color: #fff;
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-list li {
+  margin-bottom: 14px;
+}
+
+.sidebar-list a {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 14px;
+  color: #e5e7eb;
+  text-decoration: none;
+}
+
+.sidebar-list a:hover {
+  color: var(--accent-red);
+}
+
+.sidebar-date {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 900px) {
+  .blog-detail-container {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-sidebar {
+    position: relative;
+    top: auto;
+    margin-top: 60px;
+  }
+
+  .blog-main h1 {
+    font-size: 42px;
+  }
 }
 
 /* ============================================================
-   COLLECTIONS PAGE  (MATCHES BLOG STRUCTURE EXACTLY)
-============================================================ */
+   CARDS (BLOG + COLLECTION + SHOP)
+   ============================================================ */
 
-.collections-page {
-    width: 100%;
-    background: #101315;
-    min-height: 100vh;
-    padding-bottom: 80px;
-}
-
-/* ---------- COLLECTIONS HEADER ----------- */
-
-.collections-header {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 20px 40px;
-    text-align: left;
-}
-
-.collections-header .craft-spirits {
-    color: #ff5b5f;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    font-family: 'Satoshi', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-}
-
-.collections-header .craft-spirits .dash {
-    color: #ff5b5f;
-    margin: 0 10px;
-}
-
-.collections-header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 60px;
-    font-weight: 300;
-    margin-bottom: 20px;
-    color: #fff;
-    line-height: 1.2;
-}
-
-.collections-header .description {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 18px;
-    color: #9ca3af;
-    max-width: 700px;
-    line-height: 1.6;
-}
-
-/* ---------- COLLECTIONS FILTER BAR (uses .filter-btn above) ----------- */
-
-.products-section {
-    max-width: 1200px;
-    margin: 50px auto 0;
-    padding: 0 20px;
-}
-
-.product-filters {
-    display: flex;
-    gap: 30px;
-    overflow-x: auto;
-    padding-bottom: 12px;
-    margin-bottom: 45px;
-}
-
-.product-filters::-webkit-scrollbar {
-    height: 6px;
-}
-
-/* COLLECTIONS CARDS — matched to blog cards */
+/* horizontal scroll containers */
+.articles-scroll,
 .products-scroll {
-    display: flex;
-    overflow-x: auto;
-    gap: 30px;
-    padding-bottom: 20px;
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  padding-bottom: 20px;
 }
 
-.products-scroll::-webkit-scrollbar {
-    height: 6px;
+/* base card */
+.article-card,
+.collection-card,
+.shop-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 22px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.collection-card {
-    min-width: 330px;
-    background: #1a1d1f;
-    border-radius: 12px;
-    padding: 22px;
-    transition: 0.3s ease;
+.article-card:hover,
+.collection-card:hover,
+.shop-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(255,91,95,0.1);
 }
 
-.collection-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(255, 91, 95, 0.1);
+/* images */
+.collection-card img,
+.shop-card-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 14px;
 }
 
-.collection-card img {
-    width: 100%;
-    height: 230px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 15px;
+/* titles */
+.article-card h3,
+.collection-card-title,
+.shop-card-title {
+  font-size: 22px;
+  margin-bottom: 10px;
 }
 
-/* CARD CONTENT */
+/* text */
+.article-card p,
+.collection-card-excerpt,
+.shop-card-desc {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 15px;
+  color: var(--text-soft);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
 
+/* category / meta */
 .collection-card-category {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 13px;
-    text-transform: uppercase;
-    color: #00d2c7;
-    margin-bottom: 8px;
-    letter-spacing: 1px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent-cyan);
+  margin-bottom: 8px;
 }
 
-.collection-card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: #fff;
-    margin-bottom: 10px;
-    line-height: 1.2;
+/* price */
+.shop-card-price {
+  font-size: 18px;
+  color: var(--accent-cyan);
+  margin-bottom: 12px;
 }
 
-.collection-card-excerpt {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 15px;
-    color: #bfbfbf;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-/* VIEW DETAILS LINK */
-
+/* CTA link */
 .collection-card-btn {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 14px;
-    color: #ff5b5f;
-    font-weight: 500;
-    text-decoration: none;
-    transition: opacity 0.3s ease;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-red);
+  transition: opacity 0.2s ease;
 }
 
 .collection-card-btn:hover {
-    opacity: 0.7;
-}
-
-/* EMPTY MESSAGE */
-
-.no-products {
-    text-align: center;
-    font-size: 24px;
-    color: #ff5b5f;
-    font-family: 'Satoshi', sans-serif;
-    padding: 40px 0;
+  opacity: 0.7;
 }
 
 /* ============================================================
-   COLLECTION DETAIL PAGE (collectionitem_detail.html)
-============================================================ */
-
-.collection-detail-page {
-    width: 100%;
-    background: #101315;
-    padding: 80px 20px 120px;
-    min-height: 100vh;
-}
-
-/* ---------- DETAIL CONTAINER WRAPPER ---------- */
-
-.collection-detail-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 70px;
-    align-items: start;
-}
-
-/* ---------- LEFT: IMAGE SECTION ---------- */
-
-.collection-detail-image {
-    width: 100%;
-}
-
-.collection-detail-image img {
-    width: 100%;
-    border-radius: 12px;
-    object-fit: cover;
-    max-height: 560px;
-    background: #1a1d1f;
-}
-
-/* ---------- RIGHT: TEXT SECTION ---------- */
-
-.collection-detail-info {
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-}
-
-.collection-detail-category {
-    font-family: 'Satoshi', sans-serif;
-    color: #00d2c7;
-    font-size: 14px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-}
-
-.collection-detail-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 56px;
-    font-weight: 300;
-    line-height: 1.15;
-    margin-bottom: 25px;
-}
-
-.collection-detail-excerpt {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 18px;
-    color: #9ca3af;
-    line-height: 1.7;
-    margin-bottom: 35px;
-    max-width: 600px;
-}
-
-/* ---------- FULL CONTENT BLOCK ---------- */
-
-.collection-detail-content {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 16px;
-    color: #bfbfbf;
-    line-height: 1.75;
-    margin-bottom: 40px;
-}
-
-.collection-detail-content p {
-    margin-bottom: 18px;
-}
-
-.collection-detail-content h2,
-.collection-detail-content h3 {
-    font-family: 'Playfair Display', serif;
-    color: #fff;
-    margin-bottom: 16px;
-    line-height: 1.3;
-}
-
-.collection-detail-content h2 {
-    font-size: 32px;
-    margin-top: 30px;
-}
-
-.collection-detail-content h3 {
-    font-size: 26px;
-    margin-top: 24px;
-}
-
-/* ---------- BACK BUTTON ---------- */
-
-.back-to-collections {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'Satoshi', sans-serif;
-    font-weight: 500;
-    text-decoration: none;
-    color: #ff5b5f;
-    font-size: 15px;
-    margin-top: 20px;
-    transition: opacity 0.3s ease;
-}
-
-.back-to-collections:hover {
-    opacity: 0.7;
-}
-
-/* ---------- RESPONSIVE ---------- */
-
-@media (max-width: 900px) {
-    .collection-detail-container {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-
-    .collection-detail-title {
-        font-size: 42px;
-    }
-
-    .collection-detail-excerpt {
-        font-size: 16px;
-    }
-}
-
-/* --------------------------------------------- */
-/* NAVBAR ALIGNMENT FIX — Shift HOME Right       */
-/* --------------------------------------------- */
-
-/* Shift the entire menu slightly right */
-.menu {
-    margin-left: 40px !important;
-}
-
-/* Add a small extra offset only to the first item: HOME */
-ul li:first-child {
-    margin-left: 10px !important;
-}
-
-/* ============================================================
-   FOOTER REPAIR — restore 4-column layout + correct stacking
+   GRID VERSIONS (SHOP / COLLECTIONS)
    ============================================================ */
 
-/* Ensure footer renders as a normal block and clears floats */
-footer.footer {
-    display: block;
-    width: 100%;
-    clear: both;
-    position: relative;
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-}
-
-/* Restore the original 4-column layout */
-footer .footer-main {
-    display: grid !important;
-    grid-template-columns: 2fr 1fr 1fr 1.5fr !important;
-    gap: 60px !important;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 20px 60px;
-    align-items: flex-start;
-}
-
-/* Fix footer divider */
-footer .footer-divider {
-    width: 80%;
-    height: 1px;
-    background: #2a2d2f !important;
-    margin: 40px auto !important;
-    display: block;
-}
-
-/* Force Experience section to remain BELOW footer-main */
-footer .footer-experience {
-    text-align: center;
-    position: relative;
-    margin-top: 40px !important;
-    z-index: 1;
-}
-
-/* Protect footer from Collections/Blog overrides */
-.collections-page footer .footer-experience,
-.blog-page footer .footer-experience,
-.story-page footer .footer-experience,
-.contact-page footer .footer-experience,
-.shop-page footer .footer-experience {
-    margin-top: 60px !important;
-}
-
-/* Footer bottom row */
-footer .footer-bottom {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px 20px 40px;
-    display: flex !important;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Ensure Experience buttons do not affect layout */
-.footer-experience-buttons button.cn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Ensure nothing collapses footer layout */
-footer * {
-    box-sizing: border-box;
-}
-
-/* ==========================================================
-   GLOBAL FOOTER SPACING — OPTION B (120px Premium Spacing)
-=========================================================== */
-
-footer.footer {
-    margin-top: 120px !important;
-}
-
-/* ==========================================================
-   FIX: EXPERIENCE EXCELLENCE SECTION (FOOTER)
-=========================================================== */
-
-.footer-experience {
-    text-align: center;
-    padding: 60px 20px 60px;
-}
-
-.experience-footer-title {
-    font-family: "Playfair Display", serif !important;
-    font-size: 32px !important;
-    font-weight: 400 !important;
-    color: #ffffff !important;
-    margin-bottom: 20px !important;
-}
-
-.experience-footer-title span {
-    color: #00d2c7 !important;   /* Excellence color */
-}
-
-.experience-footer-description {
-    font-family: 'Satoshi', sans-serif !important;
-    font-size: 16px !important;
-    color: #9ca3af !important;
-    max-width: 600px;
-    margin: 0 auto 30px !important;
-    line-height: 1.6;
-}
-
-/* BUTTON STACKING — one below the other */
-.footer-experience-buttons {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 18px !important;
-    margin-top: 30px !important;
-}
-
-/* VIEW COLLECTIONS — solid corals (#ff5b5f) */
-.footer-experience-buttons .cn.collections {
-    background: #ff5b5f !important;
-    border: none !important;
-    padding: 10px 25px !important;
-}
-
-.footer-experience-buttons .cn.collections a {
-    color: #000 !important;
-    font-family: "Satoshi", sans-serif;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* SHOP NOW — transparent with light border + text */
-.footer-experience-buttons .cn.shop-now {
-    background: transparent !important;
-    border: 2px solid #9ca3af !important;
-    padding: 10px 25px !important;
-}
-
-.footer-experience-buttons .cn.shop-now a {
-    color: #9ca3af !important;
-    font-family: "Satoshi", sans-serif;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Hover improvements */
-.footer-experience-buttons .cn.collections:hover {
-    background: #ffffff !important;
-}
-
-.footer-experience-buttons .cn.collections:hover a {
-    color: #000 !important;
-}
-
-.footer-experience-buttons .cn.shop-now:hover {
-    background: #ffffff !important;
-    border-color: #ffffff !important;
-}
-
-.footer-experience-buttons .cn.shop-now:hover a {
-    color: #000 !important;
-}
-
-/* ============================================================
-   STORY / JOURNEY / PHILOSOPHY  (kept as earlier)
-=========================================================== */
-
-.story-page { width:100%; background:#101315; padding:0 20px 60px; min-height:100vh; }
-.story-header { max-width:1200px; margin:0 auto; text-align:center; padding-top:60px; }
-.story-year { font-family:'Satoshi',sans-serif; font-size:11px; color:#ff5b5f; letter-spacing:2px; display:flex; justify-content:center; margin-bottom:20px; }
-.story-header h1 { font-family:'Playfair Display',serif; font-size:88px; color:#fff; font-weight:400; margin-bottom:20px; }
-.story-tagline { font-family:'Satoshi',sans-serif; font-size:18px; color:#9ca3af; max-width:700px; margin:0 auto; }
-
-.story-content { max-width:1200px; margin:110px auto 0; display:grid; grid-template-columns:1fr 1fr; gap:60px; padding-bottom:80px; align-items:center; }
-.story-text h2 { font-family:'Playfair Display',serif; font-size:36px; color:#fff; margin-bottom:30px; }
-.story-text p { font-family:'Satoshi',sans-serif; font-size:16px; color:#9ca3af; line-height:1.8; margin-bottom:20px; }
-.image-placeholder { width:100%; height:500px; background:#1a1d1f; border-radius:12px; }
-
-.story-philosophy { padding:80px 20px 60px; text-align:center; }
-.philosophy-label { font-family:'Satoshi',sans-serif; font-size:11px; color:#5fa64a; letter-spacing:2px; }
-.story-philosophy h2 { font-family:'Playfair Display',serif; font-size:60px; color:#fff; }
-.philosophy-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:40px; max-width:1000px; margin:60px auto 0; }
-.philosophy-number { width:60px; height:60px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:28px; font-family:'Playfair Display',serif; }
-.philosophy-number.red { background:rgba(255,91,95,.15); color:#ff5b5f; }
-.philosophy-number.green { background:rgba(0,210,199,.15); color:#00d2c7; }
-.philosophy-number.orange { background:rgba(255,114,0,.15); color:#ff7200; }
-
-.story-journey { padding:60px 20px 100px; text-align:center; }
-.story-journey h2 { font-size:60px; color:#fff; font-family:'Playfair Display',serif; margin-bottom:60px; }
-.timeline { max-width:900px; margin:0 auto; }
-.timeline-item { display:grid; grid-template-columns:80px 30px 1fr; gap:20px; margin-bottom:50px; }
-.timeline-year { color:#fff; font-size:24px; font-family:'Playfair Display',serif; }
-.timeline-dot { width:16px; height:16px; border-radius:50%; }
-.timeline-dot.red { background:#ff5b5f; }
-.timeline-dot.green { background:#00d2c7; }
-.timeline-dot.orange { background:#ff7200; }
-.timeline-content h3 { font-size:28px; color:#fff; }
-.timeline-content p { font-size:16px; color:#9ca3af; }
-
-.story-experience { padding:80px 20px 100px; text-align:center; }
-.story-experience h2 { font-size:48px; color:#fff; font-family:'Playfair Display',serif; margin-bottom:20px; }
-.story-experience p { font-size:18px; color:#9ca3af; margin-bottom:40px; }
-.experience-buttons { display:flex; justify-content:center; gap:20px; }
-.experience-buttons .cn.visit-btn { background:#ff5b5f; padding:0 25px; }
-.experience-buttons .cn.explore-btn { background:transparent; border:2px solid #9ca3af; padding:0 25px; }
-
-/* ============================================================
-   CONTACT PAGE — RESTORED ORIGINAL FULL STYLING
-============================================================ */
-
-.contact-page {
-    width: 100%;
-    background: #101315;
-    padding: 60px 20px 0;
-}
-
-.contact-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-}
-
-.contact-left {
-    display: flex;
-    flex-direction: column;
-}
-
-.contact-label {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 14px;
-    color: #ff5b5f;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-}
-
-.contact-label .dash {
-    margin: 0 10px;
-}
-
-.contact-left h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 60px;
-    font-weight: 300;
-    color: #fff;
-    margin-bottom: 20px;
-}
-
-.contact-description {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 16px;
-    line-height: 1.8;
-    color: #9ca3af;
-    margin-bottom: 60px;
-}
-
-.contact-form-section h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 24px;
-    font-weight: 300;
-    color: #fff;
-    margin-bottom: 30px;
-}
-
-.contact-form-section h3 .highlight-cyan {
-    color: #00d2c7;
-}
-
-.contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-}
-
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 15px 20px;
-    background: #1a1d1f;
-    border: 1px solid #2a2d2f;
-    border-radius: 4px;
-    font-family: 'Satoshi', sans-serif;
-    font-size: 15px;
-    color: #fff;
-    outline: none;
-    transition: border-color 0.3s;
-}
-
-.contact-form input::placeholder,
-.contact-form textarea::placeholder {
-    color: #6b7280;
-}
-
-.contact-form input:focus,
-.contact-form textarea:focus {
-    border-color: #ff5b5f;
-}
-
-.contact-form textarea {
-    resize: vertical;
-    min-height: 150px;
-}
-
-.contact-form button {
-    align-self: flex-start;
-    margin-top: 10px;
-    width: 180px;
-    height: 45px;
-    background: #ff5b5f;
-    border: none;
-    font-size: 14px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: 0.3s ease;
-    font-family: 'Satoshi', sans-serif;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-.contact-form button:hover {
-    background: #ff7200;
-}
-
-.contact-form button a {
-    color: #fff;
-    text-decoration: none;
-}
-
-.contact-right {
-    display: flex;
-    flex-direction: column;
-    margin-top: 254px;
-}
-
-.contact-right-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 24px;
-    font-weight: 300;
-    color: #fff;
-    margin-bottom: 30px;
-}
-
-.contact-card {
-    background: #1a1d1f;
-    border: 1px solid #2a2d2f;
-    border-radius: 8px;
-    padding: 12px 15px;
-    margin-bottom: 30px;
-}
-
-.contact-card h4 {
-    font-family: 'Playfair Display', serif;
-    font-size: 16px;
-    font-weight: 300;
-    color: #fff;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.contact-card h4 i {
-    color: #ff5b5f;
-}
-
-.contact-benefits {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.contact-benefits li {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 13px;
-    line-height: 1.4;
-    color: #9ca3af;
-}
-
-.contact-info {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.contact-info-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.contact-info-header span {
-    font-family: 'Playfair Display', serif;
-    font-size: 14px;
-    font-weight: 300;
-    color: #fff;
-}
-
-.contact-info-detail {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 13px;
-    color: #6b7280;
-    margin-left: 22px;
-}
-
-.contact-info-sub {
-    font-size: 11px;
-    color: #6b7280;
-    margin-left: 22px;
-}
-
-/* ============================================================
-   FAQ SECTION — ORIGINAL CLEAN VERSION (STYLE A)
-============================================================ */
-
-.faq-section {
-    width: 100%;
-    background: #101315;
-    padding: 80px 20px 100px;
-    text-align: center;
-}
-
-.faq-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 48px;
-    font-weight: 300;
-    color: #fff;
-    margin-bottom: 60px;
-}
-
-.faq-title span {
-    color: #00ff88;
-}
-
-.faq-list {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
-.faq-item {
-    border-bottom: 1px solid #2a2d2f;
-    padding: 25px 0;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.faq-item:hover {
-    background: rgba(255, 91, 95, 0.05);
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-.faq-question {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.faq-question h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-weight: 300;
-    color: #fff;
-    margin: 0;
-}
-
-.faq-toggle {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    border: 1px solid #ff5b5f;
-    color: #ff5b5f;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.faq-item:hover .faq-toggle {
-    background: #ff5b5f;
-    color: #fff;
-}
-
-.faq-answer {
-    display: none;
-    margin-top: 18px;
-    font-family: 'Satoshi', sans-serif;
-    font-size: 15px;
-    color: #9ca3af;
-    line-height: 1.6;
-}
-
-.faq-item.active .faq-answer {
-    display: block;
-}
-
-.faq-item.active .faq-toggle {
-    background: #ff5b5f;
-    color: #fff;
-}
-
-/* ============================================================
-   MEDIA PAGE STYLING
-============================================================ */
-
-.media-page {
-    width: 100%;
-    background: #101315;
-    min-height: 100vh;
-    padding-bottom: 80px;
-}
-
-/* --------- HEADER --------- */
-.media-header {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 20px 40px;
-    text-align: left;
-}
-
-.media-header .craft-spirits {
-    color: #ff5b5f;
-    font-size: 20px;
-    font-family: 'Satoshi', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-}
-
-.media-header .craft-spirits .dash {
-    color: #ff5b5f;
-    margin: 0 10px;
-}
-
-.media-header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 60px;
-    font-weight: 300;
-    color: #fff;
-    margin-bottom: 20px;
-}
-
-.media-header .description {
-    font-size: 18px;
-    color: #9ca3af;
-    max-width: 700px;
-    line-height: 1.6;
-}
-
-/* --------- FEATURED PRESS --------- */
-.press-section {
-    max-width: 1200px;
-    margin: 60px auto 0;
-    padding: 0 20px;
-}
-
-.press-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 48px;
-    color: #fff;
-    margin-bottom: 40px;
-}
-
-.press-title span {
-    color: #00d2c7;
-}
-
-.press-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-    gap: 30px;
-}
-
-.press-card {
-    background: #1a1d1f;
-    padding: 25px;
-    border-radius: 12px;
-    transition: 0.3s ease;
-}
-
-.press-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(255, 91, 95, 0.1);
-}
-
-.press-card .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.press-card .publication-logo {
-    font-size: 26px;
-    color: #ff5b5f;
-}
-
-.publish-date {
-    color: #9ca3af;
-    font-size: 13px;
-    font-family: 'Satoshi', sans-serif;
-}
-
-.article-title {
-    font-family: 'Playfair Display', serif;
-    color: #fff;
-    font-size: 22px;
-    margin: 20px 0 10px;
-}
-
-.article-description {
-    font-family: 'Satoshi', sans-serif;
-    color: #bfbfbf;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-.read-more {
-    color: #ff5b5f;
-    font-family: 'Satoshi', sans-serif;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-/* --------- ALL PRESS --------- */
-.all-press-section {
-    max-width: 1200px;
-    margin: 80px auto 0;
-    padding: 0 20px;
-}
-
-.all-press-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 40px;
-    color: #fff;
-    margin-bottom: 30px;
-}
-
-.all-press-title .highlight-green {
-    color: #00d2c7;
-}
-
-.press-list {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-.press-list-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #1a1d1f;
-    padding: 22px;
-    border-radius: 12px;
-}
-
-.item-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #9ca3af;
-    font-family: 'Satoshi', sans-serif;
-    font-size: 13px;
-}
-
-.item-title {
-    font-size: 20px;
-    font-family: 'Playfair Display', serif;
-    color: #fff;
-    margin-top: 5px;
-}
-
-.read-btn {
-    background: transparent;
-    border: 1px solid #9ca3af;
-    padding: 8px 16px;
-    color: #9ca3af;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
-
-.read-btn:hover {
-    background: #fff;
-    color: #000;
-}
-
-/* --------- PRESS KIT --------- */
-.press-kit-section {
-    max-width: 1200px;
-    margin: 100px auto 0;
-    padding: 0 20px;
-    text-align: center;
-}
-
-.press-kit-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 40px;
-    color: #fff;
-    margin-bottom: 20px;
-}
-
-.press-kit-description {
-    color: #9ca3af;
-    max-width: 700px;
-    margin: 0 auto 30px;
-    line-height: 1.6;
-    font-size: 16px;
-}
-
-.press-kit-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.press-kit-buttons .cn {
-    padding: 10px 25px;
-    background: #ff5b5f;
-    border: none;
-}
-
-.press-kit-buttons .cn.inquiries {
-    background: transparent;
-    border: 2px solid #9ca3af;
-    color: #9ca3af;
-}
-
-.press-kit-buttons .cn.inquiries:hover {
-    background: #ffffff;
-    color: #000;
-}
-
-/* ============================================================
-   PRESS DETAIL PAGE
-============================================================ */
-
-.press-detail-page {
-    max-width: 900px;
-    margin: 80px auto 120px;
-    padding: 0 20px;
-    color: #fff;
-}
-
-.press-detail-header {
-    margin-bottom: 40px;
-}
-
-.press-detail-meta {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 14px;
-    color: #9ca3af;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.press-detail-meta .pub {
-    color: #00d2c7;
-    font-weight: 500;
-}
-
-.press-detail-meta .dot {
-    color: #555;
-}
-
-.press-detail-title {
-    font-family: "Playfair Display", serif;
-    font-size: 56px;
-    line-height: 1.2;
-    font-weight: 300;
-    margin-bottom: 25px;
-    color: #fff;
-}
-
-.external-link-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: "Satoshi", sans-serif;
-    font-size: 14px;
-    padding: 10px 18px;
-    border: 1px solid #9ca3af;
-    border-radius: 6px;
-    color: #9ca3af;
-    text-decoration: none;
-    transition: 0.25s ease-in-out;
-}
-
-.external-link-btn:hover {
-    background: #fff;
-    color: #000;
-}
-
-.press-detail-cover {
-    margin: 50px 0;
-}
-
-.press-detail-cover img {
-    width: 100%;
-    border-radius: 12px;
-    background: #1a1d1f;
-}
-
-.press-detail-content {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 17px;
-    color: #c7c7c7;
-    line-height: 1.75;
-}
-
-.press-detail-content h2,
-.press-detail-content h3 {
-    font-family: 'Playfair Display', serif;
-    margin: 35px 0 15px;
-    color: #fff;
-}
-
-.press-detail-content h2 {
-    font-size: 32px;
-}
-
-.press-detail-content h3 {
-    font-size: 26px;
-}
-
-.press-detail-content p {
-    margin-bottom: 18px;
-}
-
-.press-detail-footer {
-    margin-top: 70px;
-}
-
-.back-btn {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 15px;
-    text-decoration: none;
-    color: #ff5b5f;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: opacity 0.3s ease;
-}
-
-.back-btn:hover {
-    opacity: 0.7;
-}
-
-/* ============================================================
-   SHOP PAGE (cleaned)
-   - Tabs + Filters are defined at the bottom canonical block
-   - shop-card / grid layout kept separate
-============================================================ */
-
-.shop-tabs {
-    width: 100%;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.shop-tab {
-    margin: 0 20px;
-    font-family: 'Satoshi', sans-serif;
-    font-size: 18px;
-    text-transform: uppercase;
-    color: #9ca3af;
-    text-decoration: none;
-    padding-bottom: 6px;
-    transition: 0.3s;
-    position: relative;
-}
-
-.shop-tab.active {
-    color: #ff5b5f;
-}
-
-.shop-tab.active::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background: #ff5b5f;
-    bottom: -4px;
-    left: 0;
-}
-
-/* SHOP GRID (kept simple) */
-.shop-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
-    margin-top: 30px;
-}
-
-.shop-card {
-    background: #1a1d1f;
-    border-radius: 12px;
-    padding: 20px;
-}
-
-.shop-card-img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-
-.shop-card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: #fff;
-    margin-bottom: 10px;
-}
-
-.shop-card-desc {
-    font-family: 'Satoshi', sans-serif;
-    color: #bfbfbf;
-    margin-bottom: 10px;
-}
-
-.shop-card-price {
-    color: #00d2c7;
-    font-size: 18px;
-    margin-bottom: 15px;
-}
-
-/* CTA buttons in shop */
-.shop-now-btn,
-.experience-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background: #ff5b5f;
-    border: none;
-    color: #000;
-    font-weight: 600;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-}
-
-.experience-btn {
-    background: transparent;
-    border: 2px solid #9ca3af;
-    color: #9ca3af;
-}
-
-/* Center the PRODUCTS / EXPERIENCES tab bar */
-.tab-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
-}
-
-/* helper center classes (lightweight) */
-.tab-center {
-    display: flex;
-    justify-content: center;
-    width: max-content;
-    gap: 20px;
-}
-
-/* Grid / card small tweak for consistent spacing */
-.items-grid {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 8px;
-}
-
-/* Ensure collection-card uses consistent paddings inside grid */
-.collection-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 380px;
-}
-
-/* Force images to be consistent inside cards */
-.collection-card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 14px;
-}
-
-/* Make call-to-action buttons match the small link style used elsewhere */
-.collection-card-btn {
-    color: #ff5b5f;
-    text-decoration: none;
-    font-weight: 600;
-    margin-top: 12px;
-    display: inline-block;
-}
-
-/* responsive fallback */
-@media (max-width: 880px) {
-    .items-grid {
-        grid-template-columns: 1fr !important;
-        gap: 20px;
-        padding: 0 18px;
-    }
-
-    .product-filters,
-    .tab-selector {
-        gap: 12px;
-    }
-
-    .collection-card {
-        min-height: unset;
-    }
-}
-
-/* ============================================================
-   SHOP: Keep the card visuals / grid consistent
-============================================================ */
-
-.collection-card {
-    background: #1a1d1f;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: left;
-    transition: transform 0.3s ease;
-}
-
-.collection-card:hover {
-    transform: translateY(-5px);
-}
-
-/* Product grid layout for Collections/Shop pages (grid version) */
 .collections-page .products-scroll,
 .shop-page .products-scroll {
   display: grid;
@@ -1828,622 +859,772 @@ footer.footer {
   padding-bottom: 40px;
 }
 
-/* basic card internals */
-.collection-card-title { font-size: 18px; color: #fff; margin-bottom: 8px; }
-.collection-card-excerpt { color: #bfc6c9; font-size: 14px; margin-bottom: 12px; flex-grow: 1; }
-.collection-card-category { font-size: 12px; color: #9ca3af; margin: 8px 0 6px; text-transform: uppercase; letter-spacing: 0.6px; }
-
 /* ============================================================
-   MEDIA / PRESS DETAIL, small responsive tweaks kept below
-============================================================ */
+   EMPTY STATES
+   ============================================================ */
 
-@media (max-width: 700px) {
-    .press-detail-title { font-size: 40px; }
-    .press-detail-content { font-size: 16px; }
-}
-
-/* ============================================================
-   CANONICAL SHOP: tab + filter styles (single source of truth)
-   - Tabs: centered, rounded pills; selected = light pill
-   - Filters: left-aligned, text-only; selected = red + underline
-============================================================ */
-
-.collections-page, .shop-page {
-  --shop-filter-color: #9ca3af;
-  --shop-accent: #ff5b5f;
-  --shop-light-pill: #f2f2f2;
-}
-
-/* Tabs (centered) */
-.collections-page .tab-selector,
-.shop-page .tab-selector {
-  display:flex;
-  justify-content:center;
-  gap:18px;
-  margin-top:32px;
-  align-items:center;
-}
-
-/* Tab button (rounded pill) */
-.collections-page .tab-selector .filter-btn,
-.shop-page .tab-selector .filter-btn {
-  display:inline-block;
-  padding:10px 22px;
-  border-radius:999px;
-  background:transparent;
-  color:var(--shop-filter-color);
-  font-weight:700;
-  text-transform:uppercase;
-  font-size:13px;
-  min-width:140px;
-  text-align:center;
-  border:1px solid rgba(255,255,255,0.08);
-  transition: transform .16s ease, box-shadow .16s ease, background .16s ease, color .16s ease;
-  text-decoration:none;
-}
-
-/* Hover on tab */
-.collections-page .tab-selector .filter-btn:hover,
-.shop-page .tab-selector .filter-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-}
-
-/* Selected tab = light pill */
-.collections-page .tab-selector .filter-btn.active,
-.shop-page .tab-selector .filter-btn.active {
-  background: var(--shop-light-pill);
-  color: #111;
-  border-color: var(--shop-light-pill);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-}
-
-/* Prevent accidental underlines on tabs */
-.collections-page .tab-selector .filter-btn::after,
-.shop-page .tab-selector .filter-btn::after {
-  content: none !important;
-}
-
-/* Filters: left-aligned text list (like blog/collections) */
-.collections-page .product-filters,
-.shop-page .product-filters {
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:flex-start;
-  gap:14px 20px;
-  margin:28px auto 40px;
-  padding:0 20px;
-  max-width:1200px;
-}
-
-/* Filter (text-only) base — uses same look as .filter-btn globally */
-.collections-page .product-filters .filter-btn,
-.shop-page .product-filters .filter-btn {
-  background: none;
-  border: none;
-  padding: 0 6px;
-  margin: 0;
-  display:inline-block;
-  color: var(--shop-filter-color);
-  font-weight:700;
-  font-size:14px;
-  text-transform:uppercase;
-  position:relative;
-  text-decoration:none;
-  transition: color .18s ease;
-}
-
-/* Hover */
-.collections-page .product-filters .filter-btn:hover,
-.shop-page .product-filters .filter-btn:hover {
-  color: var(--shop-accent);
-}
-
-/* Active filter = red text + underline */
-.collections-page .product-filters .filter-btn.active,
-shop-page .product-filters .filter-btn.active {
-  color: var(--shop-accent);
-}
-
-/* Underline for active filter */
-.collections-page .product-filters .filter-btn.active::after,
-.shop-page .product-filters .filter-btn.active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -6px;
-  height: 3px;
-  background: var(--shop-accent);
-  border-radius: 2px;
-}
-
-/* Small screen tweaks */
-@media (max-width: 720px) {
-  .collections-page .tab-selector .filter-btn,
-  .shop-page .tab-selector .filter-btn {
-    padding:8px 12px;
-    min-width:100px;
-    font-size:12px;
-  }
-  .collections-page .product-filters,
-  .shop-page .product-filters {
-    padding-left:16px;
-    gap:8px 10px;
-  }
-  .collections-page .product-filters .filter-btn,
-  .shop-page .product-filters .filter-btn {
-    padding:0 6px;
-    font-size:13px;
-  }
-}
-
-/* End of cleaned stylesheet */
-/* Cart badge (placed near the cart icon in navbar) */
-.nav-icons { position: relative; } /* you likely already have this */
-
-.cart-link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: #fff;            /* icon color */
-  text-decoration: none;
-}
-
-.cart-link .fa {
-  font-size: 18px;
-}
-
-/* the circular badge */
-.cart-count {
-  position: absolute;
-  top: -6px;
-  right: -8px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 6px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #ff5b5f;
-  color: #000;
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 999px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-  line-height: 1;
-  pointer-events: none;
-}
-/* === CART ICON FIXES === */
-.cart-link {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.cart-icon {
-    font-size: 20px;
-    color: #ffffff; /* white icon */
-    transition: color 0.2s ease;
-}
-
-.cart-link:hover .cart-icon {
-    color: #ff5b5f; /* Ochre red on hover */
-}
-
-/* === CART BADGE (count) === */
-.cart-badge {
-    position: absolute;
-    top: -6px;
-    right: -10px;
-    background: #ff5b5f;      /* Ochre red */
-    color: #ffffff;           /* white text */
-    font-size: 11px;
-    font-weight: 700;
-    font-family: 'Satoshi', sans-serif;
-    padding: 2px 6px;
-    border-radius: 999px;
-    min-width: 18px;
-    text-align: center;
-    line-height: 1.2;
-    border: 2px solid #000;  /* matches your navbar dark bg */
-}
-
-/* optional: slightly enlarge area for touch targets */
-.nav-icons .cart-link {
-    padding: 0 6px;
-}
-/* === CART ICON (light color so it shows on dark navbar) === */
-.cart-link {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.cart-icon {
-    font-size: 20px;
-    color: #f5f5f5; /* light off-white so it shows clearly */
-    transition: color 0.2s ease;
-}
-
-.cart-link:hover .cart-icon {
-    color: #ff5b5f; /* Ochre red on hover */
-}
-
-/* === CART BADGE (count) === */
-.cart-badge {
-    position: absolute;
-    top: -6px;
-    right: -10px;
-    background: #ff5b5f;      /* Ochre red */
-    color: #ffffff;           /* white text */
-    font-size: 11px;
-    font-weight: 700;
-    font-family: 'Satoshi', sans-serif;
-    padding: 2px 6px;
-    border-radius: 999px;
-    min-width: 18px;
-    text-align: center;
-    line-height: 1.2;
-    border: 2px solid #000;  /* matches your dark nav bar */
-}
-
-/* optional: improve clickable area */
-.nav-icons .cart-link {
-    padding: 0 6px;
-}
-/* ============================
-   NAV ICONS — CLEAN VERSION (NO BAG)
-   ============================ */
-
-.nav-icons {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.nav-icons .icon-link,
-.nav-icons .user-toggle {
-  color: #f5f5f5 !important; /* bright for dark navbar */
-  background: transparent;
-  border: none;
-  font-size: 18px;
-  padding: 6px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* USER DROPDOWN */
-.user-dropdown-wrapper {
-  position: relative;
-}
-
-.user-dropdown {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 8px);
-  min-width: 160px;
-  background: #0b0c0d;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 8px;
-  padding: 8px 6px;
-  display: none;
-  z-index: 9999;
-  backdrop-filter: blur(4px);
-}
-
-.user-dropdown.show {
-  display: block;
-}
-
-.user-dropdown .dropdown-item {
-  display: block;
-  padding: 8px 12px;
-  font-family: 'Satoshi', sans-serif;
-  color: #f5f6f8;
-  font-size: 14px;
-  text-decoration: none;
-  border-radius: 6px;
-  margin: 4px 6px;
-}
-
-.user-dropdown .dropdown-item:hover {
-  background: rgba(255,91,95,0.06);
-  color: #ff5b5f;
-}
-
-.logout-btn {
-  width: 100%;
-  background: transparent;
-  border: none;
-  padding: 8px 12px;
-  color: #f5f6f8;
-  text-align: left;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.logout-btn:hover {
-  background: rgba(255,91,95,0.06);
-  color: #ff5b5f;
-}
-
-/* CART ICON & BADGE (FORCE VISIBLE) */
-.cart-link .cart-icon {
-  color: #ffffff !important;
-  font-size: 20px !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-.cart-link:hover .cart-icon {
-  color: #ff5b5f !important;
-}
-
-.cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -10px;
-  background: #ff5b5f;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 999px;
-  border: 2px solid #000;
-  min-width: 18px;
+.no-articles,
+.no-products {
   text-align: center;
+  padding: 40px 0;
+  font-size: 24px;
+  color: var(--accent-red);
 }
-/* ---------- User dropdown + cart styling (navbar) ---------- */
+/* ============================================================
+   COLLECTION DETAIL PAGE
+   ============================================================ */
 
-.nav-icons {
-  display: flex;
+.collection-detail-page {
+  width: 100%;
+  background: var(--bg-main);
+  padding: 80px 20px 120px;
+  min-height: 100vh;
+}
+
+.collection-detail-container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: start;
+}
+
+/* image */
+.collection-detail-image img {
+  width: 100%;
+  max-height: 560px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: var(--bg-card);
+}
+
+/* info */
+.collection-detail-category {
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  margin-bottom: 12px;
+}
+
+.collection-detail-title {
+  font-size: 56px;
+  line-height: 1.15;
+  margin-bottom: 25px;
+}
+
+.collection-detail-excerpt {
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 35px;
+  max-width: 600px;
+}
+
+.collection-detail-content {
+  font-size: 16px;
+  color: var(--text-soft);
+  line-height: 1.75;
+  margin-bottom: 40px;
+}
+
+.collection-detail-content p {
+  margin-bottom: 18px;
+}
+
+.collection-detail-content h2 {
+  font-size: 32px;
+  margin-top: 30px;
+}
+
+.collection-detail-content h3 {
+  font-size: 26px;
+  margin-top: 24px;
+}
+
+/* back link */
+.back-to-collections {
+  display: inline-flex;
   align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent-red);
+  margin-top: 20px;
+  transition: opacity 0.2s ease;
+}
+
+.back-to-collections:hover {
+  opacity: 0.7;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer {
+  background: var(--bg-dark);
+  margin-top: 120px;
+}
+
+.footer-main {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 80px 20px 60px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 60px;
+}
+
+.footer-logo {
+  font-size: 35px;
+  margin-bottom: 20px;
+}
+
+.footer-tagline {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.footer-heading {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 
-/* keep icon-link appearance unchanged but ensure visible on dark bg */
-.icon-link, .user-toggle {
-  color: #f5f5f5;
-  background: transparent;
-  border: none;
-  font-size: 18px;
-  padding: 6px;
-  cursor: pointer;
+.footer-links a {
+  color: var(--text-muted);
+  transition: color 0.2s ease;
 }
 
-/* user dropdown wrapper */
-.user-menu-wrap {
-  position: relative;
-  display: inline-block;
+.footer-links a:hover {
+  color: #ffffff;
 }
 
-/* dropdown panel */
-.user-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: calc(100% + 10px);
-  min-width: 160px;
-  background: #0b0c0d;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 8px;
-  padding: 8px;
-  z-index: 9999;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+.footer-divider {
+  width: 80%;
+  height: 1px;
+  background: #2a2d2f;
+  margin: 40px auto;
 }
 
-/* shown state */
-.user-dropdown.show {
-  display: block;
+.footer-experience {
+  text-align: center;
+  padding: 60px 20px;
 }
 
-/* dropdown items */
-.user-dropdown .dropdown-item {
-  display: block;
-  padding: 8px 12px;
-  color: #f5f6f8;
-  text-decoration: none;
-  font-size: 14px;
-  border-radius: 6px;
-  margin: 4px 0;
+.footer-experience-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
 }
 
-.user-dropdown .dropdown-item:hover,
-.logout-btn:hover {
-  color: #ff5b5f;
-  background: rgba(255,91,95,0.04);
+.footer-bottom {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 20px 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
 }
 
-/* logout button inside dropdown */
-.logout-btn {
+/* ============================================================
+   FAQ SECTION
+   ============================================================ */
+
+.faq-section {
   width: 100%;
-  text-align: left;
-  background: transparent;
-  color: inherit;
-  border: none;
-  padding: 0;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-/* cart icon + badge */
-.cart-link {
-  position: relative;
-  display: inline-block;
-  margin-left: 6px;
-}
-
-.cart-icon {
-  color: #f5f5f5;
-  font-size: 18px;
-}
-
-.cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -8px;
-  background: #ff5b5f;
-  color: #fff;
-  font-size: 11px;
-  padding: 2px 6px;
-  border-radius: 999px;
-  font-weight: 700;
-  border: 1px solid #000;
-  min-width: 18px;
+  padding: 80px 20px 100px;
   text-align: center;
 }
-/* -------------------------
-   AUTH PAGES: login / signup / logout
-   Append this block to end of static/style.css
-   ------------------------- */
+
+.faq-title {
+  font-size: 48px;
+  margin-bottom: 60px;
+}
+
+.faq-list {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-item {
+  width: 100%;
+  border-bottom: 1px solid #2a2d2f;
+  padding: 24px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.faq-item:hover {
+  background: rgba(255,91,95,0.06);
+}
+
+.faq-question h3 {
+  font-size: 20px;
+  text-align: left;
+}
+
+.faq-toggle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-red);
+  color: var(--accent-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.faq-item.active .faq-toggle,
+.faq-item:hover .faq-toggle {
+  background: var(--accent-red);
+  color: #ffffff;
+}
+
+.faq-answer {
+  display: none;
+  width: 100%;
+  max-width: 900px;
+  margin-top: 15px;
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  text-align: left;
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+/* ============================================================
+   CONTACT PAGE & FORMS
+   ============================================================ */
+
+.contact-page {
+  width: 100%;
+  background: var(--bg-main);
+  padding: 60px 20px 0;
+}
+
+.contact-container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+}
+
+.contact-left h1 {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.contact-description {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 60px;
+}
+
+/* forms */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  background: var(--bg-card);
+  border: 1px solid #2a2d2f;
+  color: #ffffff;
+  padding: 14px 16px;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: #6b7280;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--accent-red);
+}
+
+.contact-form textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.contact-form button {
+  width: 180px;
+  height: 45px;
+  background: var(--accent-red);
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: background 0.25s ease;
+}
+
+.contact-form button:hover {
+  background: var(--accent-orange);
+}
+
+/* ============================================================
+   RESPONSIVE (PARTIAL — FINAL IN NEXT CHUNK)
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .collection-detail-container,
+  .contact-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .collection-detail-title {
+    font-size: 42px;
+  }
+
+  .faq-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .faq-toggle {
+    align-self: flex-end;
+  }
+}
+/* ============================================================
+   STORY / JOURNEY / PHILOSOPHY
+   ============================================================ */
+
+.story-page {
+  width: 100%;
+  background: var(--bg-main);
+  padding: 0 20px 60px;
+  min-height: 100vh;
+}
+
+.story-header {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 60px;
+}
+
+.story-header h1 {
+  font-size: 88px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.story-tagline {
+  font-size: 18px;
+  color: var(--text-muted);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.story-content {
+  max-width: var(--container-width);
+  margin: 110px auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 80px;
+  align-items: center;
+}
+
+.story-text h2 {
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+.story-text p {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.story-philosophy {
+  padding: 80px 20px 60px;
+  text-align: left;
+}
+
+.story-philosophy h2 {
+  font-size: 60px;
+  margin-bottom: 12px;
+}
+
+.story-philosophy p {
+  max-width: 900px;
+  margin-bottom: 18px;
+  color: var(--text-muted);
+}
+
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 40px;
+  max-width: 1000px;
+  margin-top: 60px;
+}
+
+.philosophy-number {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.story-journey {
+  padding: 60px 20px 100px;
+  text-align: center;
+}
+
+.story-journey h2 {
+  font-size: 60px;
+  margin-bottom: 60px;
+}
+/* ============================================================
+   MEDIA / PRESS — CANONICAL (NO DUPLICATES)
+   ============================================================ */
+
+.media-page {
+  width: 100%;
+  background: var(--bg-main);
+  min-height: 100vh;
+  padding-bottom: 120px;
+}
+
+/* ---------------- HEADER ---------------- */
+
+.media-header {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 80px 20px 40px;
+}
+
+.media-header h1 {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.media-header .description {
+  font-size: 18px;
+  color: var(--text-muted);
+  max-width: 700px;
+}
+
+/* ---------------- FEATURED PRESS ---------------- */
+
+.press-section {
+  max-width: var(--container-width);
+  margin: 60px auto 0;
+  padding: 0 20px;
+}
+
+.press-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 30px;
+}
+
+.press-card {
+  background: #1a1d1f;
+  border-radius: 12px;
+  padding: 22px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.press-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(255,91,95,0.1);
+}
+
+/* ---------------- ALL PRESS (LEFT-ALIGNED) ---------------- */
+
+.all-press-section {
+  max-width: var(--container-width);
+  margin: 100px auto 0;
+  padding: 0 20px;
+}
+
+.all-press-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  margin-bottom: 40px;
+  text-align: left; /* IMPORTANT */
+}
+
+/* List container */
+.press-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Row item */
+.press-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #151718;
+  border-radius: 10px;
+  padding: 18px 22px;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.press-list-item:hover {
+  background: #1a1d1f;
+  transform: translateY(-2px);
+}
+
+.press-list-item .item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.press-list-item .item-meta {
+  font-size: 13px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.press-list-item .item-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.press-list-item .read-btn {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-red);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.press-list-item .read-btn:hover {
+  opacity: 0.7;
+}
+
+/* ---------------- PRESS KIT (CENTERED) ---------------- */
+
+.press-kit-section {
+  max-width: 900px;
+  margin: 120px auto 0;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.press-kit-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  margin-bottom: 20px;
+}
+
+.press-kit-description {
+  font-size: 16px;
+  color: #9ca3af;
+  max-width: 640px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+.press-kit-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* ---------------- PRESS DETAIL ---------------- */
+
+.press-detail-page {
+  max-width: 900px;
+  margin: 80px auto 120px;
+  padding: 0 20px;
+}
+
+.press-detail-title {
+  font-size: 56px;
+  line-height: 1.2;
+  margin-bottom: 25px;
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media (max-width: 720px) {
+  .press-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .media-header h1 {
+    font-size: 42px;
+  }
+
+  .all-press-title,
+  .press-kit-title {
+    font-size: 32px;
+  }
+}
+
+/* ============================================================
+   AUTH PAGES (LOGIN / SIGNUP / LOGOUT)
+   ============================================================ */
 
 .auth-page {
-  min-height: calc(100vh - 200px); /* accounts for header + footer */
+  min-height: calc(100vh - 200px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
-  background: transparent; /* keep site bg */
 }
 
-/* Card */
 .auth-card {
   width: 100%;
   max-width: 720px;
   background: #0f1112;
   border-radius: 12px;
   padding: 28px;
-  box-shadow: 0 18px 50px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.03);
 }
 
-/* Optionally smaller variant (logout confirm) */
-.auth-card.small { max-width: 520px; padding: 22px; }
-
-/* Header inside card */
-.auth-card-header {
-  text-align: left;
-  margin-bottom: 18px;
-}
-.auth-card-header .craft-spirits {
-  color: #ff5b5f;
-  font-size: 13px;
-  letter-spacing: 2px;
-  font-weight:700;
-  margin-bottom: 8px;
-}
 .auth-title {
-  font-family: 'Playfair Display', serif;
   font-size: 36px;
-  font-weight: 400;
-  color: #fff;
-  margin: 0 0 6px;
+  margin-bottom: 6px;
 }
+
 .auth-sub {
-  color: #9ca3af;
-  font-family: 'Satoshi', sans-serif;
-  margin-top: 4px;
+  color: var(--text-muted);
   font-size: 15px;
 }
 
-/* Errors */
-.auth-errors {
-  background: rgba(255,91,95,0.06);
-  color: #ffb4b7;
-  padding: 10px 12px;
-  border-radius: 8px;
-  margin-bottom: 14px;
-  font-family: 'Satoshi', sans-serif;
-}
-
-/* Form layout */
-.form-grid { display: grid; gap: 14px; }
-.form-row { display:flex; flex-direction:column; gap:6px; }
-
-/* Field labels & inputs */
-.field-label {
-  font-size: 12px;
-  color: #9ca3af;
-  font-weight: 700;
-  text-transform: uppercase;
-  font-family: 'Satoshi', sans-serif;
-  letter-spacing: 1px;
-}
-input[type="text"],
-input[type="email"],
-input[type="password"],
-textarea,
-select {
-  background: #101315;
+.auth-form input,
+.auth-form select,
+.auth-form textarea {
+  background: var(--bg-main);
   border: 1px solid #222428;
-  color: #fff;
+  color: #ffffff;
   padding: 12px 14px;
   border-radius: 8px;
-  font-family: 'Satoshi', sans-serif;
   font-size: 15px;
-  outline: none;
-  transition: border-color .15s ease, box-shadow .15s ease;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-textarea:focus,
-select:focus {
-  border-color: rgba(255,91,95,0.9);
-  box-shadow: 0 6px 18px rgba(255,91,95,0.06);
-}
-
-/* help / error text */
-.field-help { font-size: 13px; color: #7b8286; font-family: 'Satoshi', sans-serif; }
-.field-error { color: #ff8b8e; font-size: 13px; }
-
-/* Actions / buttons */
-.form-actions {
-  display:flex;
-  gap: 18px;
-  align-items: center;
-  margin-top: 12px;
-}
 .cn.auth-btn {
-  background: #ff5b5f;
+  background: var(--accent-red);
   color: #000;
   padding: 12px 22px;
   border-radius: 10px;
   font-weight: 800;
-  border: none;
+}
+
+/* ============================================================
+   AUTH FORMS — CANONICAL SPACING & RHYTHM
+   (Login, Signup, Profile, Edit Profile)
+   ============================================================ */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* MAIN vertical rhythm */
+}
+
+/* Each field block */
+.auth-form .form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* label → input spacing */
+}
+
+/* Labels */
+.auth-form .field-label {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Inputs */
+.auth-form input,
+.auth-form select,
+.auth-form textarea {
+  background: var(--bg-main);
+  border: 1px solid #222428;
+  color: #ffffff;
+  padding: 12px 14px;
+  border-radius: 8px;
   font-size: 15px;
+  width: 100%;
 }
-.auth-link {
-  color: #9ca3af;
-  text-decoration: none;
-  font-family: 'Satoshi', sans-serif;
-}
-.auth-link:hover { color: #ff5b5f; }
 
-/* footer area of auth card */
-.auth-footer { margin-top: 18px; color: #9ca3af; font-family: 'Satoshi', sans-serif; }
-
-/* Responsive */
-@media (max-width: 720px) {
-  .auth-card { padding: 20px; margin: 18px; }
-  .auth-title { font-size: 28px; }
-  .form-actions { flex-direction: column; align-items: stretch; }
-  .cn.auth-btn { width: 100%; }
+/* Focus state */
+.auth-form input:focus,
+.auth-form select:focus,
+.auth-form textarea:focus {
+  border-color: var(--accent-red);
+  outline: none;
 }
-/* ---------------- CART PAGE ---------------- */
+
+/* Help text */
+.auth-form .field-help {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Error text */
+.auth-form .field-error {
+  font-size: 13px;
+  color: var(--accent-red);
+}
+
+/* Actions row */
+.auth-form .form-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+/* ============================================================
+   CART PAGE
+   ============================================================ */
 
 .cart-page-container {
-  max-width: 1200px;
+  max-width: var(--container-width);
   margin: 0 auto;
   padding: 0 25px 80px;
-  color: #fff;
 }
 
 .cart-grid {
@@ -2452,10 +1633,7 @@ select:focus {
   gap: 40px;
 }
 
-/* --------- LEFT SIDE --------- */
-
 .cart-title {
-  font-family: "Playfair Display", serif;
   font-size: 32px;
   margin-bottom: 25px;
 }
@@ -2464,1578 +1642,821 @@ select:focus {
   background: #151718;
   padding: 25px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.05);
 }
+
+.cart-summary-box {
+  background: #1b1d1f;
+  padding: 28px;
+  border-radius: 12px;
+}
+
+/* ============================================================
+   CART PAGE
+   ============================================================ */
+
+.cart-page-container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 25px 80px;
+}
+
+.cart-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 40px;
+}
+
+/* ------------------------------------------------------------
+   LEFT: CART ITEMS
+   ------------------------------------------------------------ */
+
+.cart-items-box {
+  background: #151718;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.cart-title {
+  font-size: 32px;
+  margin-bottom: 25px;
+}
+
+/* -------------------------
+   CART TABLE
+   ------------------------- */
 
 .cart-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.cart-table th {
-  font-size: 14px;
-  font-family: "Satoshi", sans-serif;
-  font-weight: 600;
-  color: #9ca3af;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+.cart-table thead th {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-align: left;
+  padding-bottom: 14px;
 }
 
-.cart-table td {
+.cart-table tbody td {
   padding: 18px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid #2a2d2f;
   vertical-align: middle;
 }
+
+/* -------------------------
+   CART ITEM ROW
+   ------------------------- */
 
 .item-info {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
-.item-thumb img,
-.thumb-placeholder {
-  width: 60px;
-  height: 60px;
+.item-thumb img {
+  width: 64px;
+  height: 64px;
   border-radius: 8px;
   object-fit: cover;
-  background: #333;
+  background: var(--bg-card);
 }
 
 .item-name {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
 }
 
 .item-cat {
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--text-muted);
+  margin-top: 4px;
 }
+
+/* -------------------------
+   CART META
+   ------------------------- */
 
 .qty-cell,
 .price-cell {
-  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
-.remove-cell {
-  text-align: center;
-}
+/* -------------------------
+   REMOVE BUTTON
+   ------------------------- */
 
 .remove-btn {
-  background: transparent;
+  background: none;
   border: none;
-  color: #ff5b5f;
   font-size: 22px;
+  color: var(--text-muted);
   cursor: pointer;
-  padding: 0;
+  line-height: 1;
 }
 
-/* --------- RIGHT SIDE: SUMMARY --------- */
+.remove-btn:hover {
+  color: var(--accent-red);
+}
+
+/* ------------------------------------------------------------
+   RIGHT: SUMMARY
+   ------------------------------------------------------------ */
 
 .cart-summary-box {
   background: #1b1d1f;
   padding: 28px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.06);
-  height: fit-content;
 }
 
 .summary-title {
-  font-family: "Playfair Display", serif;
-  font-size: 26px;
+  font-size: 22px;
   margin-bottom: 22px;
 }
 
+/* totals */
 .summary-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   font-size: 15px;
-  color: #ccc;
 }
 
 .summary-row.grand {
+  font-size: 18px;
   font-weight: 700;
-  color: #fff;
-  margin-top: 14px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  padding-top: 14px;
+  margin-top: 20px;
 }
+
+/* -------------------------
+   SUMMARY ACTIONS
+   ------------------------- */
 
 .summary-actions {
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 22px;
+  gap: 14px;
 }
 
-.btn-outline {
-  text-align: center;
-  padding: 12px 18px;
-  border-radius: 6px;
-  border: 1px solid #555;
-  color: #ccc;
-  text-decoration: none;
-}
-
-.btn-primary {
-  text-align: center;
-  padding: 12px 18px;
-  border-radius: 6px;
-  background: #ff5b5f;
+/* PRIMARY CTA — Checkout */
+.summary-actions .btn-primary {
+  height: 45px;
+  background: var(--accent-red);
   color: #000;
+  font-family: 'Satoshi', sans-serif;
   font-weight: 700;
-  text-decoration: none;
-}
-
-/* --------- EMPTY CART --------- */
-
-.empty-cart {
-  text-align: center;
-  padding: 100px 20px;
-}
-
-.empty-cart h2 {
-  font-size: 26px;
-  margin-bottom: 18px;
-}
-/* ---------------- USER DROPDOWN ---------------- */
-
-.user-dropdown-wrapper {
-  position: relative;
-}
-
-.user-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 6px;
-  color: #fff;
-}
-
-.user-dropdown {
-  position: absolute;
-  top: 42px;
-  right: 0;
-  width: 220px;
-  background: #1b1d1f;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 10px;
-  padding: 10px 0;
-  display: none;
-  flex-direction: column;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-  animation: fadeSlideIn 0.25s ease-out forwards;
-  z-index: 3000;
-}
-
-@keyframes fadeSlideIn {
-  0% { opacity: 0; transform: translateY(-8px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-.user-dropdown.open {
-  display: flex;
-}
-
-.dropdown-header {
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-
-.dropdown-header .u-name {
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.dropdown-header .u-email {
-  font-size: 13px;
-  color: #9ca3af;
-  display: block;
-}
-
-.dropdown-item {
-  padding: 12px 16px;
-  font-size: 14px;
-  color: #ccc;
-  text-decoration: none;
-  transition: background 0.2s ease;
-  display: block;
-}
-
-.dropdown-item:hover {
-  background: rgba(255,255,255,0.05);
-  color: #fff;
-}
-
-.logout-form {
-  margin: 0;
-  padding: 0;
-}
-
-.logout-btn {
-  width: 100%;
-  padding: 12px 16px;
-  text-align: left;
-  background: transparent;
-  border: none;
-  color: #ff5b5f;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.logout-btn:hover {
-  background: rgba(255,255,255,0.05);
-}
-
-/* Fix dropdown overlapping */
-.nav-icons {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-/* ---------------- Header: user dropdown & cart styles (append to end of style.css) ---------------- */
-
-.nav-icons { display:flex; align-items:center; gap:12px; }
-
-/* icon-link base - make the icon visible on dark header */
-.icon-link {
-  color: #f3f4f6; /* light */
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  text-decoration:none;
-  position:relative;
-  padding:6px;
-  border-radius:6px;
-}
-.icon-link:hover { color: #ffffff; }
-
-/* cart icon */
-.cart-icon {
-  font-size: 18px;
-  color: #f3f4f6;
-}
-
-/* cart badge (red circle) */
-.cart-badge {
-  position: absolute;
-  top: 4px;
-  right: 2px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
+  text-transform: uppercase;
+  border-radius: 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #ff5b5f;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.summary-actions .btn-primary:hover {
+  background: #ffffff;
   color: #000;
-  font-weight: 700;
-  font-size: 12px;
-  border-radius: 999px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
 
-/* user dropdown wrapper positioning */
-.user-dropdown-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-/* dropdown box */
-.user-dropdown {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 8px);
-  min-width: 220px;
-  background: #0b0d0e;
-  border: 1px solid rgba(255,255,255,0.04);
-  box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+/* SECONDARY CTA — Continue Shopping */
+.summary-actions .btn-outline {
+  height: 45px;
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.6);
+  color: #ffffff;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
   border-radius: 8px;
-  padding: 10px;
-  z-index: 1200;
-  transform-origin: top right;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-6px) scale(.98);
-  transition: opacity .18s ease, transform .18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
-/* show dropdown (JS will toggle .open) */
-.user-dropdown.open {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
+.summary-actions .btn-outline:hover {
+  background: #ffffff;
+  color: #000;
+  border-color: #ffffff;
 }
 
-/* header inside dropdown */
-.user-dropdown .dropdown-header {
-  padding: 8px 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-  margin-bottom: 8px;
-}
-.user-dropdown .u-name { display:block; font-weight:700; color:#fff; }
-.user-dropdown .u-email { display:block; font-size:13px; color:#9ca3af; margin-top:4px; }
+/* ============================================================
+   FINAL RESPONSIVE LOCK
+   ============================================================ */
 
-/* items */
-.user-dropdown .dropdown-item {
-  display:block;
-  padding: 10px 8px;
-  text-decoration:none;
-  color:#e6e7e8;
-  font-weight:600;
-  font-size:14px;
-  border-radius:6px;
-}
-.user-dropdown .dropdown-item:hover { background: rgba(255,255,255,0.02); color:#fff; }
+@media (max-width: 1024px) {
+  .philosophy-grid {
+    grid-template-columns: 1fr;
+  }
 
-/* logout button styling inside form */
-.logout-form { margin:0; padding:0; }
-.logout-btn {
-  background: transparent;
-  border: none;
-  color: inherit;
-  font-weight:700;
-  cursor:pointer;
-  padding:0;
-}
-.logout-btn:hover { text-decoration: underline; }
-
-/* small-screen tweaks */
-@media (max-width: 720px) {
-  .cart-badge { top: 2px; right: -2px; font-size:11px; min-width:16px; height:16px; }
-}
-
-/* --- FORCE CART ICON TO BE LIGHT --- */
-.nav-icons .cart-link .cart-icon,
-.icon-link.cart-link i.fa-shopping-cart {
-    color: #ffffff !important;
-    opacity: 1 !important;
-} 
-
-/* Increase visibility on hover too */
-.nav-icons .cart-link:hover .cart-icon {
-    color: #ff5b5f !important;
-}
-/* ===============================
-   FORCE: Cart icon ALWAYS LIGHT
-   Paste this at the very END of style.css
-   =============================== */
-
-/* Target the cart link and everything inside it */
-html body .nav-icons .icon-link.cart-link,
-html body a.icon-link.cart-link,
-html body .icon-link.cart-link {
-  color: #ffffff !important;        /* text color for font icons */
-  background: transparent !important;
-  opacity: 1 !important;
-  filter: none !important;         /* remove any invert/brightness filters */
-  -webkit-filter: none !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-/* For fontawesome <i> icons (classic) */
-html body .icon-link.cart-link i,
-html body .icon-link.cart-link .fa,
-html body .icon-link.cart-link .fas,
-html body .icon-link.cart-link .far,
-html body .icon-link.cart-link .fal,
-html body .icon-link.cart-link .fab {
-  color: #ffffff !important;
-  fill: #ffffff !important;
-  stroke: #ffffff !important;
-  opacity: 1 !important;
-  text-shadow: 0 1px 0 rgba(0,0,0,0.25) !important; /* subtle lift for legibility */
-}
-
-/* For SVG icons (if your cart is an inline <svg> or SVG sprite) */
-html body .icon-link.cart-link svg,
-html body .icon-link.cart-link svg * {
-  fill: #ffffff !important;
-  stroke: #ffffff !important;
-  color: #ffffff !important;
-  opacity: 1 !important;
-  filter: none !important;
-  -webkit-filter: none !important;
-}
-
-/* Ensure badge does not cover icon or invert its color */
-html body .icon-link.cart-link .cart-badge {
-  background: #ff5b5f !important;  /* coral badge */
-  color: #fff !important;
-  border-radius: 999px !important;
-  padding: 2px 7px !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  line-height: 1 !important;
-  display: inline-block !important;
-  vertical-align: top !important;
-  transform: translateY(-8px) translateX(-6px) !important;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
-  z-index: 60 !important;
-  position: relative !important;
-}
-
-/* Increase stacking to be above any darker layer */
-html body .nav-icons .icon-link.cart-link,
-html body .nav-icons .icon-link.cart-link * {
-  z-index: 50 !important;
-}
-
-/* Hover state: coral highlight */
-html body .icon-link.cart-link:hover i,
-html body .icon-link.cart-link:hover svg,
-html body .icon-link.cart-link:hover .fa {
-  color: #ff5b5f !important;
-  fill: #ff5b5f !important;
-  stroke: #ff5b5f !important;
-}
-
-/* If you use a darker background on the nav, ensure icon padding/contrast */
-html body .icon-link.cart-link {
-  padding: 6px 8px !important;
-  border-radius: 6px !important;
-}
-
-/* Small-screen tweak */
-@media (max-width: 720px) {
-  html body .icon-link.cart-link .cart-badge {
-    transform: translateY(-6px) translateX(-4px) !important;
-    font-size: 11px !important;
-    padding: 2px 6px !important;
+  .cart-grid {
+    grid-template-columns: 1fr;
   }
 }
-/* ---- FORCE: FontAwesome cart icon visible on dark navbar ----
-   Paste this at the VERY BOTTOM of static/style.css
-   (targets both old "fa" and newer "fa-*" class variants) */
-html body .nav-icons .icon-link.cart-link,
-html body a.icon-link.cart-link {
-  color: #ffffff !important;
-  background: transparent !important;
-  padding: 6px 8px !important;
-  border-radius: 6px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 60 !important;
-}
 
-/* target the font icon itself */
-html body .icon-link.cart-link i.fa,
-html body .icon-link.cart-link i.fas,
-html body .icon-link.cart-link i.far,
-html body .icon-link.cart-link i.fal,
-html body .icon-link.cart-link i.fab,
-html body .icon-link.cart-link i[class*="fa-"] {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  text-shadow: 0 1px 0 rgba(0,0,0,0.28) !important;
-  opacity: 1 !important;
-  filter: none !important;
-}
-
-/* badge */
-html body .icon-link.cart-link .cart-badge {
-  background: #ff5b5f !important;
-  color: #fff !important;
-  font-weight: 700 !important;
-  font-size: 12px !important;
-  padding: 2px 7px !important;
-  border-radius: 999px !important;
-  line-height: 1 !important;
-  position: relative !important;
-  transform: translateY(-8px) translateX(-6px) !important;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.28) !important;
-  z-index: 70 !important;
-}
-
-/* hover: highlight with coral */
-html body .icon-link.cart-link:hover i,
-html body .icon-link.cart-link:hover svg {
-  color: #ff5b5f !important;
-  fill: #ff5b5f !important;
-}
-
-/* small screens: nudge badge */
 @media (max-width: 720px) {
-  html body .icon-link.cart-link .cart-badge {
-    transform: translateY(-6px) translateX(-4px) !important;
-    font-size: 11px !important;
-    padding: 2px 6px !important;
+  h1 { font-size: 42px; }
+  h2 { font-size: 32px; }
+
+  .story-header h1,
+  .media-header h1 {
+    font-size: 42px;
+  }
+
+  .story-content {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-card {
+    padding: 20px;
   }
 }
-/* === User dropdown & cart styles (append to end of style.css) === */
+/* ============================================================
+   VISUAL LOCK PATCH
+   Restores buttons + homepage hero centering
+   (NO new styles, only re-asserts original ones)
+   ============================================================ */
 
-.user-dropdown-wrapper { position: relative; display: inline-block; }
+/* --------------------
+   GLOBAL BUTTON BASE
+   -------------------- */
 
-.user-toggle {
-  background: transparent;
+.cn {
+  width: 180px;
+  height: 40px;
   border: none;
   cursor: pointer;
-  color: #f3f4f6; /* light for dark bg */
-  font-size: 18px;
-  padding: 6px;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.user-dropdown {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 8px);
-  min-width: 220px;
-  background: #0e1112;
-  border: 1px solid rgba(255,255,255,0.04);
-  box-shadow: 0 12px 36px rgba(0,0,0,0.6);
-  border-radius: 8px;
-  padding: 10px;
-  display: none; /* hidden by default */
-  z-index: 9999;
-  color: #fff;
-}
-
-.user-dropdown[aria-hidden="false"] {
-  display: block;
-}
-
-.user-dropdown .dropdown-header {
-  padding: 8px 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-  margin-bottom: 8px;
-}
-.user-dropdown .u-name { display:block; font-weight:700; }
-.user-dropdown .u-email { display:block; font-size:13px; color:#9ca3af; margin-top:4px; }
-
-.user-dropdown .dropdown-item {
-  display:block;
-  padding: 8px 10px;
-  color: #e6e7e8;
+.cn a {
   text-decoration: none;
-  margin: 6px 0;
-  border-radius: 6px;
-}
-.user-dropdown .dropdown-item:hover,
-.user-dropdown .dropdown-item:focus {
-  background: rgba(255,91,95,0.06);
-  color: #fff;
-  outline: none;
+  color: inherit;
+  font-weight: inherit;
 }
 
-.logout-btn {
-  display: inline-block;
-  width: 100%;
-  background: transparent;
-  border: none;
-  color: #ff8388;
-  padding: 8px 10px;
-  text-align:left;
-  cursor:pointer;
-  font-weight:700;
-}
-.logout-btn:hover { background: rgba(255,91,95,0.06); color:#fff; }
+/* --------------------
+   RED BUTTON (PRIMARY)
+   -------------------- */
 
-/* Cart icon / badge */
-.cart-link { position: relative; color: #f8fafc; text-decoration:none; margin-left:12px; }
-.cart-icon { font-size:18px; color: #f8fafc; }
-.cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -8px;
+.cn,
+.cn.shop,
+.cn.collections,
+.cn.auth-btn,
+button.cn {
   background: #ff5b5f;
+color: #2b0f10;
+}
+
+.cn:hover {
+  background: #ffffff;
   color: #000;
-  padding: 2px 6px;
-  font-size: 12px;
-  border-radius: 999px;
-  font-weight:700;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.3);
 }
 
-/* on small screens ensure dropdown sits correctly */
-@media (max-width: 720px) {
-  .user-dropdown { right: 8px; left: auto; min-width: 180px; }
-}
-/* ===== AUTH PAGE STYLES ===== */
+/* --------------------
+   TRANSPARENT BUTTON
+   -------------------- */
 
-.auth-container {
-  max-width: 380px;
-  margin: 120px auto;
-  padding: 40px;
+.cn.stories,
+.cn.shop-now,
+.cn.explore-btn {
+  background: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+}
+
+.cn.stories:hover,
+.cn.shop-now:hover,
+.cn.explore-btn:hover {
+  background: #ffffff;
+  color: #000;
+}
+
+/* --------------------
+   HOMEPAGE HERO FIX
+   -------------------- */
+
+.content {
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
-  background: #0d0f10;
-  border-radius: 10px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  padding-top: 120px;
 }
 
-.auth-title {
-  font-family: "Playfair Display", serif;
-  font-size: 32px;
-  color: #fff;
-  margin-bottom: 28px;
-}
-
-.auth-form {
-  text-align: left;
-}
-
-.auth-field {
-  margin-bottom: 18px;
+.content .buttons {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
 }
 
-.auth-field label {
-  font-family: "Satoshi", sans-serif;
-  font-size: 15px;
-  color: #ccc;
-  margin-bottom: 6px;
+/* Ensure hero text stays centered */
+.content h1,
+.content .caption {
+  text-align: center;
 }
 
-.auth-field input {
-  padding: 12px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: #1a1d1f;
-  color: #fff;
-  font-family: "Satoshi", sans-serif;
+/* --------------------
+   MOBILE SAFETY
+   -------------------- */
+
+@media (max-width: 1200px) {
+  .content {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+/* ============================================================
+   HOME — HERO TITLE (OCHRE ONLY)
+   ============================================================ */
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 120px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-bottom: 12px;
+  text-align: center;
 }
 
-.forgot-wrap {
-  text-align: right;
+/* Craft Spirits line under OCHRE (home only) */
+.hero-title .craft-spirits {
+  display: block;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 25px;
+  letter-spacing: 3px;
+  color: var(--accent-red);
+  margin-top: 14px;
+}
+/* ============================================================
+   HOME — HERO GROUPED RHYTHM (FINAL)
+   ============================================================ */
+
+/* Group 1: OCHRE + Craft Spirits (tight) */
+.hero-title {
+  margin-bottom: 8px;   /* tight coupling */
+}
+
+.content .craft-spirits {
+  margin-bottom: 34px;  /* separation from caption */
+}
+
+/* Group 2: Caption */
+.content .caption {
+  margin-bottom: 42px;  /* separation from buttons */
+}
+
+/* Group 3: Buttons */
+.content .buttons {
+  margin-top: 0;
+}
+
+/* Mobile refinement */
+@media (max-width: 720px) {
+  .hero-title {
+    margin-bottom: 6px;
+  }
+
+  .content .craft-spirits {
+    margin-bottom: 26px;
+  }
+
+  .content .caption {
+    margin-bottom: 34px;
+  }
+}
+
+/* Mobile safety */
+@media (max-width: 720px) {
+  .hero-title {
+    font-size: 64px;
+  }
+
+  .hero-title .craft-spirits {
+    font-size: 18px;
+  }
+}
+
+/* ============================================================
+   PAGE HEADER SYSTEM — RESTORE (BLOG = CANONICAL)
+   Applies to: Collections, MediaHub, Shop, Contact
+   ============================================================ */
+
+/* ---------- SHARED PAGE CONTAINER ---------- */
+
+.page-container,
+.collections-header,
+.media-header,
+.shop-header,
+.contact-left {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* ---------- SECTION LABEL (— OUR COLLECTIONS — etc.) ---------- */
+
+.collections-header .craft-spirits,
+.media-header .craft-spirits,
+.shop-header .craft-spirits,
+.contact-label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 20px;
+  color: #ff5b5f;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+/* dash between words */
+.craft-spirits .dash {
+  margin: 0 10px;
+}
+
+/* ---------- PAGE TITLE ---------- */
+
+.collections-header h1,
+.media-header h1,
+.shop-header h1,
+.contact-left h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 60px;
+  font-weight: 300;
+  line-height: 1.2;
+  color: #ffffff;
   margin-bottom: 20px;
 }
 
-.forgot-link {
-  font-size: 14px;
-  color: #ff5b5f;
-  text-decoration: none;
-}
-
-.forgot-link:hover {
-  text-decoration: underline;
-}
-
-.auth-btn {
-  width: 100%;
-  padding: 12px;
-  background: #ff5b5f;
-  border: none;
-  color: #000;
-  font-family: "Satoshi", sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.auth-btn:hover {
-  background: #ff7b7f;
-}
-
-.auth-switch {
-  margin-top: 22px;
-  font-size: 14px;
-  color: #aaa;
-}
-
-.auth-switch a {
-  color: #ff5b5f;
-  text-decoration: none;
-  margin-left: 4px;
-}
-
-.auth-switch a:hover {
-  text-decoration: underline;
-}
-/* ===============================
-   NAVBAR: align menu centreline with logo
-   Paste this at the VERY END of style.css
-   Adjust --nav-nudge if needed (positive = move menu down)
-   =============================== */
-
-:root {
-  /* tweak this value to taste (px). Default 3px works for your current navbar height */
-  --nav-nudge: 3px;
-}
-
-/* Ensure navbar uses flex centering baseline we expect */
-.navbar {
-  display: flex !important;
-  align-items: center !important;   /* vertical centre alignment of children */
-  height: 75px !important;          /* keep your set height */
-}
-
-/* Normalise logo block so it's vertically centered in navbar */
-.navbar .icon,
-.navbar .icon .logo,
-.navbar .icon a.logo-link {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding-top: 0 !important;        /* remove any extra top padding interfering with centering */
-  margin: 0 !important;
-  height: 100% !important;
-  line-height: 1 !important;
-}
-
-/* Nudge the main menu (tabs/links) slightly down so their visual centre aligns with logo */
-.navbar .menu,
-.navbar .menu ul {
-  display: flex !important;
-  align-items: center !important;
-}
-
-/* apply subtle vertical shift to the menu items (tabs) */
-.navbar .menu ul {
-  transform: translateY(var(--nav-nudge)) !important;
-  -webkit-transform: translateY(var(--nav-nudge)) !important;
-  /* keep transitions smooth if you have hover animations */
-  transition: transform 160ms ease !important;
-}
-
-/* Specific: if you use .tab-selector / .shop-tabs centered bars, nudge them too */
-.tab-selector,
-.shop-tabs {
-  transform: translateY(var(--nav-nudge)) !important;
-}
-
-/* If you have a separate .nav-icons group on the right, keep it vertically aligned with tabs */
-.nav-icons,
-.navbar .nav-icons {
-  display: flex !important;
-  align-items: center !important;
-  transform: translateY(var(--nav-nudge)) !important;
-}
-
-/* Small-screen adjustments: reduce nudge on mobile */
-@media (max-width: 720px) {
-  :root { --nav-nudge: 1px; }
-  .navbar { height: auto !important; padding: 10px 16px !important; }
-  .navbar .icon, .navbar .menu ul, .nav-icons { transform: none !important; }
-}
-/* =====================================================
-   GLOBAL NAVBAR DOWNWARD SHIFT (gentle correction)
-   Place at END of style.css
-   ===================================================== */
-:root {
-  /* Increase to move navbar further DOWN (px) */
-  --nav-shift-down: 25px;
-}
-
-.navbar {
-  padding-top: var(--nav-shift-down) !important;
-}
-/* ==========================================
-   Slightly shift the Ochre logo left
-   ========================================== */
-.navbar .icon {
-    margin-left: -12px !important;   /* adjust: -8px, -10px, -15px as needed */
-}
-/* ===========================================
-   FIX FOOTER LINK MISALIGNMENT
-   Ensures all links align exactly under headings
-   =========================================== */
-
-footer .footer-column ul,
-footer .footer-column li,
-footer .footer-column a {
-    margin-left: 0 !important;
-    padding-left: 0 !important;
-}
-
-/* Make list bullets disappear (if any) */
-footer .footer-column ul {
-    list-style: none;
-}
-
-/* Normalize vertical spacing */
-footer .footer-column li {
-    margin-bottom: 6px;
-}
-/* ============================================================
-   FIX: Contact form spacing + consistent field colours
-   Paste at the very end of style.css
-   ============================================================ */
-
-/* Scope to contact page wrapper if present; fallback to form classes */
-html body .contact-page .contact-form,
-html body .contact-form {
-  display: grid !important;
-  grid-template-columns: 1fr;
-  gap: 18px !important;               /* equal vertical spacing between fields */
-  max-width: 720px !important;
-  margin: 0 auto !important;
-}
-
-/* Consistent field appearance for inputs/selects/textareas */
-html body .contact-form input[type="text"],
-html body .contact-form input[type="email"],
-html body .contact-form input[type="tel"],
-html body .contact-form input[type="url"],
-html body .contact-form input[type="number"],
-html body .contact-form input[type="search"],
-html body .contact-form select,
-html body .contact-form textarea {
-  background: #1a1d1f !important;     /* uniform dark field background */
-  border: 1px solid #2a2d2f !important;
-  color: #fff !important;
-  padding: 14px 16px !important;      /* consistent internal spacing */
-  border-radius: 6px !important;
-  font-family: 'Satoshi', sans-serif !important;
-  font-size: 15px !important;
-  outline: none !important;
-  width: 100% !important;
-  box-shadow: none !important;
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-}
-
-/* Placeholder colour */
-html body .contact-form input::placeholder,
-html body .contact-form textarea::placeholder {
-  color: #6b7280 !important;
-  opacity: 1 !important;
-}
-
-/* Focus state */
-html body .contact-form input:focus,
-html body .contact-form select:focus,
-html body .contact-form textarea:focus {
-  border-color: #ff5b5f !important;
-  box-shadow: 0 6px 18px rgba(255,91,95,0.06) !important;
-}
-
-/* Ensure textarea height is pleasant */
-html body .contact-form textarea {
-  min-height: 160px !important;
-  resize: vertical !important;
-  line-height: 1.6 !important;
-}
-
-/* Buttons inside contact form */
-html body .contact-form button,
-html body .contact-form .cn {
-  padding: 12px 22px !important;
-  border-radius: 8px !important;
-  font-weight: 700 !important;
-  font-family: 'Satoshi', sans-serif !important;
-}
-
-/* Make inline form rows consistent (if you use .form-row grid) */
-html body .contact-form .form-row {
-  display: grid !important;
-  grid-template-columns: repeat(2, 1fr) !important;
-  gap: 18px !important;
-}
-
-/* Single-column on small screens */
-@media (max-width: 880px) {
-  html body .contact-form .form-row {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-/* Remove accidental bright backgrounds on child wrappers */
-html body .contact-form *[style*="background"] {
-  background: transparent !important;
-}
-
-/* If some other rule forces inputs to white, ensure we reset them */
-html body .contact-form input,
-html body .contact-form textarea,
-html body .contact-form select {
-  background-image: none !important;
-}
-
-/* ============================================================
-   FIX: "Why choose Ochre" — align three points to same left baseline
-   Targets common layouts: .why-ochre, .philosophy-grid, .philosophy-number
-   ============================================================ */
-
-/* Wrapper: constrain width to content and align contents to same left edge */
-html body .why-ochre,
-html body .why-ochre-section,
-html body .philosophy-grid,
-html body .philosophy-list {
-  max-width: 1200px !important;
-  margin: 0 auto !important;
-  padding-left: 20px !important;      /* align with page gutter */
-  padding-right: 20px !important;
-}
-
-/* Ensure the three cards/points all start on the same left vertical */
-html body .why-ochre .point,
-html body .philosophy-grid > *,
-html body .philosophy-list > * {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important; /* left align internal content */
-  text-align: left !important;
-  padding-left: 0 !important;
-  margin-left: 0 !important;
-}
-
-/* If the "number" circle sits above text, align its left edge to the heading */
-html body .philosophy-number,
-html body .why-ochre .point .icon {
-  margin-left: 0 !important;
-  margin-bottom: 12px !important;
-}
-
-/* Ensure headings in points use Playfair and sit flush */
-html body .why-ochre .point h3,
-html body .philosophy-grid h2,
-html body .philosophy-grid h3 {
-  font-family: 'Playfair Display', serif !important;
-  margin: 0 0 8px 0 !important;
-  padding: 0 !important;
-}
-
-/* Body copy inside points should use Satoshi and line up */
-html body .why-ochre .point p,
-html body .philosophy-grid p {
-  font-family: 'Satoshi', sans-serif !important;
-  margin: 0 !important;
-}
-
-/* If the grid uses columns that add internal left padding, remove it here */
-html body .philosophy-grid .col,
-html body .why-ochre .point-inner {
-  padding-left: 0 !important;
-}
-
-/* Responsive: stack points on small screens but keep left alignment */
-@media (max-width: 880px) {
-  html body .philosophy-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 22px !important;
-  }
-}
-/* ======================================================
-   MEDIA PAGE — PRESS KIT BUTTONS FIX
-   ====================================================== */
-
-/* Wrapper: ensure these styles only apply on mediahub pages */
-.mediahub-page .press-kit-buttons a.cn,
-.mediahub-page .press-kit-buttons .cn {
-    font-family: 'Satoshi', sans-serif;
-    font-weight: 700;
-    padding: 12px 26px;
-    border-radius: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.25s ease;
-    text-decoration: none !important;
-}
-
-/* -----------------------------------------
-   PRIMARY BUTTON — Download Press Kit (RED)
-   ----------------------------------------- */
-.mediahub-page .press-kit-buttons a.cn.download {
-    background: #FF5B5F !important;
-    color: #000 !important;
-    border: none !important;
-    box-shadow: 0 8px 22px rgba(255, 91, 95, 0.25);
-}
-
-.mediahub-page .press-kit-buttons a.cn.download:hover {
-    box-shadow: 0 10px 28px rgba(255, 91, 95, 0.35);
-    transform: translateY(-2px);
-}
-
-/* ------------------------------------------------
-   SECONDARY BUTTON — Media Inquiries (Transparent)
-   ------------------------------------------------ */
-.mediahub-page .press-kit-buttons a.cn.inquiries {
-    background: transparent !important;
-    color: #d1d5db !important; /* light grey */
-    border: 1px solid rgba(255,255,255,0.22) !important;
-}
-
-.mediahub-page .press-kit-buttons a.cn.inquiries:hover {
-    border-color: rgba(255,255,255,0.35) !important;
-    color: #fff !important;
-    text-decoration: underline !important;
-}
-/* ================================
-   PRESS KIT BUTTONS (MEDIA PAGE)
-   ================================ */
-.press-kit-section .press-kit-buttons {
-    max-width: 420px;
-    margin: 40px auto 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.press-kit-section .pk-btn {
-    display: block;
-    width: 100%;
-    padding: 14px 20px;
-    text-align: center;
-    font-family: 'Satoshi', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    border-radius: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: all 0.25s ease;
-}
-
-/* Primary red button */
-.press-kit-section .pk-download {
-    background: #ff5b5f;
-    color: #000;
-    border: none;
-    box-shadow: 0 8px 24px rgba(255, 91, 95, 0.25);
-}
-
-/* Transparent secondary button */
-.press-kit-section .pk-inquiries {
-    background: transparent;
-    color: #e5e5e5;
-    border: 1px solid rgba(255,255,255,0.25);
-}
-
-.press-kit-section .pk-download:hover {
-    background: #ff7376;
-}
-
-.press-kit-section .pk-inquiries:hover {
-    border-color: rgba(255,255,255,0.45);
-    color: #fff;
-}
-/* ================================
-   PRESS KIT BUTTONS — final, authoritative
-   Targets .press-kit-section and .mediahub-page
-   ================================ */
-
-.mediahub-page .press-kit-section,
-.press-kit-section {
-  /* make sure the wrapper is centered and constrained */
-  max-width: 520px;
-  margin: 36px auto 0;
-  padding: 0 16px;
-  box-sizing: border-box;
-}
-
-/* Buttons column */
-.mediahub-page .press-kit-buttons,
-.press-kit-section .press-kit-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: stretch;
-  justify-content: center;
-}
-
-/* Base button style */
-.mediahub-page .press-kit-buttons .pk-btn,
-.press-kit-section .press-kit-buttons .pk-btn {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100% !important;
-  padding: 14px 18px !important;
-  border-radius: 8px !important;
-  font-family: 'Satoshi', sans-serif !important;
-  font-weight: 700 !important;
-  font-size: 14px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.6px !important;
-  text-decoration: none !important;
-  transition: transform 180ms ease, box-shadow 180ms ease, background 160ms ease;
-  box-sizing: border-box !important;
-  cursor: pointer;
-}
-
-/* Primary active download (red background, black text) */
-.mediahub-page .press-kit-buttons .pk-download,
-.press-kit-section .press-kit-buttons .pk-download {
-  background: #ff5b5f !important;
-  color: #000 !important;
-  border: 1px solid rgba(0,0,0,0.06) !important;
-  box-shadow: 0 12px 30px rgba(255,91,95,0.16) !important;
-}
-
-/* Disabled / no-file state (greyed but visible) */
-.mediahub-page .press-kit-buttons .pk-download.disabled,
-.press-kit-section .press-kit-buttons .pk-download.disabled {
-  background: rgba(255,91,95,0.12) !important;
-  color: rgba(0,0,0,0.6) !important;
-  border: 1px dashed rgba(255,91,95,0.16) !important;
-  box-shadow: none !important;
-  cursor: default !important;
-  pointer-events: none !important;
-}
-
-/* Secondary transparent button */
-.mediahub-page .press-kit-buttons .pk-inquiries,
-.press-kit-section .press-kit-buttons .pk-inquiries {
-  background: transparent !important;
-  color: #e8e8e8 !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-}
-
-/* Hover states */
-.mediahub-page .press-kit-buttons .pk-download:hover:not(.disabled),
-.press-kit-section .press-kit-buttons .pk-download:hover:not(.disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 36px rgba(255,91,95,0.20) !important;
-  background: #ff7276 !important;
-}
-
-.mediahub-page .press-kit-buttons .pk-inquiries:hover,
-.press-kit-section .press-kit-buttons .pk-inquiries:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255,255,255,0.36) !important;
-  color: #fff !important;
-}
-
-/* Ensure icon inside link is visible */
-.mediahub-page .press-kit-buttons .pk-btn i,
-.press-kit-section .press-kit-buttons .pk-btn i {
-  font-size: 16px;
-  line-height: 1;
-}
-
-/* Small screens — keep them nicely spaced */
-@media (max-width: 520px) {
-  .mediahub-page .press-kit-buttons,
-  .press-kit-section .press-kit-buttons {
-    gap: 10px;
-  }
-  .mediahub-page .press-kit-buttons .pk-btn,
-  .press-kit-section .press-kit-buttons .pk-btn {
-    padding: 12px 14px !important;
-    font-size: 13px !important;
-  }
-}
-/* ===== CART ICON + BADGE: ensure visible on dark header ===== */
-
-/* The container must be positioned so the badge can be absolutely positioned */
-.nav-icons .cart-link,
-.icon-link.cart-link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff !important;          /* ensure icon is light */
-  text-decoration: none;
-}
-
-/* cart icon itself */
-.icon-link .cart-icon,
-.cart-link .cart-icon {
-  font-size: 18px !important;
-  color: #ffffff !important;          /* white icon for dark header */
-  line-height: 1;
-  display: inline-block;
-  vertical-align: middle;
-  text-shadow: none;
-}
-
-/* badge (round) */
-.icon-link .cart-badge,
-.cart-link .cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -8px;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 6px;
-  border-radius: 999px;
-  background: #ff5b5f !important;     /* coral red background */
-  color: #000 !important;             /* dark numerals */
-  font-weight: 800 !important;
-  font-size: 12px !important;
-  line-height: 20px !important;
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.35) !important;
-  border: 2px solid rgba(255,255,255,0.06) !important;
-  z-index: 9999 !important;
-}
-
-/* when count grows (two+ digits) allow badge width to expand cleanly */
-.icon-link .cart-badge {
-  white-space: nowrap;
-}
-
-/* small-screen tweaks: nudge badge a bit */
-@media (max-width: 520px) {
-  .icon-link .cart-badge {
-    top: -4px;
-    right: -6px;
-    min-width: 18px;
-    height: 18px;
-    font-size: 11px;
-    line-height: 18px;
-  }
-}
-
-/* If other rules turned the icon dark via color inheritance, force it here */
-.icon-link.cart-link, .icon-link.cart-link * {
-  color: inherit !important;
-}
-/* Cart badge */
-.cart-link {
-  position: relative;           /* parent for absolute badge */
-  display: inline-flex;
-  align-items: center;
-}
-
-/* base badge style */
-.cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -8px;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 6px;
-  font-size: 12px;
-  line-height: 20px;
-  font-weight: 700;
-  border-radius: 12px;
-  text-align: center;
-  background: #ff5b5f;          /* coral — matches brand */
-  color: #000;                  /* dark text for contrast */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
-  display: inline-block;
-  vertical-align: middle;
-  transform: translateZ(0);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  pointer-events: none;         /* clicks go through to the cart link */
-}
-
-/* Hide the badge when zero (if you're always rendering it) */
-.cart-badge[aria-hidden="true"] {
-  display: none;
-}
-
-/* smaller screens: shift slightly */
-@media (max-width: 900px) {
-  .cart-badge { top: -4px; right: -6px; font-size: 11px; height: 18px; }
-}
-/* ====== STORY page: force left-align for title + its subtitle ======
-   Targets .story-philosophy (the container on STORY page) and:
-   - the main h2 (title)
-   - the immediate p below it (subtitle / lead)
-   This fixes cases where one line drifts right while the others are left-aligned.
-=============================================================== */
-
-.story-philosophy {
-  /* keep the section layout but make text left-aligned */
-  text-align: left !important;
-}
-
-/* Title (big line) */
-.story-philosophy h2 {
-  text-align: left !important;
-  margin-left: 0 !important;     /* remove accidental left offset */
-  margin-right: 0 !important;
-  max-width: 900px;              /* keep readable line-length */
-  margin-top: 0;
-  margin-bottom: 12px;
-}
-
-/* Subtitle / supporting line immediately under the title */
-.story-philosophy h2 + p,
-.story-philosophy .story-subtitle,
-.story-philosophy .lead {
-  text-align: left !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  max-width: 900px;
-  margin-top: 0;
-  margin-bottom: 18px;
-}
-
-/* Small-screen tweak — keep comfortable padding on mobile */
-@media (max-width: 900px) {
-  .story-philosophy,
-  .story-philosophy h2,
-  .story-philosophy h2 + p,
-  .story-philosophy .story-subtitle,
-  .story-philosophy .lead {
-    padding-left: 20px;
-    padding-right: 20px;
-    max-width: 100%;
-  }
-}
-
-/* CONTACT PAGE — left-align the tagline under the main heading */
-.contact-left h1,
+/* ---------- PAGE DESCRIPTION ---------- */
+
+.collections-header .description,
+.media-header .description,
+.shop-header .description,
 .contact-description {
-    text-align: left !important;
-    margin-left: 0 !important;
-    margin-right: auto !important;
-}
-.contact-left {
-    text-align: left !important;
-}
-/* CONTACT PAGE — fix misaligned first bullet in Why Choose Ochre card */
-.contact-card .contact-benefits li {
-    text-align: left !important;
-    margin-left: 0 !important;
-    padding-left: 0 !important;
-}
-/* Remove default UL indentation */
-.contact-card .contact-benefits {
-    padding-left: 0 !important;
-    margin-left: 0 !important;
-}
-.contact-card .contact-benefits li {
-    list-style-position: inside !important;
-}
-/* ===== FAQ RESTORE — place at end of style.css =====
-   Restores styling for both .faq-item and .faq-list-item variants.
-   High-specificity, scoped to pages so it won't affect other lists.
-===================================================== */
-
-/* Container */
-.contact-page .faq-section,
-.faq-section {
-  width: 100%;
-  background: #101315;
-  padding: 80px 20px 100px;
-  text-align: left; /* keep questions left aligned in contact page */
+  font-family: 'Satoshi', sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #9ca3af;
+  max-width: 700px;
 }
 
-/* Title */
-.contact-page .faq-title,
-.faq-title {
+/* ============================================================
+   COLLECTIONS — CARD GRID + SPACING (match Blog)
+   ============================================================ */
+
+.products-section,
+.press-section,
+.shop-page .items-grid {
+  max-width: 1200px;
+  margin: 50px auto 0;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* ============================================================
+   MEDIAHUB — RESTORE CARD SYSTEM
+   ============================================================ */
+
+.press-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 30px;
+}
+
+.press-card {
+  background: #1a1d1f;
+  border-radius: 12px;
+  padding: 22px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.press-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(255,91,95,0.1);
+}
+
+.press-card h3,
+.press-card .article-title {
   font-family: 'Playfair Display', serif;
-  font-size: 48px;
-  font-weight: 300;
-  color: #fff;
-  margin-bottom: 40px;
+  font-size: 22px;
+  color: #ffffff;
+  margin-bottom: 10px;
 }
 
-/* List wrapper (either .faq-list or legacy .faq-list wrapper) */
-.contact-page .faq-list,
-.faq-list {
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  padding-left: 0;        /* neutralize unwanted left padding */
-}
-
-/* Each item (supports both class names) */
-.contact-page .faq-item,
-.contact-page .faq-list-item,
-.faq-item,
-.faq-list-item {
-  border-bottom: 1px solid #2a2d2f;
-  padding: 22px 0;
-  cursor: pointer;
-  transition: background .2s ease, padding .15s ease;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Question text */
-.contact-page .faq-item h3,
-.contact-page .faq-list-item .item-title,
-.faq-item h3,
-.faq-list-item .item-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  font-weight: 300;
-  color: #fff;
-  margin: 0;
-}
-
-/* Expand button / toggle */
-.contact-page .faq-toggle,
-.faq-toggle {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid #ff5b5f;
-  background: transparent;
-  color: #ff5b5f;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background .15s ease, color .15s ease, transform .12s ease;
-}
-
-/* Hover / active styles */
-.contact-page .faq-item:hover,
-.faq-item:hover,
-.contact-page .faq-list-item:hover,
-.faq-list-item:hover {
-  background: rgba(255, 91, 95, 0.03);
-}
-.contact-page .faq-item:hover .faq-toggle,
-.faq-item:hover .faq-toggle,
-.contact-page .faq-list-item:hover .expand-btn,
-.faq-list-item:hover .expand-btn {
-  background: #ff5b5f;
-  color: #fff;
-}
-
-/* Answer block (hidden by default) */
-.contact-page .faq-answer,
-.faq-answer {
-  display: none;
-  margin-top: 14px;
+.press-card p,
+.press-card .article-description {
   font-family: 'Satoshi', sans-serif;
   font-size: 15px;
-  color: #9ca3af;
+  color: #bfbfbf;
   line-height: 1.6;
 }
 
-/* When active — show answer */
-.contact-page .faq-item.active .faq-answer,
-.faq-item.active .faq-answer,
-.contact-page .faq-list-item.active .faq-answer,
-.faq-list-item.active .faq-answer {
-  display: block;
+/* ============================================================
+   SHOP — HEADER + GRID ALIGNMENT
+   ============================================================ */
+
+.shop-page .items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+  gap: 30px;
 }
 
-/* Accessibility focus state for keyboard users */
-.contact-page .faq-item:focus-within,
-.faq-item:focus-within {
-  outline: 2px solid rgba(255,91,95,0.12);
-  outline-offset: 2px;
+/* ============================================================
+   CONTACT — SPACING RESTORE (last good version)
+   ============================================================ */
+
+.contact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
-/* Small screens: stack neatly */
+.contact-left {
+  padding-top: 60px;
+}
+
+.contact-description {
+  margin-bottom: 60px;
+}
+
+/* ============================================================
+   MOBILE SAFETY — SAME AS BLOG
+   ============================================================ */
+
 @media (max-width: 900px) {
-  .contact-page .faq-item,
-  .faq-item,
-  .contact-page .faq-list-item,
-  .faq-list-item {
-    padding: 16px 0;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+  .collections-header h1,
+  .media-header h1,
+  .shop-header h1,
+  .contact-left h1 {
+    font-size: 42px;
   }
 
-  .contact-page .faq-toggle,
-  .faq-toggle {
-    align-self: flex-end;
+  .collections-header .description,
+  .media-header .description,
+  .shop-header .description,
+  .contact-description {
+    font-size: 16px;
   }
+}
+
+/* ============================================================
+   FINAL ALIGNMENT PATCH
+   Fixes:
+   - Header → content spacing (Home / Collections / Shop)
+   - Contact page right column spacing
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   HEADER → CONTENT SPACING
+   ------------------------------------------------------------ */
+
+/* Home page */
+.content {
+  margin-bottom: 80px;
+}
+
+/* Collections page */
+.collections-header {
+  padding-bottom: 60px;
+}
+
+/* Shop page */
+.shop-header {
+  padding-bottom: 60px;
+}
+
+/* Ensure main content starts with breathing room */
+.products-section,
+.shop-page .items-grid {
+  margin-top: 40px;
+}
+
+/* ------------------------------------------------------------
+   CONTACT PAGE — RIGHT COLUMN RESTORE
+   ------------------------------------------------------------ */
+
+.contact-right {
+  margin-top: 260px;        /* restores original vertical drop */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;                /* restores card separation */
+}
+
+/* Card spacing consistency */
+.contact-card {
+  padding: 16px 18px;
+}
+
+/* “Get in touch” heading */
+.contact-right-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 300;
+  margin-bottom: 30px;
+  color: #ffffff;
+}
+
+/* Contact info blocks spacing */
+.contact-info {
+  margin-top: 20px;
+  gap: 14px;
 }
 /* ============================================================
-   FAQ — FINAL FIX (CENTER ALIGN + RED CIRCLE + BUTTON)
-============================================================ */
+   CONTACT — RESTORE RIGHT COLUMN LAYOUT (FINAL)
+   ============================================================ */
 
-/* Center the whole FAQ block */
-.faq-section {
-    text-align: center !important;
+.contact-page .contact-container {
+  align-items: flex-start;
 }
 
-/* Center the list inside the FAQ */
-.faq-list {
-    max-width: 900px;
-    margin: 0 auto;
-    padding-left: 0 !important;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Right column vertical alignment (as before) */
+.contact-page .contact-right {
+  margin-top: 250px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
-/* FAQ item layout — QUESTION + TOGGLE */
-.faq-item,
-.faq-list-item {
-    width: 100%;
-    max-width: 900px;
-    border-bottom: 1px solid #2a2d2f;
-    padding: 24px 0;
-    cursor: pointer;
-    transition: background 0.25s ease;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Heading: Get in touch */
+.contact-page .contact-right-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 300;
+  margin-bottom: 28px;
+  color: #ffffff;
 }
 
-/* Hover effect */
-.faq-item:hover,
-.faq-list-item:hover {
-    background: rgba(255, 91, 95, 0.06);
+/* Cards spacing */
+.contact-page .contact-card {
+  padding: 16px 18px;
 }
 
-/* QUESTION TEXT */
-.faq-question h3,
-.item-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-weight: 300;
-    margin: 0;
-    color: #fff;
-    text-align: left; /* keep text left-aligned inside center container */
+/* Info spacing */
+.contact-page .contact-info {
+  margin-top: 20px;
+  gap: 14px;
+}
+/* ============================================================
+   CANONICAL PAGE INTRO ALIGNMENT
+   All section-eyebrow lines start at SAME vertical height
+   ============================================================ */
+
+/* Shared vertical baseline from top of page */
+:root {
+  --page-intro-offset: 80px;   /* matches Blog (canonical) */
 }
 
-/* ===== RED CIRCLE + BUTTON Restored ===== */
-.faq-toggle,
-.expand-btn {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    border: 1px solid #ff5b5f !important;
-    background: transparent !important;
-    color: #ff5b5f !important;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 34px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background 0.2s ease, color 0.2s ease;
+/* ------------------------------------------------------------
+   BLOG (already correct, but locked)
+   ------------------------------------------------------------ */
+.blog-header {
+  padding-top: var(--page-intro-offset);
 }
 
-/* Hover → Red background + white plus */
-.faq-item:hover .faq-toggle,
-.faq-list-item:hover .expand-btn,
-.faq-item.active .faq-toggle,
-.faq-list-item.active .expand-btn {
-    background: #ff5b5f !important;
-    color: #fff !important;
+/* ------------------------------------------------------------
+   COLLECTIONS
+   ------------------------------------------------------------ */
+.collections-header {
+  padding-top: var(--page-intro-offset);
 }
 
-/* ANSWER BLOCK */
-.faq-answer {
-    display: none;
-    width: 100%;
-    max-width: 900px;
-    text-align: left; /* keep text readable */
-    margin-top: 15px;
-    color: #9ca3af;
-    font-size: 15px;
-    line-height: 1.6;
-    font-family: 'Satoshi', sans-serif;
+/* ------------------------------------------------------------
+   MEDIAHUB
+   ------------------------------------------------------------ */
+.media-header {
+  padding-top: var(--page-intro-offset);
 }
 
-/* Show answer when item active */
-.faq-item.active .faq-answer,
-.faq-list-item.active .faq-answer {
-    display: block;
+/* ------------------------------------------------------------
+   STORY
+   ------------------------------------------------------------ */
+.story-header {
+  padding-top: var(--page-intro-offset);
 }
 
-/* Mobile responsive adjustments */
-@media (max-width: 700px) {
-    .faq-item,
-    .faq-list-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
+/* ------------------------------------------------------------
+   CONTACT (LEFT COLUMN ONLY)
+   ------------------------------------------------------------ */
+.contact-left {
+  padding-top: var(--page-intro-offset);
+}
 
-    .faq-toggle,
-    .expand-btn {
-        align-self: flex-end;
-    }
+/* ------------------------------------------------------------
+   SHOP
+   ------------------------------------------------------------ */
+.shop-header {
+  padding-top: var(--page-intro-offset);
+}
+/* ============================================================
+   FINAL FREEZE — SECTION HEADER ALIGNMENT & SPACING
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Canonical vertical offset (Blog is reference)
+   ------------------------------------------------------------ */
+:root {
+  --section-header-offset: 80px;
+  --section-content-gap: 56px;
+}
+
+/* ============================================================
+   1. SECTION HEADER ALIGNMENT (ALL PAGES)
+   ============================================================ */
+
+/* Blog */
+.blog-header {
+  padding-top: var(--section-header-offset);
+}
+
+/* Collections */
+.collections-header {
+  padding-top: var(--section-header-offset);
+}
+
+/* MediaHub */
+.media-header,
+.press-header {
+  padding-top: var(--section-header-offset);
+}
+
+/* Shop */
+.shop-header {
+  padding-top: var(--section-header-offset);
+}
+
+/* Story */
+.story-header {
+  padding-top: var(--section-header-offset);
+}
+
+/* Contact — LEFT column only */
+.contact-left {
+  padding-top: var(--section-header-offset);
+}
+
+/* ============================================================
+   2. HEADER → CONTENT VERTICAL GAP (CRITICAL FIX)
+   ============================================================ */
+
+/* Blog */
+.blog-header + .articles-section {
+  margin-top: var(--section-content-gap);
+}
+
+/* Collections */
+.collections-header + .collections-grid,
+.collections-header + .products-section {
+  margin-top: var(--section-content-gap);
+}
+
+/* MediaHub */
+.media-header + .media-grid,
+.press-header + .press-grid {
+  margin-top: var(--section-content-gap);
+}
+
+/* Shop */
+.shop-header + .shop-filters,
+.shop-header + .items-grid {
+  margin-top: var(--section-content-gap);
+}
+
+/* Story */
+.story-header + .story-content {
+  margin-top: var(--section-content-gap);
+}
+
+/* Contact */
+.contact-left + .contact-form {
+  margin-top: var(--section-content-gap);
+}
+
+/* ============================================================
+   3. SAFE-GUARD: PREVENT EDGE-STICKING
+   ============================================================ */
+
+.blog-page,
+.collections-page,
+.media-page,
+.shop-page,
+.story-page,
+.contact-page {
+  padding-left: clamp(16px, 5vw, 72px);
+  padding-right: clamp(16px, 5vw, 72px);
 }

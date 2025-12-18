@@ -3,133 +3,131 @@
 
 {% block content %}
 
-<div class="mediahub-page">
+<div class="media-page">
 
-    <!-- HEADER -->
-    <div class="media-header">
-        <p class="craft-spirits">
-            <span class="dash">—</span>PRESS & RECOGNITIONS<span class="dash">—</span>
-        </p>
+  <!-- HEADER -->
+  <div class="media-header">
+    <p class="craft-spirits">
+      <span class="dash">—</span>PRESS & RECOGNITIONS<span class="dash">—</span>
+    </p>
 
-        <h1>Media Coverage & Press</h1>
+    <h1>Media Coverage & Press</h1>
 
-        <p class="description">
-            Discover what the world is saying about Ochre Spirits.
-            From featured articles to press coverage from leading publications.
-        </p>
+    <p class="description">
+      Discover what the world is saying about Ochre Spirits.
+      From featured articles to press coverage from leading publications.
+    </p>
+  </div>
+
+  <!-- FEATURED PRESS -->
+  <section class="press-section">
+    <h2 class="press-title">
+      Featured <span>Press</span>
+    </h2>
+
+    <div class="press-cards">
+      {% if featured %}
+        {% for article in featured %}
+          <div class="press-card">
+
+            <div class="card-header">
+              <div class="publication-logo">
+                <i class="fa-regular fa-newspaper"></i>
+              </div>
+
+              <span class="publish-date">
+                {{ article.date|date:"M d, Y" }}
+              </span>
+            </div>
+
+            <h3 class="article-title">{{ article.title }}</h3>
+
+            <p class="article-description">
+              {{ article.excerpt }}
+            </p>
+
+            <a href="{% url 'mediahub:press_detail' article.slug %}"
+               class="read-more">
+              Read Full Article
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+
+          </div>
+        {% endfor %}
+      {% else %}
+        <p style="color:#999;">No featured articles yet.</p>
+      {% endif %}
     </div>
+  </section>
 
-    <!-- FEATURED PRESS -->
-    <div class="press-section">
-        <h2 class="press-title">Featured <span>Press</span></h2>
+  <!-- ALL PRESS -->
+  <section class="all-press-section">
+    <h2 class="all-press-title">
+      All Press <span class="highlight-green">Coverage</span>
+    </h2>
 
-        <div class="press-cards">
-            {% if featured %}
-                {% for article in featured %}
-                    <div class="press-card">
-                        
-                        <div class="card-header">
-                            <div class="publication-logo">
-                                <i class="fa-regular fa-newspaper"></i>
-                            </div>
+    <div class="press-list">
+      {% if all_press %}
+        {% for article in all_press %}
+          <div class="press-list-item">
 
-                            <span class="publish-date">
-                                {{ article.date|date:"M d, Y" }}
-                            </span>
-                        </div>
+            <div class="item-content">
+              <div class="item-meta">
+                <span class="publication-name">{{ article.publication_name }}</span>
+                <span class="separator">•</span>
+                <span class="item-date">{{ article.date|date:"F d, Y" }}</span>
+              </div>
 
-                        <h3 class="article-title">{{ article.title }}</h3>
+              <h3 class="item-title">{{ article.title }}</h3>
+            </div>
 
-                        <p class="article-description">
-                            {{ article.excerpt }}
-                        </p>
+            <a href="{% url 'mediahub:press_detail' article.slug %}"
+               class="read-btn">
+              Read <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
 
-                        <a href="{% url 'mediahub:press_detail' article.slug %}"
-                           class="read-more">
-                            Read Full Article 
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p style="color:#999;">No featured articles yet.</p>
-            {% endif %}
-        </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p style="color:#aaa;">No press articles available.</p>
+      {% endif %}
     </div>
+  </section>
 
-    <!-- ALL PRESS -->
-    <div class="all-press-section">
-        <h2 class="all-press-title">
-            All Press <span class="highlight-green">Coverage</span>
-        </h2>
+  <!-- PRESS KIT -->
+  <section class="press-kit-section text-center">
 
-        <div class="press-list">
+    <h2 class="press-kit-title">
+      Press <span>Kit</span>
+    </h2>
 
-            {% if all_press %}
-                {% for article in all_press %}
-                <div class="press-list-item">
-
-                    <div class="item-content">
-                        <div class="item-meta">
-                            <span class="publication-name">{{ article.publication_name }}</span>
-                            <span class="separator">•</span>
-                            <span class="item-date">{{ article.date|date:"F d, Y" }}</span>
-                        </div>
-
-                        <h3 class="item-title">{{ article.title }}</h3>
-                    </div>
-
-                    <a href="{% url 'mediahub:press_detail' article.slug %}" class="read-btn">
-                        Read <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
-
-                </div>
-                {% endfor %}
-            {% else %}
-                <p style="color:#aaa;">No press articles available.</p>
-            {% endif %}
-
-        </div>
-    </div>
-
-
-    <!-- PRESS KIT -->
-    <div class="press-kit-section">
-
-        <h2 class="press-kit-title">
-            Press <span>Kit</span>
-        </h2>
-
-        <p class="press-kit-description">
-            Download our press kit for high-resolution images, brand assets and company information.
-        </p>
+    <p class="press-kit-description">
+      Download our press kit for high-resolution images, brand assets and company information.
+    </p>
 
     <div class="press-kit-buttons">
-  {# Active download button if file exists #}
-  {% if press_kit and press_kit.file %}
-    <a href="{{ press_kit.file.url }}" target="_blank" rel="noopener" class="pk-btn pk-download" aria-label="Download press kit">
-      <i class="fa-solid fa-download" aria-hidden="true"></i>
-      DOWNLOAD PRESS KIT
-    </a>
-  {% else %}
-    {# show disabled placeholder so layout doesn't jump; optionally link to contact or show tooltip #}
-    <a href="#" class="pk-btn pk-download disabled" title="Press kit not available">
-      <i class="fa-solid fa-download" aria-hidden="true"></i>
-      PRESS KIT COMING SOON
-    </a>
-  {% endif %}
+      {% if press_kit and press_kit.file %}
+        <a href="{{ press_kit.file.url }}"
+           target="_blank"
+           rel="noopener"
+           class="cn">
+          <i class="fa-solid fa-download"></i>
+          DOWNLOAD PRESS KIT
+        </a>
+      {% else %}
+        <button class="cn disabled" disabled>
+          PRESS KIT COMING SOON
+        </button>
+      {% endif %}
 
-  {# Media inquiries (always shown) #}
-  <a href="{% url 'contact:contact_page' %}" class="pk-btn pk-inquiries">
-    MEDIA INQUIRIES
-  </a>
-</div>
-
-
-
+      <a href="{% url 'contact:contact_page' %}" class="cn stories">
+        MEDIA INQUIRIES
+      </a>
     </div>
 
-    <div class="gradient-divider"></div>
+  </section>
+
+  <div class="gradient-divider"></div>
 
 </div>
 

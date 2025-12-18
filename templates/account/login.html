@@ -2,42 +2,41 @@
 {% load static %}
 
 {% block content %}
-<div class="auth-container">
+<main class="auth-page">
+  <div class="auth-card">
 
-  <h1 class="auth-title">Sign In</h1>
+    <header class="auth-card-header">
+      <p class="craft-spirits"><span class="dash">—</span>ACCOUNT<span class="dash">—</span></p>
+      <h1 class="auth-title">Sign In</h1>
+      <p class="auth-sub">Access your account to continue.</p>
+    </header>
 
-  <form method="post" class="auth-form">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
+    <form method="post" action="{% url 'account_login' %}" class="auth-form">
+      {% csrf_token %}
 
-    <!-- USERNAME / EMAIL -->
-    <div class="auth-field">
-      <label>Email</label>
-      {{ form.login }}
-    </div>
+      {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+      {% endif %}
 
-    <!-- PASSWORD -->
-    <div class="auth-field">
-      <label>Password</label>
-      {{ form.password }}
-    </div>
+      {{ form.non_field_errors }}
 
-    <!-- FORGOT PASSWORD -->
-    <div class="forgot-wrap">
-      <a href="{% url 'account_reset_password' %}" class="forgot-link">
-        Forgot your password?
+      <div class="form-row">
+        {{ form.login }}
+      </div>
+
+      <div class="form-row">
+        {{ form.password }}
+      </div>
+
+      <button type="submit" class="cn auth-btn">Sign In</button>
+    </form>
+
+    <div style="margin-top:20px; text-align:center;">
+      <a href="{% url 'account_signup' %}" class="auth-link">
+        New here? Create an account
       </a>
     </div>
 
-    <!-- SUBMIT -->
-    <button type="submit" class="auth-btn">Sign In</button>
-
-  </form>
-
-  <p class="auth-switch">
-    Don’t have an account?
-    <a href="{% url 'account_signup' %}">Sign up</a>
-  </p>
-
-</div>
+  </div>
+</main>
 {% endblock %}

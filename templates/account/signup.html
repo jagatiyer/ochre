@@ -2,36 +2,62 @@
 {% load static %}
 
 {% block content %}
-<div class="auth-container">
 
-  <h1 class="auth-title">Create Account</h1>
+<div class="contact-page">
+  <div class="contact-container">
 
-  <form method="post" class="auth-form">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
+    <div class="contact-left">
 
-    <div class="auth-field">
-      <label>Email</label>
-      {{ form.email }}
+      <p class="contact-label">
+        <span class="dash">—</span> ACCOUNT <span class="dash">—</span>
+      </p>
+
+      <h1>Create Account</h1>
+
+      <p class="contact-description">
+        Join Ochre to explore our collections and shop with ease.
+      </p>
+
+      <div class="contact-form-section">
+        <h3>Get started with <span class="highlight-cyan">Ochre</span></h3>
+
+        <form class="contact-form" method="POST" action="{% url 'account_signup' %}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+          {% for field in form %}
+            <div class="form-row">
+              {{ field }}
+            </div>
+            {% if field.errors %}
+              <p class="field-error">{{ field.errors|striptags }}</p>
+            {% endif %}
+          {% endfor %}
+
+          <button type="submit" class="cn">CREATE ACCOUNT</button>
+        </form>
+
+        <p style="margin-top:16px;">
+          Already registered?
+          <a href="{% url 'account_login' %}?next={{ request.GET.next }}">Sign in</a>
+        </p>
+      </div>
+
     </div>
 
-    <div class="auth-field">
-      <label>Password</label>
-      {{ form.password1 }}
+    <div class="contact-right">
+      <h3 class="contact-right-title">What you get</h3>
+
+      <div class="contact-card">
+        <ul class="contact-benefits">
+          <li>Faster checkout</li>
+          <li>Order history</li>
+          <li>Early access to launches</li>
+        </ul>
+      </div>
     </div>
 
-    <div class="auth-field">
-      <label>Confirm Password</label>
-      {{ form.password2 }}
-    </div>
-
-    <button type="submit" class="auth-btn">Sign Up</button>
-  </form>
-
-  <p class="auth-switch">
-    Already have an account?
-    <a href="{% url 'account_login' %}">Sign in</a>
-  </p>
-
+  </div>
 </div>
+
 {% endblock %}

@@ -12,7 +12,7 @@ def profile_view(request):
     """
     user = request.user
     context = {"user": user}
-    return render(request, "account/profile.html", context)
+    return render(request, "users/profile.html", context)
 
 
 @login_required
@@ -34,4 +34,4 @@ def profile_edit(request):
     else:
         form = ProfileForm(instance=user)
 
-    return render(request, "account/profile_edit.html", {"form": form})
+    return render(request, "users/profile_edit.html", {"form": form})
