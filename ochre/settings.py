@@ -32,6 +32,9 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
 
+    # CKEditor 5 (rich text for blog admin)
+    "django_ckeditor_5",
+
     # Project apps
     "home",
     "blog",
@@ -147,6 +150,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# CKEditor5 upload path (relative to MEDIA_ROOT)
+CKEDITOR5_UPLOAD_PATH = "ckeditor5/"
 
 
 # ============================================================

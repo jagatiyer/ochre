@@ -39,3 +39,4 @@ urllib3==2.6.0
 wagtail==5.2.3
 webencodings==0.5.1
 Willow==1.6.3
+django-ckeditor-5==0.2.12
