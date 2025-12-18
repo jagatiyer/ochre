@@ -11,7 +11,8 @@ except Exception:
 
 class BlogPostForm(forms.ModelForm):
     if CKEditor5Widget is not None:
-        content = forms.CharField(widget=CKEditor5Widget())
+        # Use the 'default' config defined in settings.py
+        content = forms.CharField(widget=CKEditor5Widget(config_name='default'))
 
     class Meta:
         model = BlogPost
@@ -25,3 +26,8 @@ class BlogPostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     search_fields = ("title", "description")
     list_filter = ("tag",)
+
+    class Media:
+        css = {
+            'all': ('admin/ckeditor5_admin.css',)
+        }
