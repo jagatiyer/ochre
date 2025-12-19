@@ -23,6 +23,10 @@ urlpatterns = [
     path("contact/", include("contact.urls", namespace="contact")),
     path("shop/", include("shop.urls", namespace="shop")),
 
+    # CKEditor5    
+    path("ckeditor5/", include("django_ckeditor_5.urls")),
+
+
     # Auth / users
     path("profile/", include("users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),

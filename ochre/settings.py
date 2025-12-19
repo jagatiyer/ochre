@@ -154,6 +154,27 @@ MEDIA_ROOT = BASE_DIR / "media"
 # CKEditor5 upload path (relative to MEDIA_ROOT)
 CKEDITOR5_UPLOAD_PATH = "ckeditor5/"
 
+# CKEditor5 configuration: use Base64 image embedding only and toolbar
+CKEDITOR5_CONFIGS = {
+    "default": {
+        "toolbar": [
+            "heading",
+            "bold",
+            "italic",
+            "underline",
+            "link",
+            "bulletedList",
+            "numberedList",
+            "blockQuote",
+            "insertImage",
+            "undo",
+            "redo",
+        ],
+        # No simpleUpload / uploadUrl configured — editor will use base64
+        # embedding (Base64UploadAdapter) if available in the build.
+        # This keeps all image embedding client-side only.
+    }
+}
 
 # ============================================================
 # AUTH / ALLAUTH

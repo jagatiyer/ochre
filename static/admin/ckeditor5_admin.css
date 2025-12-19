@@ -1,0 +1,21 @@
+.ck-editor__editable_inline,
+.ck-editor__editable {
+  background: #0f1112 !important;
+  color: #ffffff !important;
+  min-height: 200px;
+}
+
+.ck-content,
+.ck-editor__editable_inline p {
+  color: #ffffff !important;
+}
+
+/* Placeholder styling */
+.ck-placeholder {
+  color: rgba(255,255,255,0.55) !important;
+}
+
+/* Ensure placeholder fades on focus */
+.ck-editor__editable_inline:focus .ck-placeholder {
+  opacity: 0 !important;
+}
