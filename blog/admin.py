@@ -9,6 +9,7 @@ from .models import BlogPost
 
 class TinyMCEAdminWidget(forms.Textarea):
         class Media:
+            # Keep Media empty; scripts will be included via ModelAdmin.Media
             js = ()
 
         def render(self, name, value, attrs=None, renderer=None):
@@ -90,9 +91,8 @@ document.addEventListener('DOMContentLoaded', function() {
 """
                 )
 
-                init_js = init_template.replace('__SELECTOR__', selector).replace('__UPLOAD_URL__', reverse('blog:tinymce_upload'))
-
-                return mark_safe(html + init_js)
+                # Inline init removed — rely on ModelAdmin.Media and static init file
+                return mark_safe(html)
 
 
 class BlogPostForm(forms.ModelForm):
@@ -112,9 +112,13 @@ class BlogPostAdmin(admin.ModelAdmin):
         list_filter = ("tag",)
 
         class Media:
-                css = {
-                        'all': ('admin/ckeditor5_admin.css',)
-                }
+            css = {
+                'all': ('admin/ckeditor5_admin.css',)
+            }
+            js = (
+                '/static/vendor/tinymce/tinymce.min.js',
+                '/static/admin/js/blog_tinymce_init.js',
+            )
 
         def get_readonly_fields(self, request, obj=None):
             # Ensure 'content' is never returned as a readonly field even if
