@@ -1,6 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import BlogPost
+from django.views.decorators.http import require_POST
+from django.contrib.admin.views.decorators import staff_member_required
+from django.core.files.storage import default_storage
+from django.utils.text import get_valid_filename
+import uuid
+from django.http import HttpResponseBadRequest
+from django.conf import settings
 
 
 # ============================================================
@@ -111,3 +118,27 @@ def blog_detail(request, slug):
         "recent_posts": recent_posts,
         "categories": BlogPost.TAG_CHOICES,
     })
+
+
+@staff_member_required
+@require_POST
+def tinymce_upload(request):
+    """Receive image upload from TinyMCE and return JSON with `location` key.
+
+    Expects file field named `image`.
+    """
+    upload = request.FILES.get('image')
+    if not upload:
+        return HttpResponseBadRequest('No image uploaded')
+
+    # Sanitize filename and add UUID prefix to avoid collisions
+    filename = get_valid_filename(upload.name)
+    unique_name = f"{uuid.uuid4().hex}_{filename}"
+    save_path = f"blog/{unique_name}"
+
+    # Save using default storage (will place under MEDIA_ROOT)
+    saved_name = default_storage.save(save_path, upload)
+    url = default_storage.url(saved_name)
+
+    # Return URL that TinyMCE expects
+    return JsonResponse({'location': url})
