@@ -6,101 +6,20 @@ from django.conf import settings
 import os
 from .models import BlogPost
 
-
-class TinyMCEAdminWidget(forms.Textarea):
-        class Media:
-            # Keep Media empty; scripts will be included via ModelAdmin.Media
-            js = ()
-
-        def render(self, name, value, attrs=None, renderer=None):
-                html = super().render(name, value, attrs, renderer)
-                # Force selector to target the content textarea id used by the ModelForm
-                selector = '#id_content'
-
-                # Load TinyMCE from a self-hosted local static path
-                script_tag = '<script src="/static/vendor/tinymce/tinymce.min.js"></script>'
-
-                # TinyMCE init script: enables headings, bold/italic/underline, links, lists, blockquote, image upload
-                init_template = (
-                    script_tag
-                    + """
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    if (typeof tinymce === 'undefined') return;
-    // Before initializing, ensure the textarea is enabled and writable
-    const textarea = document.getElementById('id_content');
-    if (textarea) {
-        textarea.removeAttribute('disabled');
-        textarea.readOnly = false;
-    }
-
-    tinymce.init({
-        selector: '__SELECTOR__',
-        readonly: false,
-        plugins: 'lists link image code advlist autolink',
-        toolbar: 'formatselect | bold italic underline | bullist numlist | blockquote | link | image | undo redo',
-        menubar: false,
-        statusbar: false,
-        branding: false,
-        setup: function (editor) {
-            editor.on('init', function () {
-                try {
-                    editor.setMode('design');
-                } catch (e) {
-                    // ignore if not supported
-                }
-                const textarea = document.getElementById('id_content');
-                if (textarea) {
-                    textarea.removeAttribute('disabled');
-                    textarea.readOnly = false;
-                }
-            });
-        },
-        images_upload_url: '__UPLOAD_URL__',
-        images_upload_handler: function (blobInfo, success, failure) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '__UPLOAD_URL__');
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            // Add CSRF token
-            function getCookie(name) {
-                var value = "; " + document.cookie;
-                var parts = value.split("; " + name + "=");
-                if (parts.length === 2) return parts.pop().split(';').shift();
-            }
-            var csrftoken = getCookie('csrftoken');
-            if (csrftoken) xhr.setRequestHeader('X-CSRFToken', csrftoken);
-            xhr.onload = function() {
-                if (xhr.status !== 200) {
-                    failure('HTTP Error: ' + xhr.status);
-                    return;
-                }
-                var json = JSON.parse(xhr.responseText);
-                if (!json || typeof json.location != 'string') {
-                    failure('Invalid JSON: ' + xhr.responseText);
-                    return;
-                }
-                success(json.location);
-            };
-            var formData = new FormData();
-            formData.append('image', blobInfo.blob(), blobInfo.filename());
-            xhr.send(formData);
-        }
-    });
-});
-</script>
-"""
-                )
-
-                # Inline init removed — rely on ModelAdmin.Media and static init file
-                return mark_safe(html)
+# Prefer the CKEditor5 widget from `django-ckeditor-5`. If it's not installed for
+# some reason, fall back to a plain textarea so the admin remains usable.
+try:
+    from ckeditor.widgets import CKEditor5Widget
+except Exception:
+    CKEditor5Widget = forms.Textarea
 
 
 class BlogPostForm(forms.ModelForm):
-        content = forms.CharField(widget=TinyMCEAdminWidget())
+    content = forms.CharField(widget=CKEditor5Widget())
 
-        class Meta:
-                model = BlogPost
-                fields = "__all__"
+    class Meta:
+        model = BlogPost
+        fields = "__all__"
 
 
 @admin.register(BlogPost)
@@ -115,10 +34,6 @@ class BlogPostAdmin(admin.ModelAdmin):
             css = {
                 'all': ('admin/ckeditor5_admin.css',)
             }
-            js = (
-                '/static/vendor/tinymce/tinymce.min.js',
-                '/static/admin/js/blog_tinymce_init.js',
-            )
 
         def get_readonly_fields(self, request, obj=None):
             # Ensure 'content' is never returned as a readonly field even if

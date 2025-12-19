@@ -140,5 +140,5 @@ def tinymce_upload(request):
     saved_name = default_storage.save(save_path, upload)
     url = default_storage.url(saved_name)
 
-    # Return URL that TinyMCE expects
-    return JsonResponse({'location': url})
+    # Return URL that editors expect. TinyMCE expects `location`, CKEditor5 expects `url`.
+    return JsonResponse({'location': url, 'url': url})
