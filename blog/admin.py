@@ -40,6 +40,20 @@ document.addEventListener('DOMContentLoaded', function() {{
         menubar: false,
         statusbar: false,
         branding: false,
+        setup: function (editor) {
+            editor.on('init', function () {
+                try {
+                    editor.setMode('design');
+                } catch (e) {
+                    // ignore if not supported
+                }
+                const textarea = document.getElementById('id_content');
+                if (textarea) {
+                    textarea.removeAttribute('disabled');
+                    textarea.readOnly = false;
+                }
+            });
+        },
         images_upload_url: '{reverse('blog:tinymce_upload')}',
         images_upload_handler: function (blobInfo, success, failure) {{
             var xhr = new XMLHttpRequest();
