@@ -176,6 +176,23 @@ CKEDITOR5_CONFIGS = {
     }
 }
 
+# Named config for blog admin (explicit full toolbar)
+CKEDITOR5_CONFIGS["blog"] = {
+    "toolbar": [
+        "heading",
+        "bold",
+        "italic",
+        "underline",
+        "link",
+        "bulletedList",
+        "numberedList",
+        "blockQuote",
+        "insertImage",
+        "undo",
+        "redo",
+    ],
+}
+
 # ============================================================
 # AUTH / ALLAUTH
 # ============================================================

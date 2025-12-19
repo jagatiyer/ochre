@@ -11,8 +11,8 @@ except Exception:
 
 class BlogPostForm(forms.ModelForm):
     if CKEditor5Widget is not None:
-        # Use the 'default' config defined in settings.py
-        content = forms.CharField(widget=CKEditor5Widget(config_name='default'))
+        # Use the named 'blog' config defined in settings.py for full toolbar
+        content = forms.CharField(widget=CKEditor5Widget(config_name='blog'))
 
     class Meta:
         model = BlogPost
