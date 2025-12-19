@@ -163,20 +163,25 @@ CKEDITOR5_CONFIGS = {
     "default": {
         "toolbar": [
             "heading",
+            "|",
             "bold",
             "italic",
-            "underline",
             "link",
             "bulletedList",
             "numberedList",
             "blockQuote",
-            "insertImage",
+            "|",
+            "sourceEditing",
             "undo",
             "redo",
         ],
-        # No simpleUpload / uploadUrl configured — editor will use base64
-        # embedding (Base64UploadAdapter) if available in the build.
-        # This keeps all image embedding client-side only.
+        "heading": {
+            "options": [
+                {"model": "paragraph", "title": "Paragraph"},
+                {"model": "heading2", "view": "h2", "title": "Heading 2"},
+                {"model": "heading3", "view": "h3", "title": "Heading 3"},
+            ]
+        },
     }
 }
 
