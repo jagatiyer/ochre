@@ -99,10 +99,10 @@ class BlogPostAdmin(admin.ModelAdmin):
                         'all': ('admin/ckeditor5_admin.css',)
                 }
 
-    def get_readonly_fields(self, request, obj=None):
-        # Ensure 'content' is never returned as a readonly field even if
-        # other code/configuration marks some fields readonly.
-        fields = list(super().get_readonly_fields(request, obj))
-        if 'content' in fields:
-            fields.remove('content')
-        return tuple(fields)
+        def get_readonly_fields(self, request, obj=None):
+            # Ensure 'content' is never returned as a readonly field even if
+            # other code/configuration marks some fields readonly.
+            fields = list(super().get_readonly_fields(request, obj))
+            if 'content' in fields:
+                fields.remove('content')
+            return tuple(fields)
