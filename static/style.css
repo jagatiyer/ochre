@@ -2509,3 +2509,49 @@ color: #2b0f10;
   background: var(--accent-red);
   margin-top: 6px;
 }
+
+/* Reverted: previous flex-centering block removed per user request. */
+
+/* Collections container alignment: ensure collections filters section
+   uses same horizontal constraints as Blog (no centering on filters).
+   Apply at the section wrapper level only. */
+.collections-page .products-section {
+  max-width: var(--container-width);
+  margin: 50px auto 0;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Shop tabs: restore inline row layout without centering or wrapping.
+   Keep changes minimal and do not touch `.filter-btn`. */
+.shop-page .tab-selector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+.shop-page .product-filters {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Collections: align filters with Blog container */
+.collections-page .articles-section,
+.collections-page .products-section {
+  max-width: var(--container-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Shop: keep Products / Experiences inline */
+.shop-page .tab-selector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
