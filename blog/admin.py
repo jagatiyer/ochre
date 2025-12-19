@@ -60,3 +60,9 @@ class BlogPostAdmin(admin.ModelAdmin):
         # `changeform_view`, this file only helps us detect which plugins are
         # present in the build (logged to the browser console).
         js = ["admin/js/ckeditor_inspect.js"]
+        css = {
+            'all': ('admin/css/blog_admin_light.css',)
+        }
+
+    # Auto-populate slug from title in the admin (scoped to BlogPost only)
+    prepopulated_fields = {"slug": ("title",)}

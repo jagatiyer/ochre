@@ -1,0 +1,29 @@
+/* Scoped light-mode overrides for BlogPost admin only. */
+/* Keep rules minimal and specific to avoid affecting other admin pages. */
+
+/* Page background and text */
+body, .module, .change-form, .object-tools {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+}
+
+/* Admin header / nav contrast */
+.header, .nav-sidebar, .breadcrumbs {
+  background-color: #f8f9fa !important;
+}
+
+/* CKEditor editable area contrast */
+.ck-editor__editable, .ck-content {
+  background: #ffffff !important;
+  color: #111111 !important;
+}
+
+/* Ensure form controls are readable */
+input, textarea, select {
+  color: #111111 !important;
+}
+
+/* Keep focus outline visible */
+:focus {
+  outline-color: #3b82f6 !important;
+}
