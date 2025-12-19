@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'blog/blog_detail_fix.css' %}">
+{% endblock %}
+
 {% block content %}
 
 <div class="blog-detail-page">

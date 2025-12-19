@@ -1,0 +1,24 @@
+/* Blog-detail-only containment rules (scoped to blog pages) */
+.blog-detail-content img,
+.blog-detail-content figure,
+.blog-detail-content iframe,
+.blog-content img,
+.blog-content figure,
+.blog-content iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent content from expanding layout */
+.blog-detail-content,
+.blog-content {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Sidebar must not shrink or be pushed */
+.blog-detail-sidebar,
+.blog-sidebar {
+  flex-shrink: 0;
+  max-width: 360px;
+}
