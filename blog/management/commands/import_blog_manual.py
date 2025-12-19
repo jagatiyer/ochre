@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from blog.models import BlogPost
 from django.core.files.base import ContentFile
 import requests
+import os
 from urllib.parse import urlparse
 
 
