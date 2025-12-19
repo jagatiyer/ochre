@@ -2527,8 +2527,7 @@ color: #2b0f10;
 .shop-page .tab-selector {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  gap: 16px;
+  flex-wrap: nowrap;
 }
 .shop-page .product-filters {
   display: flex;
