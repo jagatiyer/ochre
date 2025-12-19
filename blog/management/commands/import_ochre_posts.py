@@ -118,7 +118,9 @@ class Command(BaseCommand):
 
             # slug from URL last path segment
             path = urlparse(url).path
-            slug = os.path.basename(path.rstrip('/')) or slugify(title)
+            raw_slug = os.path.basename(path.rstrip('/'))
+            # Ensure we create a safe slug (only allowed chars) — slugify both raw slug and fallback to title
+            slug = slugify(raw_slug) if raw_slug else slugify(title)
             if slug in processed_slugs:
                 continue
 
