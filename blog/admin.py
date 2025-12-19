@@ -123,3 +123,13 @@ class BlogPostAdmin(admin.ModelAdmin):
             if 'content' in fields:
                 fields.remove('content')
             return tuple(fields)
+
+        def get_form(self, request, obj=None, **kwargs):
+            # Ensure the form field itself is not rendered disabled by admin
+            form = super().get_form(request, obj, **kwargs)
+            if hasattr(form, 'base_fields') and 'content' in form.base_fields:
+                try:
+                    form.base_fields['content'].disabled = False
+                except Exception:
+                    pass
+            return form
