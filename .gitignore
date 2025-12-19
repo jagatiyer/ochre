@@ -21,3 +21,6 @@ media/
 .idea/
 .vscode/
 
+# Ignore generated vendor static assets
+static/vendor/
+
