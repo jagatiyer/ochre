@@ -2522,19 +2522,32 @@ color: #2b0f10;
   padding-right: 20px;
 }
 
-/* Shop tabs: restore inline row layout without centering or wrapping.
-   Keep changes minimal and do not touch `.filter-btn`. */
-.shop-page .tab-selector {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-}
 .shop-page .product-filters {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 16px;
+}
+
+/* SHOP TOP TABS (PILLS) */
+.shop-tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.shop-tab {
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-red);
+  color: var(--accent-red);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.shop-tab.active {
+  background: var(--accent-red);
+  color: #fff;
 }
 
 /* Collections: align filters with Blog container */
@@ -2547,11 +2560,5 @@ color: #2b0f10;
   padding-right: 20px;
 }
 
-/* Shop: keep Products / Experiences inline */
-.shop-page .tab-selector {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
-}
+/* Shop: keep Products / Experiences inline (handled by .shop-tabs above) */
 
