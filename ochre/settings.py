@@ -37,7 +37,7 @@ INSTALLED_APPS = [
 
     # Project apps
     "home",
-    "blog",
+    "blog.apps.BlogConfig",
     "mediahub",
     "collections_app",
     "shop.apps.ShopConfig",
