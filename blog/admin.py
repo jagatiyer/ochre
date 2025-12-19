@@ -2,23 +2,34 @@ from django.contrib import admin
 from django import forms
 from django.utils.safestring import mark_safe
 from django.urls import reverse
+from django.conf import settings
+import os
 from .models import BlogPost
 
 
 class TinyMCEAdminWidget(forms.Textarea):
         class Media:
-                js = (
-                        # TinyMCE CDN (full featured)
-                        "https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js",
-                )
+            js = ()
 
         def render(self, name, value, attrs=None, renderer=None):
                 html = super().render(name, value, attrs, renderer)
                 final_id = (attrs or {}).get("id")
                 selector = f"#{final_id}" if final_id else f"textarea[name=\"{name}\"]"
 
+                # Determine TinyMCE API key from settings or env; use 'no-api-key' only in DEBUG
+                api_key = getattr(settings, 'TINYMCE_API_KEY', None) or os.environ.get('TINYMCE_API_KEY')
+                if not api_key and getattr(settings, 'DEBUG', False):
+                        api_key = 'no-api-key'
+
+                # Build script tag if key is available (or placeholder used for DEBUG)
+                if api_key:
+                        script_tag = f"<script src=\"https://cdn.tiny.cloud/1/{api_key}/tinymce/6/tinymce.min.js\"></script>"
+                else:
+                        script_tag = '<!-- TinyMCE not loaded: TINYMCE_API_KEY missing -->'
+
                 # TinyMCE init script: enables headings, bold/italic/underline, links, lists, blockquote, image upload
                 init_js = f"""
+{script_tag}
 <script>
 document.addEventListener('DOMContentLoaded', function() {{
     if (typeof tinymce === 'undefined') return;

@@ -151,6 +151,10 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# TinyMCE Cloud API key - read from environment. Set this in production.
+import os
+TINYMCE_API_KEY = os.environ.get('TINYMCE_API_KEY')
+
 # CKEditor5 upload path (relative to MEDIA_ROOT)
 CKEDITOR5_UPLOAD_PATH = "ckeditor5/"
 
