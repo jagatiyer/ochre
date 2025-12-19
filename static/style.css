@@ -8,6 +8,26 @@
   box-sizing: border-box;
 }
 
+
+/* ======================================================
+   BLOG FILTERS – scoped active pill (DO NOT MOVE)
+   ====================================================== */
+
+.blog-filters .filter-btn.active {
+  background: var(--accent-red);
+  border-radius: 999px;
+  color: #fff;
+}
+
+/* ======================================================
+   GLOBAL FILTER RESET – prevent pill bleed
+   ====================================================== */
+
+.filter-btn.active {
+  background: transparent;
+  border-radius: 0;
+}
+
 html, body {
   width: 100%;
 }

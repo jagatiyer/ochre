@@ -20,10 +20,28 @@ def blog_list(request):
     Loads ONLY the first row (2 posts for now).
     """
 
-    # Optional tag filter (from ?tag=slug)
-    tag = request.GET.get("tag")
+    # Optional filter parameter precedence: ?filter=... overrides ?tag=...
+    raw_filter = request.GET.get("filter")
+    tag_param = request.GET.get("tag")
+
+    # Determine which tag (if any) to apply to the queryset and what the active_filter should be
+    if raw_filter:
+        if raw_filter == "all":
+            tag = None
+            active_filter = "all"
+        else:
+            tag = raw_filter
+            active_filter = raw_filter
+    else:
+        if tag_param:
+            tag = tag_param
+            active_filter = tag_param
+        else:
+            tag = None
+            active_filter = "all"
 
     qs = BlogPost.objects.filter(published=True).order_by("-created_at")
+    # Apply tag filter only when present (do not change other queryset logic)
     if tag:
         qs = qs.filter(tag=tag)
 
@@ -34,7 +52,7 @@ def blog_list(request):
         "posts": posts,
         "total_count": total_count,
         "tags": BlogPost.TAG_CHOICES,
-        "current_tag": tag,
+        "active_filter": active_filter,
     })
 
 

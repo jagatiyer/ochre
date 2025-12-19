@@ -20,9 +20,15 @@
     </p>
     
     <!-- Categories (filters) -->
-    <div class="article-filters" aria-label="category-filters">
+    <div class="article-filters blog-filters" aria-label="category-filters">
+      <!-- Permanent ALL filter (always visible). Active when no filter or filter=all -->
+      <button
+        class="filter-btn {% if active_filter == 'all' %}active{% endif %}"
+        data-filter="all">
+        ALL
+      </button>
       {% for value,label in tags %}
-        <a href="?tag={{ value }}" class="filter-btn {% if current_tag == value %}active{% endif %}">{{ label|upper }}</a>
+        <a href="?tag={{ value }}" class="filter-btn {% if active_filter == value %}active{% endif %}">{{ label|upper }}</a>
       {% endfor %}
     </div>
   </div>
