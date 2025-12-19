@@ -18,29 +18,9 @@
     </div>
 
         <!-- TAB SELECTOR (centered) -->
-        <div class="tab-selector" style="text-align:center;">
-            <a href="?tab=products{% if filter_type and filter_type != 'ALL' %}&filter={{ filter_type }}{% endif %}"
-               class="filter-btn {% if selected_tab == 'products' %}active{% endif %}">
-                PRODUCTS
-            </a>
-            <a href="?tab=experiences{% if filter_type and filter_type != 'ALL' %}&filter={{ filter_type }}{% endif %}"
-               class="filter-btn {% if selected_tab == 'experiences' %}active{% endif %}">
-                EXPERIENCES
-            </a>
-        </div>
 
     <!-- CATEGORY FILTERS (centered) -->
-    <div class="product-filters" aria-label="category-filters">
-        {# Use filter_items so chips only show categories that have items for the selected tab #}
-        {% for f in filter_items %}
-            <a href="?tab={{ selected_tab }}&filter={{ f }}"
-               class="filter-btn {% if filter_type == f %}active{% endif %}">
-                {{ f|upper }}
-            </a>
-        {% empty %}
-            <p style="color:#9ca3af;">No categories yet.</p>
-        {% endfor %}
-    </div>
+        <!-- Shop tabs & category filters removed (frozen) -->
 
     <!-- ITEMS GRID -->
     <div class="products-scroll" style="max-width:1200px; margin: 0 auto; padding: 0 20px;">

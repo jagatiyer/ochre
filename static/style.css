@@ -2550,6 +2550,31 @@ color: #2b0f10;
   color: #fff;
 }
 
+/* Added by request: ensure shop top tabs always stay inline */
+.shop-tabs {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 16px;
+  align-items: center;
+}
+
+.shop-tabs .shop-tab {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+.shop-tabs .shop-tab + .shop-tab {
+  margin-left: 16px;
+}
+
+/* TEMP: Disable Shop tabs & filters until inventory is populated */
+.shop-page .shop-tabs,
+.shop-page .tab-selector,
+.shop-page .product-filters,
+.shop-page .filter-btn {
+  display: none !important;
+}
+
 /* Collections: align filters with Blog container */
 .collections-page .articles-section,
 .collections-page .products-section {
