@@ -197,6 +197,11 @@ CKEDITOR5_CONFIGS["blog"] = {
     ],
 }
 
+# Backwards-compatible alias: some versions of `django_ckeditor_5` look for
+# `CKEDITOR_5_CONFIGS` (with an underscore). Define it here to ensure both
+# variants are available without modifying site-packages.
+CKEDITOR_5_CONFIGS = CKEDITOR5_CONFIGS
+
 # ============================================================
 # AUTH / ALLAUTH
 # ============================================================
