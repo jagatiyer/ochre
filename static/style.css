@@ -9,24 +9,9 @@
 }
 
 
-/* ======================================================
-   BLOG FILTERS – scoped active pill (DO NOT MOVE)
-   ====================================================== */
-
-.blog-filters .filter-btn.active {
-  background: var(--accent-red);
-  border-radius: 999px;
-  color: #fff;
-}
-
-/* ======================================================
-   GLOBAL FILTER RESET – prevent pill bleed
-   ====================================================== */
-
-.filter-btn.active {
-  background: transparent;
-  border-radius: 0;
-}
+/* ============================================================
+  RESET & GLOBAL BASE
+  ============================================================ */
 
 html, body {
   width: 100%;
@@ -440,11 +425,7 @@ img {
   letter-spacing: 1px;
 }
 
-.filter-btn.active {
-  background: var(--accent-cyan);
-  color: #000;
-  border-color: transparent;
-}
+/* (global .filter-btn.active removed to avoid pill styling leak) */
 
 .load-more-wrap {
   text-align: center;
@@ -531,20 +512,7 @@ img {
   transition: color 0.2s ease;
 }
 
-.filter-btn:hover,
-.filter-btn.active {
-  color: var(--accent-red);
-}
-
-.filter-btn.active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -4px;
-  height: 2px;
-  background: var(--accent-red);
-}
+/* hover color removed to enforce underline-only active state */
 
 
 /* BLOG LIST GRID */
@@ -2440,6 +2408,9 @@ color: #2b0f10;
   padding-top: var(--section-header-offset);
 }
 
+
+/* (blog-only pill styling removed to enforce global underline-only active state) */
+
 /* Collections */
 .collections-header {
   padding-top: var(--section-header-offset);
@@ -2469,6 +2440,14 @@ color: #2b0f10;
 /* ============================================================
    2. HEADER → CONTENT VERTICAL GAP (CRITICAL FIX)
    ============================================================ */
+
+/* ============================================================
+  GLOBAL: Enforce underline-only active state for all filter buttons
+  ============================================================ */
+
+/* NOTE: active/background/border-radius rules were removed to ensure
+  all filters use underline-only active state. A single ::after rule
+  is appended at the very end of this file. */
 
 /* Blog */
 .blog-header + .articles-section {
@@ -2515,4 +2494,18 @@ color: #2b0f10;
 .contact-page {
   padding-left: clamp(16px, 5vw, 72px);
   padding-right: clamp(16px, 5vw, 72px);
+}
+
+
+/* ============================================================
+   SINGLE GLOBAL ACTIVE-STATE RULE — underline-only (single source)
+   ============================================================ */
+
+.filter-btn.active::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-red);
+  margin-top: 6px;
 }
