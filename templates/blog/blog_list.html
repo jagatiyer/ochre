@@ -18,6 +18,13 @@
     <p class="description">
       Craft, clarity and conversations around spirits and culture.
     </p>
+    
+    <!-- Categories (filters) -->
+    <div class="article-filters" aria-label="category-filters">
+      {% for value,label in tags %}
+        <a href="?tag={{ value }}" class="filter-btn {% if current_tag == value %}active{% endif %}">{{ label|upper }}</a>
+      {% endfor %}
+    </div>
   </div>
 
 
@@ -26,15 +33,17 @@
        ========================= -->
   <div class="blog-grid" id="blog-grid">
 
+    {% load blog_extras %}
     {% for post in posts %}
       <div class="article-card">
 
         {% if post.cover_image %}
-          <img
-            src="{{ post.cover_image.url }}"
-            alt="{{ post.title }}"
-            class="shop-card-img"
-          >
+          <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" class="shop-card-img">
+        {% else %}
+          {% first_image_src post.content as first_img %}
+          {% if first_img %}
+            <img src="{{ first_img }}" alt="{{ post.title }}" class="shop-card-img">
+          {% endif %}
         {% endif %}
 
         <h3>{{ post.title }}</h3>
@@ -58,12 +67,11 @@
        LOAD MORE
        ========================= -->
   {% if total_count > posts|length %}
-    <div class="load-more-wrap" style="text-align:center; margin-top:40px;">
+    <div class="load-more-wrap">
       <button
         id="load-more-btn"
-        class="cn collections"
-        data-offset="{{ posts|length }}"
-        style="color:#1a1d1f">
+        class="load-more-btn cn collections"
+        data-offset="{{ posts|length }}">
         Show More
       </button>
     </div>

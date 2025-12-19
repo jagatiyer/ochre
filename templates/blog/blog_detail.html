@@ -69,6 +69,19 @@
         </div>
       {% endif %}
 
+      {% if categories %}
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Categories</h3>
+          <ul class="sidebar-list">
+            {% for value,label in categories %}
+              <li>
+                <a href="{% url 'blog:blog_list' %}?tag={{ value }}">{{ label }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
     </aside>
 
   </div>
