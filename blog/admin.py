@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {{
         statusbar: false,
         branding: false,
         setup: function (editor) {
-            editor.on('init', function () {
+            editor.on('init', function () {{
                 try {
                     editor.setMode('design');
                 } catch (e) {
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {{
                     textarea.removeAttribute('disabled');
                     textarea.readOnly = false;
                 }
-            });
+            }});
         },
         images_upload_url: '{reverse('blog:tinymce_upload')}',
         images_upload_handler: function (blobInfo, success, failure) {{
