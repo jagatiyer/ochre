@@ -1,0 +1,12 @@
+/* Blog admin only — light mode */
+.change-form #content,
+.change-form .cke_editable,
+.ck-editor__editable {
+  background: #ffffff !important;
+  color: #111111 !important;
+}
+
+.ck.ck-toolbar {
+  background: #f5f5f5 !important;
+  border-color: #ddd !important;
+}

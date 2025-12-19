@@ -61,7 +61,7 @@ class BlogPostAdmin(admin.ModelAdmin):
         # present in the build (logged to the browser console).
         js = ["admin/js/ckeditor_inspect.js"]
         css = {
-            'all': ('admin/css/blog_admin_light.css',)
+            'all': ('blog/admin_blog_light.css',)
         }
 
     # Auto-populate slug from title in the admin (scoped to BlogPost only)
