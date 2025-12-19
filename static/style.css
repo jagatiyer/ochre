@@ -420,9 +420,10 @@ img {
   letter-spacing: 1px;
 }
 
-.article-filters .filter-btn.active {
-  /* viewer-facing filters: keep no background or pill styling; underline handled by ::after */
-  color: var(--accent-red);
+.filter-btn.active {
+  background: var(--accent-cyan);
+  color: #000;
+  border-color: transparent;
 }
 
 .load-more-wrap {
@@ -510,12 +511,12 @@ img {
   transition: color 0.2s ease;
 }
 
-.article-filters .filter-btn:hover,
-.article-filters .filter-btn.active {
+.filter-btn:hover,
+.filter-btn.active {
   color: var(--accent-red);
 }
 
-.article-filters .filter-btn.active::after {
+.filter-btn.active::after {
   content: "";
   position: absolute;
   left: 0;
