@@ -20,20 +20,21 @@ class TinyMCEAdminWidget(forms.Textarea):
                 script_tag = '<script src="/static/vendor/tinymce/tinymce.min.js"></script>'
 
                 # TinyMCE init script: enables headings, bold/italic/underline, links, lists, blockquote, image upload
-                init_js = f"""
-{script_tag}
+                init_template = (
+                    script_tag
+                    + """
 <script>
-document.addEventListener('DOMContentLoaded', function() {{
+document.addEventListener('DOMContentLoaded', function() {
     if (typeof tinymce === 'undefined') return;
     // Before initializing, ensure the textarea is enabled and writable
     const textarea = document.getElementById('id_content');
-    if (textarea) {{
+    if (textarea) {
         textarea.removeAttribute('disabled');
         textarea.readOnly = false;
-    }}
+    }
 
-    tinymce.init({{
-        selector: '{selector}',
+    tinymce.init({
+        selector: '__SELECTOR__',
         readonly: false,
         plugins: 'lists link image code advlist autolink',
         toolbar: 'formatselect | bold italic underline | bullist numlist | blockquote | link | image | undo redo',
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {{
         statusbar: false,
         branding: false,
         setup: function (editor) {
-            editor.on('init', function () {{
+            editor.on('init', function () {
                 try {
                     editor.setMode('design');
                 } catch (e) {
@@ -52,41 +53,44 @@ document.addEventListener('DOMContentLoaded', function() {{
                     textarea.removeAttribute('disabled');
                     textarea.readOnly = false;
                 }
-            }});
+            });
         },
-        images_upload_url: '{reverse('blog:tinymce_upload')}',
-        images_upload_handler: function (blobInfo, success, failure) {{
+        images_upload_url: '__UPLOAD_URL__',
+        images_upload_handler: function (blobInfo, success, failure) {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '{reverse('blog:tinymce_upload')}');
+            xhr.open('POST', '__UPLOAD_URL__');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             // Add CSRF token
-            function getCookie(name) {{
+            function getCookie(name) {
                 var value = "; " + document.cookie;
                 var parts = value.split("; " + name + "=");
                 if (parts.length === 2) return parts.pop().split(';').shift();
-            }}
+            }
             var csrftoken = getCookie('csrftoken');
             if (csrftoken) xhr.setRequestHeader('X-CSRFToken', csrftoken);
-            xhr.onload = function() {{
-                if (xhr.status !== 200) {{
+            xhr.onload = function() {
+                if (xhr.status !== 200) {
                     failure('HTTP Error: ' + xhr.status);
                     return;
-                }}
+                }
                 var json = JSON.parse(xhr.responseText);
-                if (!json || typeof json.location != 'string') {{
+                if (!json || typeof json.location != 'string') {
                     failure('Invalid JSON: ' + xhr.responseText);
                     return;
-                }}
+                }
                 success(json.location);
-            }};
+            };
             var formData = new FormData();
             formData.append('image', blobInfo.blob(), blobInfo.filename());
             xhr.send(formData);
-        }}
-    }});
-}});
+        }
+    });
+});
 </script>
 """
+                )
+
+                init_js = init_template.replace('__SELECTOR__', selector).replace('__UPLOAD_URL__', reverse('blog:tinymce_upload'))
 
                 return mark_safe(html + init_js)
 
