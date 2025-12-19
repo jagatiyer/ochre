@@ -13,8 +13,8 @@ class TinyMCEAdminWidget(forms.Textarea):
 
         def render(self, name, value, attrs=None, renderer=None):
                 html = super().render(name, value, attrs, renderer)
-                final_id = (attrs or {}).get("id")
-                selector = f"#{final_id}" if final_id else f"textarea[name=\"{name}\"]"
+                # Force selector to target the content textarea id used by the ModelForm
+                selector = '#id_content'
 
                 # Determine TinyMCE API key from settings or env; use 'no-api-key' only in DEBUG
                 api_key = getattr(settings, 'TINYMCE_API_KEY', None) or os.environ.get('TINYMCE_API_KEY')
@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {{
     if (typeof tinymce === 'undefined') return;
     tinymce.init({{
         selector: '{selector}',
+        readonly: false,
         plugins: 'lists link image code advlist autolink',
         toolbar: 'formatselect | bold italic underline | bullist numlist | blockquote | link | image | undo redo',
         menubar: false,
@@ -97,3 +98,11 @@ class BlogPostAdmin(admin.ModelAdmin):
                 css = {
                         'all': ('admin/ckeditor5_admin.css',)
                 }
+
+    def get_readonly_fields(self, request, obj=None):
+        # Ensure 'content' is never returned as a readonly field even if
+        # other code/configuration marks some fields readonly.
+        fields = list(super().get_readonly_fields(request, obj))
+        if 'content' in fields:
+            fields.remove('content')
+        return tuple(fields)
