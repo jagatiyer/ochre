@@ -20,6 +20,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--dry-run', action='store_true', help='Do not save anything — just report')
         parser.add_argument('--source', type=str, default='https://ochrespirits.com/media-%26-blogs', help='Source URL')
+        parser.add_argument('--single-url', type=str, help='Run import for a single post URL (use with --dry-run for safe testing)')
 
     def handle(self, *args, **options):
         dry_run = options['dry_run']
@@ -32,6 +33,11 @@ class Command(BaseCommand):
         to_process = []
         visited_page_urls = set()
         page_url = source
+
+        single_url = options.get('single_url')
+        if single_url:
+            to_process = [single_url]
+            page_url = None
 
         # Follow 'load more' / pagination if present. This is best-effort: we look for
         # rel="next" links and for buttons/links with data-url or href that looks like pagination.
@@ -146,9 +152,63 @@ class Command(BaseCommand):
                 p = soup.find('p')
                 excerpt = p.get_text().strip() if p else ''
 
-            # content — try article element or a container with class 'content' or 'post'
-            content_container = soup.find('article') or soup.find(class_='content') or soup.find(class_='post') or soup.find(class_='blog-content')
-            content_html = str(content_container) if content_container else r.text
+            # content — locate the article container precisely using site-specific selectors
+            content_container = None
+            selectors = ['article', '.blog-post-content', '.blog-content', '.entry-content', '.post-content', '.article-content', '.post', '.content']
+            for sel in selectors:
+                if sel.startswith('.'):
+                    found = soup.select_one(sel)
+                else:
+                    found = soup.find(sel)
+                if found and len(found.get_text(strip=True)) > 50:
+                    content_container = found
+                    break
+
+            # Fallback: try to find the largest <div> or <article> by text length
+            if not content_container:
+                candidates = soup.find_all(['article', 'div'], limit=10)
+                best = None
+                best_len = 0
+                for c in candidates:
+                    l = len(c.get_text(strip=True))
+                    if l > best_len:
+                        best_len = l
+                        best = c
+                if best_len > 50:
+                    content_container = best
+
+            if content_container:
+                # sanitize content: remove scripts, iframes, styles, noscript and unwanted wrappers
+                for bad in content_container.select('script, iframe, style, noscript'):
+                    bad.decompose()
+
+                # remove header/footer/nav inside container
+                for tag in content_container.select('header, nav, footer'):
+                    tag.decompose()
+
+                # remove elements likely to be cookie banners / external widgets
+                for sel in ['.cookie', '.cookie-banner', '.consent', '.gdpr', '.site-footer', '.powered-by', '.wix', '.godaddy', '.cookie-consent', '.cookie-notice']:
+                    for el in content_container.select(sel):
+                        el.decompose()
+
+                # sanitize images: remove width/height attributes and inline width/height styles
+                for img in content_container.select('img'):
+                    if img.has_attr('width'):
+                        del img['width']
+                    if img.has_attr('height'):
+                        del img['height']
+                    if img.has_attr('style'):
+                        # remove width/height from style
+                        styles = [s.strip() for s in img['style'].split(';') if s.strip()]
+                        styles = [s for s in styles if not s.split(':',1)[0].strip() in ('width','height')]
+                        if styles:
+                            img['style'] = ';'.join(styles)
+                        else:
+                            del img['style']
+
+                content_html = str(content_container)
+            else:
+                content_html = ''
 
             # Find primary image: look for og:image or first img in content
             cover_image_url = None
@@ -160,12 +220,16 @@ class Command(BaseCommand):
                 if img and img.get('src'):
                     cover_image_url = urljoin(url, img['src'])
 
-            # Dry-run: only log
+            # Dry-run: only log and show extracted HTML for single-url
             self.stdout.write('Found post: %s (%s)' % (title, slug))
 
             if dry_run:
                 self.stdout.write('DRY RUN — would import: %s (slug=%s) cover_image=%s' % (title, slug, cover_image_url))
-                skipped += 0
+                # If single-url, output the extracted (sanitized) HTML for inspection
+                if single_url:
+                    self.stdout.write('--- EXTRACTED SANITIZED HTML START ---')
+                    self.stdout.write(content_html or '[EMPTY]')
+                    self.stdout.write('--- EXTRACTED SANITIZED HTML END ---')
                 processed_slugs.add(slug)
                 continue
 
