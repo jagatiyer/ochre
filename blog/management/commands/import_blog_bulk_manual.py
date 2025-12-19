@@ -7,6 +7,8 @@ from django.core.files.base import ContentFile
 import requests
 import os
 from urllib.parse import urlparse
+import re
+import html
 
 
 class Command(BaseCommand):
@@ -81,6 +83,41 @@ class Command(BaseCommand):
             raw_date = item["date"]
             hero_image_url = item.get("hero_image_url")
             content = item.get("content", "")
+
+            # Convert plain-text content into structured HTML per rules:
+            # - Split on double newlines into blocks
+            # - If a block ends WITHOUT terminal punctuation and is followed by other blocks,
+            #   treat it as a heading (<h2>)
+            # - Otherwise wrap block in <p>
+            # - Preserve ordering and escape content
+            def convert_plaintext_to_html(text):
+                if not text:
+                    return ""
+                # If content already contains HTML tags, leave as-is
+                if any(tag in text for tag in ("<p", "<h", "<div", "<br", "</")):
+                    return text
+
+                blocks = [b.strip() for b in text.split("\n\n") if b.strip()]
+                out_blocks = []
+
+                for idx, b in enumerate(blocks):
+                    # Determine if block ends with terminal punctuation
+                    last_char = b.strip()[-1] if b.strip() else ""
+                    ends_with_punct = last_char in ".!?;:"
+
+                    # If this block ends without punctuation and is followed by at least one block,
+                    # treat as a heading
+                    is_heading = (not ends_with_punct) and (idx < len(blocks) - 1)
+
+                    escaped = html.escape(b)
+                    if is_heading:
+                        out_blocks.append(f"<h2>{escaped}</h2>")
+                    else:
+                        out_blocks.append(f"<p>{escaped}</p>")
+
+                return "\n".join(out_blocks)
+
+            content = convert_plaintext_to_html(content)
 
             slug = slugify(title)
 
