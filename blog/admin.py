@@ -53,3 +53,10 @@ class BlogPostAdmin(admin.ModelAdmin):
         "tag",
         "published",
     )
+
+    class Media:
+        # Include a tiny inspector script scoped to BlogPost admin only. The
+        # real CKEditor assets are injected via the form media in
+        # `changeform_view`, this file only helps us detect which plugins are
+        # present in the build (logged to the browser console).
+        js = ["admin/js/ckeditor_inspect.js"]
