@@ -2528,6 +2528,7 @@ color: #2b0f10;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  align-items: center;
 }
 .shop-page .product-filters {
   display: flex;

@@ -18,16 +18,7 @@
     </div>
 
     <!-- TAB SELECTOR (centered) -->
-    <div class="tab-selector" style="text-align:center;">
-        <a href="?tab=products{% if filter_type and filter_type != 'ALL' %}&filter={{ filter_type }}{% endif %}"
-           class="filter-btn {% if selected_tab == 'products' %}active{% endif %}">
-            PRODUCTS
-        </a>
-        <a href="?tab=experiences{% if filter_type and filter_type != 'ALL' %}&filter={{ filter_type }}{% endif %}"
-           class="filter-btn {% if selected_tab == 'experiences' %}active{% endif %}">
-            EXPERIENCES
-        </a>
-    </div>
+    <div class="tab-selector" style="text-align:center;"><a href="?tab=products{% if filter_type and filter_type != 'ALL' %}&filter={{ filter_type }}{% endif %}" class="filter-btn {% if selected_tab == 'products' %}active{% endif %}">PRODUCTS</a><a href="?tab=experiences{% if filter_type and filter_type != 'ALL' %}&filter={{ filter_type }}{% endif %}" class="filter-btn {% if selected_tab == 'experiences' %}active{% endif %}">EXPERIENCES</a></div>
 
     <!-- CATEGORY FILTERS (centered) -->
     <div class="product-filters" aria-label="category-filters">
