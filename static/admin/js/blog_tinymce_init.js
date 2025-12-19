@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   tinymce.init({
     selector: '#id_content',
+    base_url: '/static/vendor/tinymce',
+    suffix: '.min',
     readonly: false,
     plugins: 'lists link image code advlist autolink',
     toolbar: 'formatselect | bold italic underline | bullist numlist | blockquote | link | image | undo redo',
