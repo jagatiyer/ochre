@@ -33,6 +33,13 @@ class TinyMCEAdminWidget(forms.Textarea):
 <script>
 document.addEventListener('DOMContentLoaded', function() {{
     if (typeof tinymce === 'undefined') return;
+    // Before initializing, ensure the textarea is enabled and writable
+    const textarea = document.getElementById('id_content');
+    if (textarea) {{
+        textarea.removeAttribute('disabled');
+        textarea.readOnly = false;
+    }}
+
     tinymce.init({{
         selector: '{selector}',
         readonly: false,
