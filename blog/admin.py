@@ -16,16 +16,8 @@ class TinyMCEAdminWidget(forms.Textarea):
                 # Force selector to target the content textarea id used by the ModelForm
                 selector = '#id_content'
 
-                # Determine TinyMCE API key from settings or env; use 'no-api-key' only in DEBUG
-                api_key = getattr(settings, 'TINYMCE_API_KEY', None) or os.environ.get('TINYMCE_API_KEY')
-                if not api_key and getattr(settings, 'DEBUG', False):
-                        api_key = 'no-api-key'
-
-                # Build script tag if key is available (or placeholder used for DEBUG)
-                if api_key:
-                        script_tag = f"<script src=\"https://cdn.tiny.cloud/1/{api_key}/tinymce/6/tinymce.min.js\"></script>"
-                else:
-                        script_tag = '<!-- TinyMCE not loaded: TINYMCE_API_KEY missing -->'
+                # Load TinyMCE from a self-hosted local static path
+                script_tag = '<script src="/static/vendor/tinymce/tinymce.min.js"></script>'
 
                 # TinyMCE init script: enables headings, bold/italic/underline, links, lists, blockquote, image upload
                 init_js = f"""
