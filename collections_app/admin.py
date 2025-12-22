@@ -20,7 +20,6 @@ class CollectionItemForm(forms.ModelForm):
             "cover_image",
             "category",
             "published",
-            "created_at",
         ]
 
 
