@@ -3,10 +3,39 @@
 
 {% block content %}
 <div class="collection-detail-page">
+
     <div class="collection-detail-container">
 
-        <!-- ADD TO CART OR BOOKING -->
-        {% if not item.is_experience %}
+        <!-- LEFT: IMAGE -->
+        <div class="collection-detail-image">
+            {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.title }}">
+            {% else %}
+                <img src="{% static 'img/placeholder.png' %}" alt="{{ item.title }}">
+            {% endif %}
+        </div>
+
+        <!-- RIGHT: DETAILS -->
+        <div class="collection-detail-info">
+
+            <div class="collection-detail-category">
+                {{ item.category.name }}
+            </div>
+
+            <h1 class="collection-detail-title">{{ item.title }}</h1>
+
+            {% if item.description %}
+            <p class="collection-detail-excerpt">
+                {{ item.description|striptags|truncatewords:30 }}
+            </p>
+            {% endif %}
+
+            <!-- PRICE -->
+            <div style="font-size: 22px; color: #00d2c7; margin-bottom: 24px;">
+                {{ item.price_display }}
+            </div>
+
+            <!-- ADD TO CART FORM -->
             <form method="post" action="{% url 'shop:add_to_cart' %}">
                 {% csrf_token %}
                 <input type="hidden" name="product_id" value="{{ item.id }}">
@@ -17,45 +46,20 @@
                     Add to Cart
                 </button>
             </form>
-        {% else %}
-            {% if request.GET.booked %}
-                <p class="booking-success">Your booking request has been received. We will contact you shortly.</p>
-            {% else %}
-                <form class="contact-form" method="post" action="{% url 'shop:experience_booking_create' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="experience_id" value="{{ item.id }}">
 
-                    <div class="form-row">
-                        <input type="text" name="customer_name" placeholder="Your Name" required>
-                        <input type="email" name="customer_email" placeholder="Email Address" required>
-                    </div>
-
-                    <div class="form-row">
-                        <input type="tel" name="customer_phone" placeholder="Phone Number">
-                        <input type="text" aria-hidden="true" style="visibility:hidden; height:0; padding:0; border:0;">
-                    </div>
-
-                    <textarea name="notes" placeholder="Notes" rows="4"></textarea>
-
-                    <button type="submit" class="cn shop" style="width: 180px; height: 45px;">
-                        Book Now
-                    </button>
-                </form>
+            <!-- FULL DESCRIPTION -->
+            {% if item.description %}
+            <div class="collection-detail-content">
+                {{ item.description|safe }}
+            </div>
             {% endif %}
-        {% endif %}
 
-        <!-- FULL DESCRIPTION -->
-        {% if item.description %}
-        <div class="collection-detail-content">
-            {{ item.description|safe }}
+            <!-- BACK LINK -->
+            <a href="{% url 'shop:shop_index' %}" class="back-to-collections">
+                ← Back to Shop
+            </a>
+
         </div>
-        {% endif %}
-
-        <!-- BACK LINK -->
-        <a href="{% url 'shop:shop_index' %}" class="back-to-collections">
-            ← Back to Shop
-        </a>
-
     </div>
 </div>
 {% endblock %}
