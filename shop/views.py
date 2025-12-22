@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.urls import reverse
 
 from .models import ShopItem, ShopCategory, Cart, CartItem, ExperienceBooking
@@ -129,6 +130,8 @@ def add_to_cart(request):
         or request.META.get("HTTP_REFERER")
         or reverse("shop:shop_index")
     )
+    # Add success message for non-AJAX cart additions
+    messages.success(request, "Item added to cart successfully.")
     return redirect(next_url)
 
 
@@ -257,5 +260,6 @@ def experience_booking_create(request):
         payment_required=False,
     )
 
-    # Redirect back to product detail with a success flag
+    # Add success message and redirect back to product detail with a success flag
+    messages.success(request, "Your booking request has been received. We will contact you shortly.")
     return redirect(f"{reverse('shop:product_detail', args=[experience.slug])}?booked=1")
