@@ -64,6 +64,66 @@ class ShopItem(models.Model):
 
 
 # ---------------------------
+# Experience Booking model
+# ---------------------------
+class ExperienceBooking(models.Model):
+    STATUS_PENDING = "pending"
+    STATUS_CONFIRMED = "confirmed"
+    STATUS_PAID = "paid"
+    STATUS_CANCELLED = "cancelled"
+
+    STATUS_CHOICES = (
+        (STATUS_PENDING, "Pending"),
+        (STATUS_CONFIRMED, "Confirmed"),
+        (STATUS_PAID, "Paid"),
+        (STATUS_CANCELLED, "Cancelled"),
+    )
+
+    user = models.ForeignKey(
+        User,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="experience_bookings",
+    )
+
+    experience = models.ForeignKey(
+        ShopItem,
+        on_delete=models.CASCADE,
+        related_name="experience_bookings",
+        limit_choices_to={"is_experience": True},
+    )
+
+    customer_name = models.CharField(max_length=255)
+    customer_email = models.EmailField()
+    customer_phone = models.CharField(max_length=30, blank=True)
+
+    notes = models.TextField(blank=True)
+
+    metadata = models.JSONField(blank=True, null=True)
+
+    status = models.CharField(
+        max_length=24,
+        choices=STATUS_CHOICES,
+        default=STATUS_PENDING,
+    )
+
+    payment_required = models.BooleanField(default=False)
+    payment_ref = models.CharField(max_length=255, blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ("-created_at",)
+        verbose_name = "Experience Booking"
+        verbose_name_plural = "Experience Bookings"
+
+    def __str__(self):
+        return f"Booking #{self.pk} — {self.customer_name}"
+
+
+# ---------------------------
 # Persistent Cart models
 # ---------------------------
 class Cart(models.Model):

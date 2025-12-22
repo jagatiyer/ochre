@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-from .models import ShopItem, ShopCategory, Cart, CartItem
+from .models import ShopItem, ShopCategory, Cart, CartItem, ExperienceBooking
 from .cart_utils import (
     add_to_session_cart,
     remove_from_session_cart,
@@ -42,10 +42,7 @@ def shop_index(request):
     category_slug = request.GET.get("category")
     categories = ShopCategory.objects.all()
 
-    items_qs = ShopItem.objects.filter(
-        is_experience=is_experience,
-        published=True
-    ).select_related("category")
+    items_qs = ShopItem.objects.filter(published=True).select_related("category")
 
     if category_slug:
         items_qs = items_qs.filter(category__slug=category_slug)
@@ -230,3 +227,35 @@ def checkout_view(request):
     }
 
     return render(request, "shop/checkout.html", context)
+
+
+@require_POST
+def experience_booking_create(request):
+    """Handle creation of ExperienceBooking via POST from product detail booking form.
+
+    Expects: experience_id, customer_name, customer_email, customer_phone (opt), notes (opt)
+    """
+    experience_id = request.POST.get("experience_id")
+    customer_name = request.POST.get("customer_name")
+    customer_email = request.POST.get("customer_email")
+    customer_phone = request.POST.get("customer_phone", "")
+    notes = request.POST.get("notes", "")
+
+    if not experience_id or not customer_name or not customer_email:
+        return HttpResponseBadRequest("Missing required booking fields")
+
+    experience = get_object_or_404(ShopItem, id=experience_id, is_experience=True)
+
+    booking = ExperienceBooking.objects.create(
+        experience=experience,
+        user=request.user if request.user.is_authenticated else None,
+        customer_name=customer_name,
+        customer_email=customer_email,
+        customer_phone=customer_phone,
+        notes=notes,
+        status=ExperienceBooking.STATUS_PENDING,
+        payment_required=False,
+    )
+
+    # Redirect back to product detail with a success flag
+    return redirect(f"{reverse('shop:product_detail', args=[experience.slug])}?booked=1")

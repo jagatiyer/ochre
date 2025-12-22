@@ -47,9 +47,15 @@
                     </p>
                 {% endif %}
 
-                <a href="{% url 'shop:product_detail' item.slug %}" class="collection-card-btn">
-                    View Details →
-                </a>
+                {% if item.is_experience %}
+                    <a href="{% url 'shop:product_detail' item.slug %}" class="collection-card-btn">
+                        Book Now →
+                    </a>
+                {% else %}
+                    <a href="{% url 'shop:product_detail' item.slug %}" class="collection-card-btn">
+                        View Details →
+                    </a>
+                {% endif %}
             </div>
             {% endfor %}
         {% else %}

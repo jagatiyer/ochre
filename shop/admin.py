@@ -1,11 +1,13 @@
 from django.contrib import admin
-from .models import ShopCategory, ShopItem
+from .models import ShopCategory, ShopItem, ExperienceBooking
+
 
 @admin.register(ShopCategory)
 class ShopCategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "slug")
     search_fields = ("name",)
     prepopulated_fields = {"slug": ("name",)}
+
 
 @admin.register(ShopItem)
 class ShopItemAdmin(admin.ModelAdmin):
@@ -14,3 +16,18 @@ class ShopItemAdmin(admin.ModelAdmin):
     search_fields = ("title", "description")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_at",)
+
+
+@admin.register(ExperienceBooking)
+class ExperienceBookingAdmin(admin.ModelAdmin):
+    list_display = (
+        "experience",
+        "customer_name",
+        "customer_email",
+        "status",
+        "payment_required",
+        "created_at",
+    )
+    list_filter = ("status", "payment_required")
+    search_fields = ("customer_name", "customer_email")
+    readonly_fields = ("created_at", "updated_at", "payment_ref")

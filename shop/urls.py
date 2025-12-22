@@ -12,6 +12,7 @@ urlpatterns = [
 
     # The missing one ↓↓↓
     path("checkout/", views.checkout_view, name="checkout_view"),
+    path("experience/book/", views.experience_booking_create, name="experience_booking_create"),
 
     path("<slug:slug>/", views.product_detail, name="product_detail"),
 ]
