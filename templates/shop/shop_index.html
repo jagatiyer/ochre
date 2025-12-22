@@ -38,7 +38,7 @@
                 <h3 class="collection-card-title">{{ item.title }}</h3>
 
                 <p class="collection-card-excerpt">
-                    {{ item.description|truncatewords:20 }}
+                    {{ item.description|striptags|truncatewords:20 }}
                 </p>
 
                 {% if not item.is_experience %}
