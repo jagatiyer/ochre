@@ -32,7 +32,11 @@
 
             <div class="card-header">
               <div class="publication-logo">
-                <i class="fa-regular fa-newspaper"></i>
+                {% if article.cover_image %}
+                  <img src="{{ article.cover_image.url }}" alt="{{ article.title }}">
+                {% else %}
+                  <i class="fa-regular fa-newspaper"></i>
+                {% endif %}
               </div>
 
               <span class="publish-date">
