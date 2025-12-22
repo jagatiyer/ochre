@@ -24,15 +24,15 @@
 
             <h1 class="collection-detail-title">{{ item.title }}</h1>
 
-            {% if item.short_description %}
+            {% if item.description %}
             <p class="collection-detail-excerpt">
-                {{ item.short_description }}
+                {{ item.description|striptags|truncatewords:30 }}
             </p>
             {% endif %}
 
             <!-- PRICE -->
             <div style="font-size: 22px; color: #00d2c7; margin-bottom: 24px;">
-                ₹ {{ item.price }}
+                {{ item.price_display }}
             </div>
 
             <!-- ADD TO CART FORM -->
@@ -48,9 +48,9 @@
             </form>
 
             <!-- FULL DESCRIPTION -->
-            {% if item.long_description %}
-            <div class="collection-detail-content" style="margin-top: 40px;">
-                {{ item.long_description|safe }}
+            {% if item.description %}
+            <div class="collection-detail-content">
+                {{ item.description|safe }}
             </div>
             {% endif %}
 
