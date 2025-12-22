@@ -34,6 +34,7 @@
     {% endif %}
 
     <div class="press-detail-content">
+        {{ article.description|safe }}
         {{ article.content|safe }}
     </div>
 

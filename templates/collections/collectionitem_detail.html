@@ -8,8 +8,8 @@
 
         <!-- LEFT: IMAGE -->
         <div class="collection-detail-image">
-            {% if item.image %}
-                <img src="{{ item.image.url }}" alt="{{ item.title }}">
+            {% if item.cover_image %}
+                <img src="{{ item.cover_image.url }}" alt="{{ item.title }}">
             {% else %}
                 <img src="{% static 'images/placeholder.png' %}" alt="No Image">
             {% endif %}
@@ -37,7 +37,7 @@
 
             <!-- FULL CONTENT -->
             <div class="collection-detail-content">
-                {{ item.content|safe }}
+                {{ item.description|safe }}
             </div>
 
             <!-- BACK BUTTON -->
