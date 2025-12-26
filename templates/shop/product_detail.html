@@ -9,9 +9,11 @@
         <!-- LEFT: IMAGE -->
         <div class="collection-detail-image">
             {% if item.image %}
-                <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                <img src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy"
+                     width="{{ item.image.width }}" height="{{ item.image.height }}"
+                     style="max-width:100%;height:auto;">
             {% else %}
-                <img src="{% static 'img/placeholder.png' %}" alt="{{ item.title }}">
+                <img src="{% static 'img/placeholder.png' %}" alt="{{ item.title }}" loading="lazy" style="max-width:100%;height:auto;">
             {% endif %}
         </div>
 
