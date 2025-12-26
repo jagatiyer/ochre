@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load thumbnail %}
 
 {% block content %}
 
@@ -38,10 +37,9 @@
 
                   <div class="item-thumb">
                     {% if product.image %}
-                      {% thumbnail product.image "200x200" crop="center" as im %}
-                        <img src="{{ im.url }}" alt="{{ product.title }}" loading="lazy"
-                             width="{{ im.width }}" height="{{ im.height }}" style="max-width:100%;height:auto;">
-                      {% endthumbnail %}
+                      <img src="{{ product.image.url }}" alt="{{ product.title }}" loading="lazy"
+                           width="{{ product.image.width }}" height="{{ product.image.height }}"
+                           style="max-width:100%;height:auto;">
                     {% else %}
                       <div class="thumb-placeholder"></div>
                     {% endif %}
