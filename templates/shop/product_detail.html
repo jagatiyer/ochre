@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block content %}
 <div class="collection-detail-page">
@@ -9,9 +10,11 @@
         <!-- LEFT: IMAGE -->
         <div class="collection-detail-image">
             {% if item.image %}
-                <img src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy"
-                     width="{{ item.image.width }}" height="{{ item.image.height }}"
-                     style="max-width:100%;height:auto;">
+                {% thumbnail item.image "800x800" crop="center" as im %}
+                    <img src="{{ im.url }}" alt="{{ item.title }}" loading="lazy"
+                         width="{{ im.width }}" height="{{ im.height }}"
+                         style="max-width:100%;height:auto;">
+                {% endthumbnail %}
             {% else %}
                 <img src="{% static 'img/placeholder.png' %}" alt="{{ item.title }}" loading="lazy" style="max-width:100%;height:auto;">
             {% endif %}

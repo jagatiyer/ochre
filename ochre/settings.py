@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     "contact",
     "story",
     "users",
+    # Image thumbnailing
+    "sorl.thumbnail",
 ]
 
 SITE_ID = 1

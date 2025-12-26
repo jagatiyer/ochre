@@ -40,3 +40,4 @@ wagtail==5.2.3
 webencodings==0.5.1
 Willow==1.6.3
 django-ckeditor-5==0.2.12
+sorl-thumbnail==12.8.0
