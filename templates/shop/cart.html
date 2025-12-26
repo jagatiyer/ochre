@@ -37,7 +37,9 @@
 
                   <div class="item-thumb">
                     {% if product.image %}
-                      <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                      <img src="{{ product.image.url }}" alt="{{ product.title }}" loading="lazy"
+                           width="{{ product.image.width }}" height="{{ product.image.height }}"
+                           style="max-width:100%;height:auto;">
                     {% else %}
                       <div class="thumb-placeholder"></div>
                     {% endif %}
