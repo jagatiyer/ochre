@@ -3230,3 +3230,40 @@ header,
   margin-top: 0 !important;
 }
 
+/* === Force visual parity wrapper system (stabilisation-only) ===
+   Neutralise external flow and make carousel a padding island so
+   visual top/bottom spacing is identical regardless of margins.
+*/
+
+/* Step 1: neutralise external flow */
+body {
+  margin: 0 !important;
+}
+
+/* Step 2: isolate carousel with padding box (must wrap carousel + CTAs) */
+.home-hero,
+.home-carousel-wrapper,
+.carousel-section {
+  padding-top: 32px !important;
+  padding-bottom: 32px !important;
+}
+
+/* Step 3: remove all internal vertical offsets within that wrapper */
+header,
+.site-header {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.hero-carousel,
+.home-carousel {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.home-cta-buttons,
+.carousel-actions {
+  margin-top: 0 !important;
+}
+
+
