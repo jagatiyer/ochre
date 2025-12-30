@@ -10,7 +10,7 @@
       <div class="carousel-track">
         {% for slide in carousel_slides %}
         <div class="carousel-slide" data-index="{{ forloop.counter0 }}">
-          <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}">
+          <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}" decoding="async" {% if forloop.first %}loading="eager"{% else %}loading="lazy"{% endif %}>
           {% if slide.title or slide.cta_text %}
           <div class="carousel-caption">
             {% if slide.title %}<h3>{{ slide.title }}</h3>{% endif %}

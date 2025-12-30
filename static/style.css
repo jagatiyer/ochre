@@ -461,6 +461,8 @@ html, body { overflow-x: hidden; }
   margin-top: -14px !important;
   /* ensure generous spacing to next content (CTAs) */
   margin-bottom: 44px !important;
+  /* stable minimum height to avoid layout shift */
+  min-height: 420px !important;
 }
 
 /* tablet adjustments */

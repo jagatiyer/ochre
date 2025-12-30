@@ -6,7 +6,8 @@ from .models import CarouselSlide
 
 
 def index(request):
-    slides = CarouselSlide.objects.filter(is_active=True).order_by('display_order')
+    # Limit homepage carousel to maximum 5 active slides ordered by display_order
+    slides = CarouselSlide.objects.filter(is_active=True).order_by('display_order')[:5]
     context = {
         'carousel_slides': slides,
     }
