@@ -479,6 +479,18 @@ html, body { overflow-x: hidden; }
 /* Safety: ensure caption and CTAs are above any overlaying elements */
 .carousel .carousel-caption, .carousel .carousel-cta { position: relative !important; z-index: 12 !important; }
 
+/* ============================================================
+  Homepage carousel spacing exact rules (additive)
+  Ensure symmetric spacing above and below carousel
+  ============================================================ */
+
+header, .site-header { margin-bottom: 24px !important; }
+
+.hero-carousel, .home-carousel, .carousel-section, .carousel { margin-top: 24px !important; margin-bottom: 24px !important; }
+
+.home-cta-buttons, .carousel-actions, .buttons { margin-top: 24px !important; }
+
+
 
 
 
