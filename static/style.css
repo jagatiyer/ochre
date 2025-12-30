@@ -4201,6 +4201,11 @@ footer,
   }
 }
 
+/* Homepage: ensure top spacing inside main->content is consistent */
+.home-content {
+  padding-top: 10px !important;
+}
+
 
 
 
