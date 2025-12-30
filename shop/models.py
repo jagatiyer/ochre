@@ -62,6 +62,15 @@ class ShopItem(models.Model):
             return ""
         return f"₹ {self.price:.2f}"
 
+    def has_units(self):
+        return self.units.filter(is_active=True).exists()
+
+    def active_units(self):
+        return self.units.filter(is_active=True).order_by('-is_default', 'id')
+
+    def default_unit(self):
+        return self.units.filter(is_active=True, is_default=True).first()
+
 
 # ---------------------------
 # Experience Booking model
@@ -171,12 +180,15 @@ class Cart(models.Model):
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(ShopItem, on_delete=models.CASCADE)
+    product_unit = models.ForeignKey(
+        'shop.ProductUnit', null=True, blank=True, on_delete=models.SET_NULL
+    )
     qty = models.PositiveIntegerField(default=1)
     # unit_price is a snapshot of product.price at the time of add-to-cart
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
-        unique_together = ("cart", "product")
+        unique_together = ("cart", "product", "product_unit")
 
     def __str__(self):
         return f"{self.qty}× {self.product.title}"
@@ -184,6 +196,70 @@ class CartItem(models.Model):
     def line_total(self):
         return (self.unit_price * Decimal(self.qty)).quantize(Decimal("0.01"))
 
+
+class UnitType(models.Model):
+    name = models.CharField(max_length=50, verbose_name="Unit type name",
+                            help_text="Friendly name for this measurement type (e.g. Volume, Size, Weight)")
+    code = models.SlugField(unique=True, max_length=30, verbose_name="Code",
+                            help_text="Short machine-friendly code for the unit type (e.g. 'volume', 'size')")
+
+    def __str__(self):
+        return self.name
+
+
+class ProductType(models.Model):
+    """
+    Categorizes product types (e.g., 'book', 'clothing').
+    """
+    name = models.CharField(max_length=120, unique=True)
+    slug = models.SlugField(max_length=140, unique=True, blank=True)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = "Product type"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)[:140]
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class ProductUnit(models.Model):
+    """
+    Specific unit for a product (e.g., 'kg', 'pack of 6'), linked to `UnitType`.
+    """
+    product = models.ForeignKey(ShopItem, related_name="units", on_delete=models.CASCADE,
+                                verbose_name="Product",
+                                help_text="The product this unit belongs to. Add units under the product in admin.")
+    unit_type = models.ForeignKey(UnitType, on_delete=models.PROTECT,
+                                  verbose_name="Unit type",
+                                  help_text="Select the unit type that describes this unit (e.g. Volume, Size).")
+    label = models.CharField(max_length=50, verbose_name="Label",
+                             help_text="Visible label for the unit shown to customers (e.g. '500 ml', 'Large').")
+    value = models.CharField(max_length=20, verbose_name="Value",
+                             help_text="Optional internal value for the unit (e.g. '500', 'L').")
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Unit price",
+                                help_text="Price for this specific unit. This price is used when customers add this unit to cart.")
+    is_default = models.BooleanField(default=False, verbose_name="Default unit",
+                                     help_text="Mark this unit as the default shown to customers. Exactly one unit should be default per product; saving will unset other defaults.")
+    is_active = models.BooleanField(default=True, verbose_name="Active",
+                                    help_text="If unchecked the unit is hidden from customers and cannot be selected.")
+    # Note: ordering by display_order was removed to match DB schema. Use is_default/id ordering when needed.
+
+    def __str__(self):
+        return f"{self.product} - {self.label}"
+
+    def save(self, *args, **kwargs):
+        # enforce single default per product
+        if self.is_default:
+            ProductUnit.objects.filter(product=self.product).update(is_default=False)
+            self.is_default = True
+        super().save(*args, **kwargs)
 
 # ---------------------------
 # Orders / OrderItem models

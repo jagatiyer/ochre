@@ -6,6 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from home import views as home_views
+from story import views as story_views
 
 # --------------------------------------------------
 # URL PATTERNS (MUST BE DEFINED FIRST)
@@ -19,6 +20,7 @@ urlpatterns = [
     path("commercials/", include("commercials.urls")),
     path("mediahub/", include("mediahub.urls")),
     path("story/", include("story.urls", namespace="story")),
+    path("society/", story_views.society_page, name="society"),
     path("blog/", include("blog.urls", namespace="blog")),
     path("contact/", include("contact.urls", namespace="contact")),
     path("shop/", include("shop.urls", namespace="shop")),

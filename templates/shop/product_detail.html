@@ -1,6 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_head %}
+<style>
+/* Match site select styling for product detail unit select */
+#product-unit-select {
+    background: var(--bg-main);
+    border: 1px solid #222428;
+    color: #ffffff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    width: 100%;
+    appearance: none;
+}
+#product-unit-select:focus { border-color: var(--accent-red); outline: none; }
+
+/* Ensure add button uses primary CTA spacing */
+.cn.shop { padding: 10px 16px; border-radius: 8px; }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="collection-detail-page">
 
@@ -33,8 +53,16 @@
             {% endif %}
 
             <!-- PRICE -->
-            <div style="font-size: 22px; color: #00d2c7; margin-bottom: 24px;">
-                {{ item.price_display }}
+            <div style="font-size: 22px; color: #00d2c7; margin-bottom: 12px;">
+                <span id="product-price" data-product-id="{{ item.id }}">
+                    {% if item.has_units %}
+                        {% with d=item.default_unit %}
+                            {% if d %}₹ {{ d.price }}{% else %}{{ item.price_display }}{% endif %}
+                        {% endwith %}
+                    {% else %}
+                        {{ item.price_display }}
+                    {% endif %}
+                </span>
             </div>
 
             <!-- ADD TO CART FORM -->
@@ -44,8 +72,17 @@
                 <input type="hidden" name="product_id" value="{{ item.id }}">
                 <input type="hidden" name="qty" value="1">
                 <input type="hidden" name="next" value="{{ request.path }}">
+                {% if item.has_units %}
+                    <p style="margin:8px 0 6px;">Choose {% with d=item.default_unit %}{% if d and d.unit_type %}{{ d.unit_type.name }}{% else %}unit{% endif %}{% endwith %}:</p>
+                    <select id="product-unit-select" name="product_unit_id" style="margin-bottom:10px; width:100%;">
+                        <option value="">Select</option>
+                        {% for u in item.active_units %}
+                            <option value="{{ u.id }}" data-price="{{ u.price }}" {% if u.is_default %}selected{% endif %}>{{ u.label }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
 
-                <button type="submit" class="cn shop" style="width: 180px; height: 45px;">
+                <button type="submit" id="add-to-cart-btn" class="cn shop" style="width: 180px; height: 45px;" {% if item.has_units and not item.default_unit %}disabled{% endif %}>
                     Add to Cart
                 </button>
             </form>
@@ -89,4 +126,31 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    var select = document.getElementById('product-unit-select');
+    var priceEl = document.getElementById('product-price');
+    var addBtn = document.getElementById('add-to-cart-btn');
+    if(select){
+        function updateState(){
+            var val = select.value;
+            var opt = select.options[select.selectedIndex];
+            if(opt && opt.dataset.price){
+                priceEl.textContent = '₹ ' + opt.dataset.price;
+            }
+            if(val){
+                addBtn.disabled = false;
+            } else {
+                addBtn.disabled = true;
+            }
+        }
+        // initialize
+        updateState();
+        select.addEventListener('change', updateState);
+    }
+});
+</script>
 {% endblock %}

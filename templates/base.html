@@ -175,6 +175,112 @@
   })();
 </script>
 <script>
+  (function(){
+    // MEDIA DROPDOWN: click toggle for mobile + keyboard + outside click
+    const mToggle = document.getElementById('media-toggle');
+    const mMenu = document.getElementById('media-dropdown');
+    const mWrapper = document.getElementById('media-dropdown-wrapper');
+
+    if (mToggle && mMenu) {
+      function openMenu(){
+        mMenu.classList.add('open');
+        mMenu.setAttribute('aria-hidden','false');
+        mToggle.setAttribute('aria-expanded','true');
+      }
+      function closeMenu(){
+        mMenu.classList.remove('open');
+        mMenu.setAttribute('aria-hidden','true');
+        mToggle.setAttribute('aria-expanded','false');
+      }
+
+      mToggle.addEventListener('click', function(e){
+        e.preventDefault();
+        const isOpen = mMenu.classList.contains('open') || mMenu.getAttribute('aria-hidden') === 'false';
+        if (isOpen) closeMenu(); else openMenu();
+      });
+
+      document.addEventListener('click', function(e){
+        if (mWrapper && !mWrapper.contains(e.target)) closeMenu();
+      });
+
+      document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') closeMenu();
+      });
+    }
+  })();
+</script>
+<script>
+  (function(){
+    // Mobile off-canvas navigation: open/close, outside tap, ESC, focus trap
+    var toggle = document.getElementById('mobile-nav-toggle');
+    var menu = document.getElementById('main-menu');
+    var overlay = document.getElementById('mobile-nav-overlay');
+    var lastFocused = null;
+
+    if (!toggle || !menu || !overlay) return;
+
+    function setAria(open) {
+      toggle.setAttribute('aria-expanded', String(open));
+      menu.setAttribute('aria-hidden', String(!open));
+      overlay.setAttribute('aria-hidden', String(!open));
+    }
+
+    function focusableElements(root) {
+      return Array.prototype.slice.call(root.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+        .filter(function(el){ return !el.hasAttribute('disabled'); });
+    }
+
+    function openMenu() {
+      lastFocused = document.activeElement;
+      menu.classList.add('open');
+      overlay.style.display = 'block';
+      setAria(true);
+      var focusables = focusableElements(menu);
+      if (focusables.length) focusables[0].focus();
+      // update toggle icon to close (small, non-breaking UI tweak)
+      try { toggle.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>'; } catch(e){}
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      menu.classList.remove('open');
+      overlay.style.display = 'none';
+      setAria(false);
+      try { toggle.innerHTML = '<i class="fa fa-bars" aria-hidden="true"></i>'; } catch(e){}
+      document.body.style.overflow = '';
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    }
+
+    toggle.addEventListener('click', function(e){
+      var isOpen = menu.classList.contains('open');
+      if (isOpen) closeMenu(); else openMenu();
+    });
+
+    overlay.addEventListener('click', function(e){ closeMenu(); });
+
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        if (menu.classList.contains('open')) closeMenu();
+      }
+
+      if (e.key === 'Tab' && menu.classList.contains('open')) {
+        var focusables = focusableElements(menu);
+        if (!focusables.length) { e.preventDefault(); return; }
+        var first = focusables[0], last = focusables[focusables.length-1];
+        if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
+        else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+      }
+    });
+
+    // Close on outside click handled by overlay; also ensure clicks outside menu close it
+    document.addEventListener('click', function(e){
+      if (!menu.contains(e.target) && !toggle.contains(e.target) && menu.classList.contains('open') && !overlay.contains(e.target)) {
+        closeMenu();
+      }
+    });
+  })();
+</script>
+<script>
 (function(){
   // helper to update or create cart badge
   function updateCartBadge(count) {

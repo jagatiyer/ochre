@@ -4,17 +4,129 @@
 
 <div class="main">
   <div class="content">
+    {% if carousel_slides and carousel_slides|length > 0 %}
+    <!-- HOMEPAGE CAROUSEL -->
+    <div class="carousel" id="home-carousel" data-autoplay-seconds="{{ carousel_slides.0.auto_slide_seconds|default:5 }}">
+      <div class="carousel-track">
+        {% for slide in carousel_slides %}
+        <div class="carousel-slide" data-index="{{ forloop.counter0 }}">
+          <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}">
+          {% if slide.title or slide.cta_text %}
+          <div class="carousel-caption">
+            {% if slide.title %}<h3>{{ slide.title }}</h3>{% endif %}
+            {% if slide.cta_text %}<a class="cn carousel-cta" href="{{ slide.cta_url|default:'#' }}">{{ slide.cta_text }}</a>{% endif %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
 
-    <!-- BRAND HERO -->
-    <h1 class="hero-title">
-      OCH<span class="highlight-r">R</span>E
-    </h1>
+      <button class="carousel-arrow left" aria-label="Previous slide">‹</button>
+      <button class="carousel-arrow right" aria-label="Next slide">›</button>
 
-    <p class="craft-spirits">
-      <span class="dash">—</span> CRAFT SPIRITS <span class="dash">—</span>
-    </p>
+      <div class="carousel-dots">
+        {% for slide in carousel_slides %}
+          <button class="dot" data-index="{{ forloop.counter0 }}" aria-label="Go to slide {{ forloop.counter }}"></button>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  {% block extra_head %}
+  <style>
+    /* Scoped carousel styles */
+    /* Pull carousel slightly up to compensate for global header padding; homepage-only spacing control */
+    /* Reduced negative margin to avoid overlap; ensure CTA buttons remain visible above the fold on small devices */
+    .carousel { position: relative; width: 100%; max-width: var(--container-width); margin: -12px auto 24px; padding-top: 0; overflow: hidden; border-radius: 8px; max-height: 68vh; }
+    .carousel-track { display: flex; transition: transform 400ms ease; will-change: transform; }
+    .carousel-slide { min-width: 100%; position: relative; touch-action: pan-y; }
+    .carousel-slide img { width: 100%; height: clamp(300px, 50vh, 720px); object-fit: cover; object-position: center; display: block; }
+    .carousel-caption { position: absolute; left: 28px; bottom: 22px; color: #fff; }
+    .carousel-caption h3 { font-size: 22px; margin-bottom: 8px; font-family: 'Playfair Display', serif; }
+    .carousel-cta { display: inline-block; margin-top: 6px; }
 
-    <p class="caption">CRAFT. CLARITY. CELEBRATION.</p>
+    .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.45); color: #fff; border: none; padding: 10px 14px; font-size: 26px; cursor: pointer; z-index: 10; }
+    .carousel-arrow.left { left: 8px; }
+    .carousel-arrow.right { right: 8px; }
+
+    .carousel-dots { position: absolute; left: 50%; transform: translateX(-50%); bottom: 12px; display:flex; gap:8px; z-index: 10; }
+    .carousel-dots .dot { width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.35); border:none; cursor:pointer; }
+    .carousel-dots .dot.active { background: var(--accent-red); }
+
+    @media (max-width:768px) {
+      .carousel { margin-bottom: 16px; }
+      .carousel-slide img { height: clamp(180px, 38vh, 360px); }
+      .carousel-caption { left: 14px; right: 14px; bottom: 14px; }
+    }
+
+    @media (max-width:480px) {
+      .carousel-slide img { height: clamp(160px, 33vh, 300px); }
+      .carousel { margin-bottom: 12px; }
+      .carousel-caption h3 { font-size: 18px; }
+    }
+
+    /* CTA spacing now controlled by carousel bottom margin; reset buttons margin to avoid double-spacing */
+    .buttons { margin-top: 0; }
+  </style>
+  {% endblock %}
+
+  {% block extra_js %}
+  <script>
+    (function(){
+      const carousel = document.getElementById('home-carousel');
+      if (!carousel) return;
+
+      const track = carousel.querySelector('.carousel-track');
+      const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
+      const dots = Array.from(carousel.querySelectorAll('.dot'));
+      const left = carousel.querySelector('.carousel-arrow.left');
+      const right = carousel.querySelector('.carousel-arrow.right');
+      let index = 0;
+      const autoSeconds = parseInt(carousel.dataset.autoplaySeconds || 5) || 5;
+      let timer = null;
+
+      function goTo(i){
+        index = (i + slides.length) % slides.length;
+        track.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach(d=>d.classList.toggle('active', Number(d.dataset.index)===index));
+      }
+
+      function next(){ goTo(index+1); }
+      function prev(){ goTo(index-1); }
+
+      right && right.addEventListener('click', ()=>{ next(); resetTimer(); });
+      left && left.addEventListener('click', ()=>{ prev(); resetTimer(); });
+
+      dots.forEach(d => d.addEventListener('click', function(){ goTo(Number(this.dataset.index)); resetTimer(); }));
+
+      function startTimer(){ stopTimer(); timer = setInterval(next, autoSeconds * 1000); }
+      function stopTimer(){ if (timer) { clearInterval(timer); timer = null; } }
+      function resetTimer(){ stopTimer(); startTimer(); }
+
+      carousel.addEventListener('mouseenter', stopTimer);
+      carousel.addEventListener('mouseleave', startTimer);
+
+      // touch support with directional detection to avoid hijacking vertical scroll
+      let startX = 0, startY = 0, isScrolling = undefined;
+      carousel.addEventListener('touchstart', (e)=>{ startX = e.touches[0].clientX; startY = e.touches[0].clientY; isScrolling = undefined; stopTimer(); });
+      carousel.addEventListener('touchmove', (e)=>{
+        if (e.touches.length > 1) return; // ignore multi-touch
+        const dx = e.touches[0].clientX - startX;
+        const dy = e.touches[0].clientY - startY;
+        if (typeof isScrolling === 'undefined') { isScrolling = Math.abs(dy) > Math.abs(dx); }
+        if (!isScrolling) { e.preventDefault(); } // horizontal intent: prevent vertical page move while swiping slides
+      }, { passive: false });
+      carousel.addEventListener('touchend', (e)=>{ const dx = e.changedTouches[0].clientX - startX; if (Math.abs(dx) > 40 && !isScrolling) { if (dx > 0) prev(); else next(); } startTimer(); });
+
+      // keyboard
+      document.addEventListener('keydown', function(e){ if (e.key === 'ArrowLeft') prev(); if (e.key === 'ArrowRight') next(); });
+
+      // init
+      if (dots.length) dots[0].classList.add('active');
+      goTo(0);
+      startTimer();
+    })();
+  </script>
+  {% endblock %}
 
     <!-- CTA BUTTONS -->
     <div class="buttons">

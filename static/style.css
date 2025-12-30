@@ -120,7 +120,9 @@ img {
 .navbar {
   width: 100%;
   max-width: var(--container-width);
-  height: 75px;
+  /* increased top spacing to reduce cramped header appearance */
+  padding-top: 18px;
+  height: calc(75px + 18px);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -130,6 +132,431 @@ img {
   top: 0;
   z-index: 1000;
 }
+
+/* ============================================================
+   MOBILE IMPROVEMENTS (Site-wide)
+   Applied breakpoints: <=768px and <=480px
+   These rules prioritize touch targets, vertical rhythm, and readability
+   without altering desktop layouts.
+   ============================================================ */
+
+@media (max-width: 768px) {
+  /* Header: reduce paddings, scale logo, tighten menu */
+  .navbar { padding-top: 12px; height: calc(64px + 12px); }
+  .logo { font-size: 28px; }
+  .menu ul { gap: 18px; }
+  .nav-icons { gap: 10px; }
+
+  /* Carousel: usable height, larger dots/touch areas */
+  .carousel-slide img { height: clamp(240px, 35vh, 420px); }
+  .carousel-dots { bottom: 10px; }
+  .carousel-dots .dot { width: 12px; height: 12px; }
+  .carousel-arrow { padding: 14px; font-size: 22px; }
+
+  /* Content wrapper: full-width flow for small screens */
+  .content { padding-top: 80px; }
+
+  /* Cards: single-column, comfortable padding, full-width CTAs */
+  .collections-page .products-scroll, .shop-page .products-scroll { grid-template-columns: 1fr; gap: 18px; }
+  .collection-card, .shop-card { padding: 16px; }
+  .collection-card img, .shop-card-img { height: 180px; }
+  .collection-card .card-actions { margin-top: 12px; }
+  .collection-card .card-actions .left-action, .collection-card .card-actions .right-action { width: 100%; }
+  .collection-card .card-actions .right-action { text-align: right; }
+  .index-add-btn, .collection-card .collection-card-btn { width: 48%; display: inline-block; }
+
+  /* Make selects touch-friendly */
+  .product-unit-selector, #product-unit-select { padding: 12px 14px; font-size: 16px; }
+
+  /* Product detail: stack layout and full-width CTAs */
+  .collection-detail-container { grid-template-columns: 1fr; gap: 30px; padding: 40px 20px; }
+  .collection-detail-title { font-size: 36px; }
+  #add-to-cart-btn { width: 100%; }
+
+  /* Footer: stack columns, increase spacing */
+  .footer-main { grid-template-columns: 1fr; padding: 40px 20px 30px; gap: 20px; }
+  .footer-bottom { flex-direction: column; gap: 12px; align-items: center; }
+
+  /* Forms: larger tap targets */
+  input, textarea, select { padding: 12px 14px; font-size: 16px; }
+  .contact-form button, .cn { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  /* Further tighten and optimize for small phones */
+  .logo { font-size: 24px; }
+  .menu ul { gap: 12px; }
+  .navbar { padding-top: 10px; height: calc(60px + 10px); }
+
+  /* Carousel: shorter height to prioritize content */
+  .carousel-slide img { height: clamp(180px, 30vh, 300px); }
+  .carousel-dots .dot { width: 10px; height: 10px; }
+
+  /* Cards & CTAs: stack buttons vertically to avoid cramped side-by-side */
+  .collection-card .card-actions { flex-direction: column; align-items: stretch; }
+  .collection-card .card-actions .right-action { text-align: left; }
+  .index-add-btn, .collection-card .collection-card-btn { width: 100%; margin-top: 8px; }
+
+  /* Typography adjustments for readability */
+  h1 { font-size: 28px; }
+  h2 { font-size: 22px; }
+
+  /* Reduce large paddings site-wide that cause overflow */
+  .content { padding-top: 60px; }
+  .collection-detail-content { font-size: 15px; }
+}
+
+/* Small utility: prevent horizontal scroll caused by overly wide elements */
+html, body { overflow-x: hidden; }
+
+/* ============================================================
+   Card image normalization (safe, additive)
+   Targets common card/grid image selectors used across shop, collections,
+   blog and media pages. Uses object-fit to crop images cleanly and
+   enforces consistent visual heights per breakpoint.
+   Does NOT target carousel/hero images (they use .carousel-slide img).
+   ============================================================ */
+
+.collection-card img,
+.products-scroll .collection-card img,
+.shop-card-img,
+.blog-list .post-card img,
+.posts-list .post-card img,
+.media-grid .media-item img,
+.mediahub .media-grid img,
+.card-grid img {
+  width: 100% !important;
+  height: 240px !important; /* desktop baseline */
+  object-fit: cover !important;
+  object-position: center center !important;
+  display: block !important;
+}
+
+@media (max-width: 768px) {
+  .collection-card img,
+  .products-scroll .collection-card img,
+  .shop-card-img,
+  .blog-list .post-card img,
+  .posts-list .post-card img,
+  .media-grid .media-item img,
+  .mediahub .media-grid img,
+  .card-grid img {
+    height: 200px !important; /* tablet */
+  }
+}
+
+@media (max-width: 480px) {
+  .collection-card img,
+  .products-scroll .collection-card img,
+  .shop-card-img,
+  .blog-list .post-card img,
+  .posts-list .post-card img,
+  .media-grid .media-item img,
+  .mediahub .media-grid img,
+  .card-grid img {
+    height: 150px !important; /* mobile */
+  }
+}
+
+/* ============================================================
+   FINAL CARD STRUCTURE NORMALIZATION (ADD-ONLY, SAFE)
+   - CSS only, additive overrides
+   - Targets card containers across shop, collections, blog, media
+   - Does NOT affect carousel/hero images
+   ============================================================ */
+
+/* 1) Make card containers consistent layout */
+.collection-card,
+.card-grid .card,
+.products-scroll .collection-card,
+.blog-list .post-card,
+.posts-list .post-card,
+.media-grid .media-item,
+.mediahub .media-item {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* 2) Image area: target only images that are direct children of card containers
+     This avoids touching hero/carousel images which are not direct children */
+.collection-card > img,
+.card-grid .card > img,
+.products-scroll .collection-card > img,
+.blog-list .post-card > img,
+.posts-list .post-card > img,
+.media-grid .media-item > img,
+.mediahub .media-item > img {
+  width: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  display: block !important;
+  flex: 0 0 auto !important; /* image area does not grow */
+  height: 240px !important; /* desktop baseline */
+}
+
+/* 3) Content flow: ensure everything after the image grows downward */
+.collection-card > :not(img),
+.card-grid .card > :not(img),
+.products-scroll .collection-card > :not(img),
+.blog-list .post-card > :not(img),
+.posts-list .post-card > :not(img),
+.media-grid .media-item > :not(img),
+.mediahub .media-item > :not(img) {
+  flex: 1 1 auto !important;
+  display: block !important;
+}
+
+/* 4) Ensure title/excerpt baseline spacing is consistent */
+.collection-card .collection-card-title,
+.card-grid .card .card-title,
+.products-scroll .collection-card .collection-card-title,
+.blog-list .post-card .post-title,
+.posts-list .post-card .post-title,
+.media-grid .media-item .media-title,
+.mediahub .media-item .media-title {
+  margin-top: 12px !important;
+  margin-bottom: 6px !important;
+}
+
+.collection-card .collection-card-excerpt,
+.card-grid .card .card-excerpt,
+.blog-list .post-card .post-excerpt,
+.media-grid .media-item .media-excerpt {
+  margin-top: 6px !important;
+  margin-bottom: 10px !important;
+  line-height: 1.45 !important;
+}
+
+/* 5) Ensure action row (buttons) sits at the bottom when possible */
+.collection-card .card-actions,
+.card-grid .card .card-actions,
+.products-scroll .collection-card .card-actions,
+.blog-list .post-card .card-actions,
+.media-grid .media-item .card-actions {
+  margin-top: auto !important;
+}
+
+/* 6) Breakpoint adjustments */
+@media (max-width: 768px) {
+  .collection-card > img,
+  .card-grid .card > img,
+  .products-scroll .collection-card > img,
+  .blog-list .post-card > img,
+  .media-grid .media-item > img {
+    height: 220px !important; /* tablet */
+  }
+}
+
+@media (max-width: 480px) {
+  .collection-card > img,
+  .card-grid .card > img,
+  .products-scroll .collection-card > img,
+  .blog-list .post-card > img,
+  .media-grid .media-item > img {
+    height: 180px !important; /* mobile */
+  }
+
+  /* Slightly reduce title margin on small screens to preserve rhythm */
+  .collection-card .collection-card-title,
+  .blog-list .post-card .post-title {
+    margin-top: 10px !important;
+  }
+}
+
+/* 7) Safety: avoid touching carousel/hero selectors explicitly
+   (carousel uses .carousel-slide img, hero images use other classes) */
+
+/* ============================================================
+   HOMEPAGE CAROUSEL ADJUSTMENTS (ADD-ONLY)
+   - Increase visual height, reduce header->carousel gap,
+     keep bottom spacing unchanged
+   - Scoped to .carousel and .carousel-slide img
+   ============================================================ */
+
+/* Reduce top gap slightly (override template negative margin if present) */
+.carousel { margin-top: -6px !important; margin-bottom: 24px !important; }
+
+/* Desktop: taller hero feel */
+.carousel .carousel-slide img { height: 420px !important; max-height: none !important; }
+.carousel { max-height: none !important; }
+
+/* Keep content vertically centered inside slides */
+.carousel .carousel-slide { display:flex !important; align-items:center !important; justify-content:flex-start !important; }
+.carousel .carousel-caption { transform: none !important; }
+
+@media (max-width: 768px) {
+  /* Tablet: slightly reduced height */
+  .carousel .carousel-slide img { height: 320px !important; }
+  .carousel { margin-top: -4px !important; }
+}
+
+@media (max-width: 480px) {
+  /* Mobile: constrained but prominent */
+  .carousel .carousel-slide img { height: 240px !important; }
+  .carousel { margin-top: 0 !important; }
+  .carousel-caption { bottom: 12px !important; left: 12px !important; right: 12px !important; }
+}
+
+/* Ensure CTA buttons remain visible and tappable (no overflow) */
+.carousel .carousel-cta { z-index: 12 !important; }
+
+/* Prevent horizontal swipe from permanently hijacking scroll: ensure pan-y allowed */
+.carousel .carousel-slide { touch-action: pan-y !important; }
+
+/* ============================================================
+   GRID / BLOG / SHOP ALIGNMENT CONFIRMATION
+   - Reaffirm image baseline and title alignment (additive)
+   ============================================================ */
+
+/* Ensure image baseline normalization already applied remains enforced */
+.collection-card img,
+.products-scroll .collection-card img,
+.shop-card-img,
+.blog-list .post-card img,
+.posts-list .post-card img,
+.media-grid .media-item img,
+.mediahub .media-grid img,
+.card-grid img {
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+
+/* Blog listing: enforce 2 columns desktop/tablet, 1 column mobile */
+.blog-list .posts-list,
+.posts-list {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 20px !important;
+}
+@media (max-width: 480px) {
+  .blog-list .posts-list,
+  .posts-list { grid-template-columns: 1fr !important; }
+}
+
+/* SHOP INDEX CTA alignment: ensure inline on desktop/tablet, stacked on small mobile */
+.collection-card .card-actions,
+.products-scroll .collection-card .card-actions { display:flex !important; align-items:center !important; justify-content:space-between !important; gap:12px !important; flex-wrap: nowrap !important; }
+.collection-card .card-actions .left-action { margin-right: auto !important; }
+.collection-card .card-actions .right-action { margin-left: 12px !important; }
+@media (max-width: 720px) {
+  .collection-card .card-actions { flex-direction: column !important; align-items:stretch !important; }
+  .collection-card .card-actions .right-action { text-align:right !important; }
+}
+
+/* Safety: ensure no change to carousel/hero selectors */
+/* End of additive overrides */
+
+/* ============================================================
+   HOMEPAGE CAROUSEL SPACING TUNING (SAFE MODE)
+   - Reduce header -> carousel gap
+   - Increase carousel -> content (CTA) gap
+   - Scoped only to .carousel container
+   ============================================================ */
+
+/* Desktop: tighter to header, more space below */
+.carousel {
+  /* bring carousel closer to header */
+  margin-top: -14px !important;
+  /* ensure generous spacing to next content (CTAs) */
+  margin-bottom: 44px !important;
+}
+
+/* tablet adjustments */
+@media (max-width: 768px) {
+  .carousel { margin-top: -8px !important; margin-bottom: 36px !important; }
+}
+
+/* mobile adjustments: keep carousel visible and CTAs reachable */
+@media (max-width: 480px) {
+  .carousel { margin-top: -2px !important; margin-bottom: 28px !important; }
+  .carousel-caption { bottom: 12px !important; }
+}
+
+/* Safety: ensure caption and CTAs are above any overlaying elements */
+.carousel .carousel-caption, .carousel .carousel-cta { position: relative !important; z-index: 12 !important; }
+
+
+
+
+
+/* Off-canvas mobile navigation ------------------------------------------------- */
+.mobile-nav-toggle { display: none; background: transparent; border: none; font-size: 20px; color: var(--text-primary); }
+.mobile-nav-toggle .sr-only { position: absolute; left: -9999px; }
+
+/* The overlay that dims page when menu is open */
+.mobile-nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 900; }
+
+/* Transform the existing .menu into an off-canvas panel on small screens */
+@media (max-width: 768px) {
+  .mobile-nav-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; margin-left: 8px; }
+
+  /* make the main .menu off-canvas */
+  .menu {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: min(320px, 86vw);
+    background: var(--bg-main);
+    box-shadow: -20px 0 40px rgba(0,0,0,0.15);
+    transform: translateX(100%);
+    transition: transform 260ms ease;
+    z-index: 1000;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 28px 18px;
+  }
+
+  .menu.open { transform: translateX(0); }
+
+  .menu .nav-menu { display: flex; flex-direction: column; gap: 14px; }
+  .menu .nav-menu a, .menu .nav-menu button { padding: 12px 8px; font-size: 16px; }
+
+  /* show overlay when open */
+  .mobile-nav-overlay[aria-hidden="false"] { display: block; }
+
+  /* ensure header content doesn't overflow horizontally */
+  .navbar { padding-left: 12px; padding-right: 12px; }
+}
+
+@media (max-width: 480px) {
+  .menu { width: 100vw; }
+}
+
+/* Improve tap target sizes for icons in header */
+.nav-icons .icon-link, .user-toggle, .mobile-nav-toggle { padding: 10px; border-radius: 8px; }
+
+/* iOS safe-area support for off-canvas menu */
+@supports(padding: max(0px)) {
+  @media (max-width: 768px) {
+    .menu { padding-top: calc(env(safe-area-inset-top, 0px) + 28px); }
+  }
+}
+
+/* Footer mobile tap targets */
+.footer-main a, .footer-main button { padding: 10px 8px; display: inline-block; }
+.footer-main { gap: 12px; }
+
+/* Shop card compacting on small screens */
+@media (max-width:768px) {
+  .collection-card { padding: 12px; border-radius: 8px; }
+  .collection-card img { height: 160px; object-fit: cover; }
+  .collection-card .collection-card-excerpt { font-size: 14px; line-height: 1.4; }
+  .collection-card .collection-card-title { font-size: 18px; margin-top:6px; }
+  .collection-card .card-actions { margin-top:10px; }
+  .product-unit-selector, #product-unit-select { font-size: 15px; padding: 10px 12px; }
+}
+
+@media (max-width:480px) {
+  .collection-card img { height: 140px; }
+  .collection-card { padding:10px; }
+  #add-to-cart-btn { width: 100%; }
+  .index-add-btn { width: 100%; }
+}
+
+
 
 /* ------------------------------------------------------------
    LOGO
@@ -177,7 +604,6 @@ img {
   text-transform: uppercase;
   color: var(--text-main);
   transition: color 0.25s ease;
-}
 }
 
 .menu ul li a:hover,
@@ -357,6 +783,84 @@ img {
 
 .logout-btn:hover {
   background: rgba(255,91,95,0.06);
+}
+
+/* ============================================================
+   NAV: MEDIA DROPDOWN (scoped + minimal)
+   ============================================================ */
+
+.nav-dropdown-wrapper {
+  position: relative;
+}
+
+.nav-dropdown-toggle {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-family: 'Satoshi', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.nav-dropdown-toggle:focus {
+  outline: 2px solid rgba(0,0,0,0);
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+  min-width: 160px;
+  background: #0e1112;
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+  display: none;
+  z-index: 2000;
+}
+
+.nav-dropdown-menu .dropdown-item {
+  display: block;
+  padding: 8px 10px;
+  color: #e6e7e8;
+  border-radius: 6px;
+  margin: 4px 0;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.nav-dropdown-menu .dropdown-item:hover,
+.nav-dropdown-menu .dropdown-item.active {
+  background: rgba(255,91,95,0.06);
+  color: var(--accent-red);
+}
+
+/* Desktop: open on hover */
+.nav-dropdown-wrapper:hover .nav-dropdown-menu {
+  display: block;
+}
+
+/* Visible state for JS toggling on mobile */
+.nav-dropdown-menu.open,
+.nav-dropdown-menu[aria-hidden="false"] {
+  display: block;
+}
+
+@media (max-width: 720px) {
+  /* mobile: make dropdown full width under the toggle for easier tapping */
+  .nav-dropdown-menu {
+    left: 0;
+    right: 0;
+    min-width: auto;
+    margin: 0 12px;
+  }
 }
 
 /* ============================================================
@@ -881,6 +1385,106 @@ img {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 30px;
   padding-bottom: 40px;
+}
+
+/* SHOP GRID — Phase 3 UX polish: normalize cards */
+.collections-page .products-scroll,
+.shop-page .products-scroll {
+  align-items: stretch;
+}
+
+.collection-card,
+.shop-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 22px;
+}
+
+.collection-card img,
+.shop-card-img {
+  height: 220px;
+  flex: 0 0 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
+
+.collection-card-title,
+.shop-card-title {
+  font-size: 20px;
+  margin-bottom: 8px;
+  line-height: 1.2;
+  min-height: 48px;
+}
+
+.collection-card-excerpt,
+.shop-card-desc {
+  flex: 1 1 auto;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.shop-card-price {
+  font-size: 18px;
+  color: var(--accent-cyan);
+  margin: 0 12px 0 0;
+  white-space: nowrap;
+}
+
+.collection-card .collection-card-btn,
+.shop-card .collection-card-btn {
+  margin-top: 16px;
+  align-self: flex-start;
+}
+
+.collection-card .card-footer,
+.shop-card .card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+@media (max-width: 1000px) {
+  .collections-page .products-scroll,
+  .shop-page .products-scroll {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .collection-card img,
+  .shop-card-img {
+    height: 200px;
+    flex: 0 0 200px;
+  }
+}
+
+@media (max-width: 600px) {
+  .collections-page .products-scroll,
+  .shop-page .products-scroll {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-bottom: 30px;
+  }
+  .collection-card img,
+  .shop-card-img {
+    height: 180px;
+    flex: 0 0 180px;
+  }
+  .collection-card,
+  .shop-card {
+    padding: 18px;
+  }
+  .collection-card-title,
+  .shop-card-title {
+    font-size: 18px;
+    min-height: auto;
+  }
+  .collection-card .collection-card-btn,
+  .shop-card .collection-card-btn {
+    width: 100%;
+    align-self: stretch;
+  }
 }
 
 /* ============================================================

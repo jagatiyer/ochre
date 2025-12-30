@@ -1,0 +1,18 @@
+/Volumes/Development/Ochre_7thdec_build/ochre_clean2/venv/lib/python3.10/site-packages/sorl/__init__.py:1: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import get_distribution, DistributionNotFound
+/Volumes/Development/Ochre_7thdec_build/ochre_clean2/venv/lib/python3.10/site-packages/sorl/__init__.py:1: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import get_distribution, DistributionNotFound
+Watching for file changes with StatReloader
+[30/Dec/2025 10:46:53] "GET / HTTP/1.1" 200 20576
+[30/Dec/2025 10:46:53] "GET /static/style.css?v=27 HTTP/1.1" 304 0
+[30/Dec/2025 10:47:03] "GET / HTTP/1.1" 200 20576
+[30/Dec/2025 10:47:05] "GET / HTTP/1.1" 200 19859
+[30/Dec/2025 10:47:05] "GET /static/style.css?v=27 HTTP/1.1" 200 53860
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 30, 2025 - 10:46:15
+Django version 4.2.11, using settings 'ochre.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+

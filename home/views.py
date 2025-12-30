@@ -1,8 +1,16 @@
+# views for home app
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
+from .models import CarouselSlide
+
+
 def index(request):
-    return render(request, "home/index.html")
+    slides = CarouselSlide.objects.filter(is_active=True).order_by('display_order')
+    context = {
+        'carousel_slides': slides,
+    }
+    return render(request, "home/index.html", context)
 # append to home/views.py
 
 

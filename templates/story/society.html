@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<style>
+  /* Scoped society page adjustments */
+  .story-header.society-hero { max-width: 900px; margin: 60px auto 10px; text-align: left; padding-top: 60px; }
+  .story-header.society-hero h1 { font-size: 64px; margin-bottom: 12px; }
+  .society-sub { color: var(--text-muted); font-size: 18px; margin-bottom: 18px; }
+
+  .society-content { max-width: 900px; margin: 60px auto 80px; text-align: left; padding: 0 20px; }
+  .society-steps { display: flex; flex-direction: column; gap: 28px; margin-top: 18px; }
+  .society-step h3 { font-size: 22px; margin: 0 0 8px; }
+  .society-step p { margin: 0; color: var(--text-muted); line-height: 1.8; }
+
+  .society-benefits .benefit p { margin: 0 0 16px; color: var(--text-muted); line-height: 1.6; }
+
+  ul.society-list { margin: 18px 0 18px 20px; padding-left: 0; color: var(--text-muted); }
+  ul.society-list li { margin-bottom: 10px; line-height: 1.6; }
+
+  .society-closer p { margin: 10px 0; color: var(--text-muted); line-height: 1.6; }
+  .cn.join-btn { display: inline-block; padding: 10px 18px; text-decoration: none; }
+
+  @media (max-width: 720px) {
+    .story-header.society-hero h1 { font-size: 40px; }
+    .society-content { padding: 0 12px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="story-page">
+
+  <div class="story-header society-hero">
+    <h1>The Ochre Society</h1>
+
+    <p class="society-sub">An invite-only dining membership with a waitlist.</p>
+
+    <p class="society-sub">A private dining circle where you walk into the city’s most exceptional restaurants…and Ochre pays for your meal.</p>
+
+    <p class="society-sub">Yes, it’s real.</p>
+    <p class="society-sub">Yes, it’s audacious.</p>
+    <p class="society-sub">Yes, you’ll want in.</p>
+
+    <p class="society-sub">The Ochre Society is an invitation-only dining membership that unlocks seamless access to the city’s finest bars and restaurants. Every time you dine, your bill (up to your visit limit) is settled by Ochre discreetly, elegantly, and without a single step required from you.</p>
+
+    <p class="society-sub">No apps. No coupons.</p>
+    <p class="society-sub">No presentations.</p>
+    <p class="society-sub">Only pure, beautifully engineered privilege.</p>
+  </div>
+
+  <div class="society-content">
+
+    <section class="society-section">
+      <h2>How The Ochre Society Works</h2>
+      <p class="society-sub">Luxury, distilled to simplicity.</p>
+
+      <div class="society-steps">
+        <div class="society-step">
+          <h3>1. Enter a world of curated excellence</h3>
+          <p>Each partner venue is chosen for craft, cuisine, ambience, and soul.
+These are not “options.”
+They are the city’s most remarkable rooms opened exclusively to you.</p>
+        </div>
+
+        <div class="society-step">
+          <h3>2. Dine as you always do, only elevated</h3>
+          <p>No cards. No codes. No conversations.
+Sit down, order what you love, and enjoy the evening.</p>
+        </div>
+
+        <div class="society-step">
+          <h3>3. Your Ochre benefit activates invisibly</h3>
+          <p>Behind the scenes, Ochre settles your bill.
+There is no process. No break in the moment.
+Just seamless privilege woven into your dining ritual.</p>
+        </div>
+
+        <div class="society-step">
+          <h3>4. You pay only if you wish to go beyond</h3>
+          <p>Stay within your limit → you spend nothing.
+Choose to indulge further → you cover only the difference.
+Ochre handles the rest.</p>
+        </div>
+
+        <div class="society-step">
+          <p>It’s the closest thing to having a private citywide dining tab — a privilege that travels with you, without ever being spoken aloud.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="society-section">
+      <h2>Why Members Choose The Ochre Society</h2>
+
+      <div class="society-benefits">
+        <div class="benefit">
+          <p>✔ Significant, predictable monthly savings
+A fixed benefit is applied to every visit.
+If you dine out even 2–4 times a month, your membership pays for itself — often many times over.</p>
+        </div>
+
+        <div class="benefit">
+          <p>✔ The city’s finest bars and restaurants
+No noise. No guesswork.
+Just the top 100 venues selected for food, ambience, service, and consistency.</p>
+        </div>
+
+        <div class="benefit">
+          <p>✔ A billing experience that simply disappears
+No scanning. No redeeming.
+Your benefit applies silently in the background.</p>
+        </div>
+
+        <div class="benefit">
+          <p>✔ You are recognised as a high-trust diner
+Partner venues extend smoother hosting and exceptional service to Ochre Society members.</p>
+        </div>
+
+        <div class="benefit">
+          <p>✔ Perfect for couples, professionals & frequent diners
+A lifestyle membership that effectively pre-pays a portion of your monthly dining — transforming routine evenings into effortless luxury.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="society-section">
+      <h2>Your Membership Includes</h2>
+      <ul class="society-list">
+        <li>• Dining covered up to your visit limit</li>
+        <li>• Access to elite partner venues</li>
+        <li>• Invitations to chef’s tables & tasting journeys</li>
+        <li>• Private Society-only events & previews</li>
+        <li>• Preferred rates on exclusive Ochre Experiences</li>
+      </ul>
+
+      <p class="society-sub">Membership is intentionally limited to preserve intimacy, privilege, and quality.</p>
+    </section>
+
+    <section class="society-section">
+      <h2>This Is Not a Discount Program</h2>
+      <p class="society-sub">This is a new category.
+A new lifestyle.
+A new way to experience your city.</p>
+
+      <div class="society-closer">
+        <p>The Ochre Society
+Where you dine freely.
+Where the bill is taken care of.
+Where luxury becomes effortless.</p>
+
+        <p><strong>Join the waitlist — before the circle closes.</strong></p>
+
+        <p><a class="cn join-btn" href="#">Join the waitlist</a></p>
+      </div>
+    </section>
+
+  </div>
+
+</div>
+
+{% endblock %}

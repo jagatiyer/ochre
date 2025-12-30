@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
 
-from .models import ShopItem, ShopCategory, Cart, CartItem, ExperienceBooking
+from .models import ShopItem, ShopCategory, Cart, CartItem, ExperienceBooking, ProductUnit
 from .cart_utils import (
     add_to_session_cart,
     remove_from_session_cart,
@@ -76,6 +76,7 @@ def product_detail(request, slug):
 @require_POST
 def add_to_cart(request):
     product_id = request.POST.get("product_id")
+    product_unit_id = request.POST.get("product_unit_id")
     qty_raw = request.POST.get("qty", 1)
 
     if not product_id:
@@ -90,29 +91,36 @@ def add_to_cart(request):
 
     product = get_object_or_404(ShopItem, id=product_id, published=True)
 
+    # validate product_unit if provided
+    product_unit = None
+    if product_unit_id:
+        try:
+            product_unit = product.units.get(id=product_unit_id, is_active=True)
+        except ProductUnit.DoesNotExist:
+            return HttpResponseBadRequest("Invalid product_unit_id")
+
     # ---------------- AUTHENTICATED USER ----------------
     if request.user.is_authenticated:
         cart, _ = Cart.objects.get_or_create(user=request.user)
 
+        defaults = {"qty": qty, "unit_price": (product_unit.price if product_unit else (product.price or Decimal("0.00"))), "product_unit": product_unit}
         ci, created = CartItem.objects.get_or_create(
             cart=cart,
             product=product,
-            defaults={
-                "qty": qty,
-                "unit_price": product.price or Decimal("0.00"),
-            },
+            product_unit=product_unit,
+            defaults=defaults,
         )
 
         if not created:
             ci.qty += qty
-            ci.unit_price = product.price or ci.unit_price
+            ci.unit_price = defaults["unit_price"] or ci.unit_price
             ci.save()
 
         cart_count = cart.items_count()
 
     # ---------------- ANONYMOUS USER ----------------
     else:
-        add_to_session_cart(request, product.id, qty)
+        add_to_session_cart(request, product.id, qty, product_unit_id=product_unit_id)
         session_cart = get_session_cart(request)
         cart_count = sum(int(v) for v in session_cart.values()) if session_cart else 0
 
@@ -142,18 +150,22 @@ def add_to_cart(request):
 @require_POST
 def remove_cart_item(request):
     product_id = request.POST.get("product_id")
+    product_unit_id = request.POST.get("product_unit_id")
     if not product_id:
         return HttpResponseBadRequest("Missing product_id")
 
     if request.user.is_authenticated:
         cart = getattr(request.user, "cart", None)
         if cart:
-            CartItem.objects.filter(cart=cart, product_id=product_id).delete()
+            if product_unit_id:
+                CartItem.objects.filter(cart=cart, product_id=product_id, product_unit_id=product_unit_id).delete()
+            else:
+                CartItem.objects.filter(cart=cart, product_id=product_id).delete()
             cart_count = cart.items_count()
         else:
             cart_count = 0
     else:
-        remove_from_session_cart(request, product_id)
+        remove_from_session_cart(request, product_id, product_unit_id=product_unit_id)
         session_cart = get_session_cart(request)
         cart_count = sum(int(v) for v in session_cart.values()) if session_cart else 0
 
@@ -175,10 +187,11 @@ def cart_view(request):
     if request.user.is_authenticated:
         cart = getattr(request.user, "cart", None)
         if cart:
-            for ci in cart.items.select_related("product").all():
+            for ci in cart.items.select_related("product", "product_unit").all():
                 line_total = ci.line_total()
                 items.append({
                     "product": ci.product,
+                    "product_unit": getattr(ci, "product_unit", None),
                     "qty": ci.qty,
                     "unit_price": ci.unit_price,
                     "line_total": line_total,
@@ -191,8 +204,9 @@ def cart_view(request):
         for row in items_raw:
             items.append({
                 "product": row["product"],
+                "product_unit": row.get("product_unit"),
                 "qty": row["qty"],
-                "unit_price": row["product"].price or Decimal("0.00"),
+                "unit_price": (row.get("product_unit").price if row.get("product_unit") else (row["product"].price or Decimal("0.00"))),
                 "line_total": row["line_total"],
             })
             subtotal += row["line_total"]

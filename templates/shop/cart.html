@@ -28,7 +28,7 @@
 
           <tbody>
             {% for row in items %}
-            {% with product=row.product qty=row.qty unit=row.unit_price total=row.line_total %}
+            {% with product=row.product qty=row.qty unit=row.unit_price total=row.line_total unit_obj=row.product_unit %}
             <tr>
 
               <!-- ITEM -->
@@ -60,7 +60,12 @@
 
               <!-- UNIT -->
               <td class="price-cell">
-                ₹ {{ unit }}
+                {% if unit_obj %}
+                  <div>{{ unit_obj.label }}</div>
+                  <div>₹ {{ unit }}</div>
+                {% else %}
+                  ₹ {{ unit }}
+                {% endif %}
               </td>
 
               <!-- TOTAL -->
@@ -73,6 +78,9 @@
                 <form method="post" action="{% url 'shop:remove_cart_item' %}">
                   {% csrf_token %}
                   <input type="hidden" name="product_id" value="{{ product.id }}">
+                  {% if unit_obj %}
+                    <input type="hidden" name="product_unit_id" value="{{ unit_obj.id }}">
+                  {% endif %}
                   <button type="submit" class="remove-btn" aria-label="Remove item">
                     ×
                   </button>
