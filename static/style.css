@@ -3205,3 +3205,28 @@ color: #2b0f10;
 
 /* Shop: keep Products / Experiences inline (handled by .shop-tabs above) */
 
+
+/* Normalize header ↔ carousel ↔ buttons vertical spacing
+   Stabilisation-only: zero header bottom spacing and
+   control all vertical spacing from the carousel wrapper.
+   Bottom-most rules win; use !important to enforce.
+*/
+
+header,
+.site-header {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.hero-carousel,
+.home-carousel,
+.carousel-section {
+  margin-top: 32px !important;
+  margin-bottom: 32px !important;
+}
+
+.home-cta-buttons,
+.carousel-actions {
+  margin-top: 0 !important;
+}
+
