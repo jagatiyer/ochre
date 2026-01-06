@@ -4,19 +4,16 @@ from .models import (
     ShopItem,
     ProductImage,
     UnitType,
-    ProductType,      # LEGACY – must stay
+    ProductType,
     ProductUnit,
     Cart,
     CartItem,
     ExperienceBooking,
-    Order,             # LEGACY – must stay
-    OrderItem,         # LEGACY – must stay
+    Order,
+    OrderItem,
 )
 
 
-# ---------------------------
-# Category
-# ---------------------------
 @admin.register(ShopCategory)
 class ShopCategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "slug")
@@ -24,9 +21,6 @@ class ShopCategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
-# ---------------------------
-# Product Units (inline)
-# ---------------------------
 class ProductUnitInline(admin.TabularInline):
     model = ProductUnit
     extra = 1
@@ -40,9 +34,6 @@ class ProductUnitInline(admin.TabularInline):
     )
 
 
-# ---------------------------
-# Product Gallery Images (inline)
-# ---------------------------
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 1
@@ -50,9 +41,6 @@ class ProductImageInline(admin.TabularInline):
     ordering = ("order",)
 
 
-# ---------------------------
-# Products
-# ---------------------------
 @admin.register(ShopItem)
 class ShopItemAdmin(admin.ModelAdmin):
     list_display = ("title", "category", "is_experience", "price", "published")
@@ -61,28 +49,26 @@ class ShopItemAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_at",)
 
-    # ✅ THIS is why the image field now shows
+    # 🔴 THIS WAS THE BUG — image MUST be listed here
     fields = (
         "title",
         "slug",
         "category",
         "description",
-        "image",          # MAIN IMAGE
+        "image",        # ✅ MAIN IMAGE FIELD
         "price",
         "tax_percent",
         "is_experience",
         "published",
     )
 
+    # 🔴 Gallery inline must be explicitly attached
     inlines = [
         ProductUnitInline,
         ProductImageInline,
     ]
 
 
-# ---------------------------
-# Experience Bookings
-# ---------------------------
 @admin.register(ExperienceBooking)
 class ExperienceBookingAdmin(admin.ModelAdmin):
     list_display = (
@@ -97,9 +83,6 @@ class ExperienceBookingAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at", "updated_at")
 
 
-# ---------------------------
-# LEGACY MODELS (DO NOT REMOVE)
-# ---------------------------
 @admin.register(ProductType)
 class ProductTypeAdmin(admin.ModelAdmin):
     list_display = ("name", "slug")
