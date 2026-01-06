@@ -7,7 +7,7 @@ User = settings.AUTH_USER_MODEL
 
 
 # ---------------------------
-# Product / Category models
+# Categories
 # ---------------------------
 class ShopCategory(models.Model):
     name = models.CharField(max_length=120, unique=True)
@@ -26,24 +26,9 @@ class ShopCategory(models.Model):
         return self.name
 
 
-class ProductType(models.Model):
-    name = models.CharField(max_length=120, unique=True)
-    slug = models.SlugField(max_length=140, unique=True, blank=True)
-    description = models.TextField(blank=True)
-
-    class Meta:
-        ordering = ("name",)
-        verbose_name = "Product type"
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)[:140]
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.name
-
-
+# ---------------------------
+# Products
+# ---------------------------
 class ShopItem(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
@@ -62,7 +47,9 @@ class ShopItem(models.Model):
 
     class Meta:
         ordering = ("-created_at",)
-        indexes = [models.Index(fields=["slug", "published"])]
+        indexes = [
+            models.Index(fields=["slug", "published"]),
+        ]
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -72,11 +59,7 @@ class ShopItem(models.Model):
     def __str__(self):
         return self.title
 
-    def price_display(self):
-        if self.price is None:
-            return ""
-        return f"₹ {self.price:.2f}"
-
+    # ---- helpers used in templates ----
     def has_units(self):
         return self.units.filter(is_active=True).exists()
 
@@ -86,15 +69,18 @@ class ShopItem(models.Model):
     def default_unit(self):
         return self.units.filter(is_active=True, is_default=True).first()
 
+    def price_display(self):
+        return f"₹ {self.price:.2f}" if self.price else ""
+
 
 # ---------------------------
-# Product Image Gallery
+# Product Gallery Images
 # ---------------------------
 class ProductImage(models.Model):
     product = models.ForeignKey(
         ShopItem,
         related_name="gallery_images",
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
     image = models.ImageField(upload_to="shop/gallery/")
     order = models.PositiveIntegerField(default=0)
@@ -103,7 +89,7 @@ class ProductImage(models.Model):
         ordering = ("order",)
 
     def __str__(self):
-        return f"{self.product.title} – Image {self.order}"
+        return f"{self.product.title} image {self.order}"
 
 
 # ---------------------------
@@ -119,7 +105,9 @@ class UnitType(models.Model):
 
 class ProductUnit(models.Model):
     product = models.ForeignKey(
-        ShopItem, related_name="units", on_delete=models.CASCADE
+        ShopItem,
+        related_name="units",
+        on_delete=models.CASCADE,
     )
     unit_type = models.ForeignKey(UnitType, on_delete=models.PROTECT)
     label = models.CharField(max_length=50)
@@ -130,24 +118,46 @@ class ProductUnit(models.Model):
 
     def save(self, *args, **kwargs):
         if self.is_default:
-            ProductUnit.objects.filter(product=self.product).update(is_default=False)
-            self.is_default = True
+            ProductUnit.objects.filter(
+                product=self.product
+            ).update(is_default=False)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.product.title} – {self.label}"
+        return f"{self.product} – {self.label}"
 
 
 # ---------------------------
-# Cart models
+# LEGACY Product Type (DO NOT DELETE)
+# ---------------------------
+class ProductType(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+    slug = models.SlugField(max_length=140, unique=True, blank=True)
+    description = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ("name",)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)[:140]
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+# ---------------------------
+# Cart
 # ---------------------------
 class Cart(models.Model):
     user = models.OneToOneField(
-        User, null=True, blank=True,
-        on_delete=models.CASCADE,
-        related_name="cart"
+        User, null=True, blank=True, on_delete=models.CASCADE, related_name="cart"
     )
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ("-updated_at",)
 
     def __str__(self):
         return f"Cart({self.user})" if self.user else "Cart(anonymous)"
@@ -165,12 +175,12 @@ class CartItem(models.Model):
     class Meta:
         unique_together = ("cart", "product", "product_unit")
 
-    def line_total(self):
-        return (self.unit_price * Decimal(self.qty)).quantize(Decimal("0.01"))
+    def __str__(self):
+        return f"{self.qty} × {self.product}"
 
 
 # ---------------------------
-# Experience Booking
+# Experience Bookings
 # ---------------------------
 class ExperienceBooking(models.Model):
     STATUS_PENDING = "pending"
@@ -186,11 +196,8 @@ class ExperienceBooking(models.Model):
     )
 
     user = models.ForeignKey(
-        User, null=True, blank=True,
-        on_delete=models.SET_NULL,
-        related_name="experience_bookings",
+        User, null=True, blank=True, on_delete=models.SET_NULL
     )
-
     experience = models.ForeignKey(
         ShopItem,
         on_delete=models.CASCADE,
@@ -201,6 +208,7 @@ class ExperienceBooking(models.Model):
     customer_name = models.CharField(max_length=255)
     customer_email = models.EmailField()
     customer_phone = models.CharField(max_length=30, blank=True)
+
     notes = models.TextField(blank=True)
     metadata = models.JSONField(blank=True, null=True)
 
@@ -215,3 +223,59 @@ class ExperienceBooking(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ("-created_at",)
+
+    def __str__(self):
+        return f"Booking #{self.pk}"
+
+
+# ---------------------------
+# Orders (LEGACY – REQUIRED)
+# ---------------------------
+class Order(models.Model):
+    STATUS_PENDING = "pending"
+    STATUS_PAID = "paid"
+    STATUS_CANCELLED = "cancelled"
+
+    STATUS_CHOICES = (
+        (STATUS_PENDING, "Pending"),
+        (STATUS_PAID, "Paid"),
+        (STATUS_CANCELLED, "Cancelled"),
+    )
+
+    user = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    status = models.CharField(
+        max_length=24,
+        choices=STATUS_CHOICES,
+        default=STATUS_PENDING,
+    )
+
+    subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
+    tax_total = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
+    total = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
+
+    payment_ref = models.CharField(max_length=255, blank=True, null=True)
+    metadata = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Order #{self.pk}"
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(ShopItem, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=255)
+    qty = models.PositiveIntegerField(default=1)
+    unit_price = models.DecimalField(max_digits=12, decimal_places=2)
+    tax_percent = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"))
+    metadata = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.qty} × {self.title}"
