@@ -1,40 +1,47 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_head %}
-<style>
-/* Match site select styling for product detail unit select */
-#product-unit-select {
-    background: var(--bg-main);
-    border: 1px solid #222428;
-    color: #ffffff;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 15px;
-    width: 100%;
-    appearance: none;
-}
-#product-unit-select:focus { border-color: var(--accent-red); outline: none; }
-
-/* Ensure add button uses primary CTA spacing */
-.cn.shop { padding: 10px 16px; border-radius: 8px; }
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="collection-detail-page">
-
     <div class="collection-detail-container">
 
-        <!-- LEFT: IMAGE -->
+        <!-- LEFT: IMAGE / GALLERY -->
         <div class="collection-detail-image">
-            {% if item.image %}
-                <img src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy"
-                     width="{{ item.image.width }}" height="{{ item.image.height }}"
-                     style="max-width:100%;height:auto;">
-            {% else %}
-                <img src="{% static 'img/placeholder.png' %}" alt="{{ item.title }}" loading="lazy" style="max-width:100%;height:auto;">
-            {% endif %}
+
+            <div class="ochre-product-gallery">
+
+                {% if item.image %}
+                <img
+                    id="ochreMainImage"
+                    src="{{ item.image.url }}"
+                    alt="{{ item.title }}"
+                    loading="lazy"
+                    style="max-width:100%;height:auto;"
+                >
+                {% else %}
+                <img
+                    id="ochreMainImage"
+                    src="{% static 'img/placeholder.png' %}"
+                    alt="{{ item.title }}"
+                    loading="lazy"
+                    style="max-width:100%;height:auto;"
+                >
+                {% endif %}
+
+                {% if item.gallery_images.all %}
+                <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+                    {% for g in item.gallery_images.all %}
+                        <img
+                            src="{{ g.image.url }}"
+                            alt="{{ item.title }}"
+                            style="width:70px;height:70px;object-fit:cover;cursor:pointer;border:1px solid #333;"
+                            onclick="ochreSwapImage('{{ g.image.url }}')"
+                        >
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div>
         </div>
 
         <!-- RIGHT: DETAILS -->
@@ -53,8 +60,8 @@
             {% endif %}
 
             <!-- PRICE -->
-            <div style="font-size: 22px; color: #00d2c7; margin-bottom: 12px;">
-                <span id="product-price" data-product-id="{{ item.id }}">
+            <div style="font-size:22px;color:#00d2c7;margin-bottom:12px;">
+                <span id="product-price">
                     {% if item.has_units %}
                         {% with d=item.default_unit %}
                             {% if d %}₹ {{ d.price }}{% else %}{{ item.price_display }}{% endif %}
@@ -65,60 +72,36 @@
                 </span>
             </div>
 
-            <!-- ADD TO CART FORM -->
+            <!-- ADD TO CART / BOOKING -->
             {% if not item.is_experience %}
             <form method="post" action="{% url 'shop:add_to_cart' %}">
                 {% csrf_token %}
                 <input type="hidden" name="product_id" value="{{ item.id }}">
                 <input type="hidden" name="qty" value="1">
-                <input type="hidden" name="next" value="{{ request.path }}">
+
                 {% if item.has_units %}
-                    <p style="margin:8px 0 6px;">Choose {% with d=item.default_unit %}{% if d and d.unit_type %}{{ d.unit_type.name }}{% else %}unit{% endif %}{% endwith %}:</p>
-                    <select id="product-unit-select" name="product_unit_id" style="margin-bottom:10px; width:100%;">
-                        <option value="">Select</option>
-                        {% for u in item.active_units %}
-                            <option value="{{ u.id }}" data-price="{{ u.price }}" {% if u.is_default %}selected{% endif %}>{{ u.label }}</option>
-                        {% endfor %}
-                    </select>
+                <select id="product-unit-select" name="product_unit_id">
+                    {% for u in item.active_units %}
+                        <option value="{{ u.id }}" data-price="{{ u.price }}"
+                                {% if u.is_default %}selected{% endif %}>
+                            {{ u.label }}
+                        </option>
+                    {% endfor %}
+                </select>
                 {% endif %}
 
-                <button type="submit" id="add-to-cart-btn" class="cn shop" style="width: 180px; height: 45px;" {% if item.has_units and not item.default_unit %}disabled{% endif %}>
+                <button type="submit" class="cn shop">
                     Add to Cart
-                </button>
-            </form>
-            {% elif item.is_experience and request.GET.booked %}
-            <p class="booking-success">Your booking request has been received. We will contact you shortly.</p>
-            {% else %}
-            <form class="contact-form" method="post" action="{% url 'shop:experience_booking_create' %}">
-                {% csrf_token %}
-                <input type="hidden" name="experience_id" value="{{ item.id }}">
-
-                <div class="form-row">
-                    <input type="text" name="customer_name" placeholder="Your Name" required>
-                    <input type="email" name="customer_email" placeholder="Email Address" required>
-                </div>
-
-                <div class="form-row">
-                    <input type="tel" name="customer_phone" placeholder="Phone Number">
-                    <input type="text" aria-hidden="true" style="visibility:hidden; height:0; padding:0; border:0;">
-                </div>
-
-                <textarea name="notes" placeholder="Notes" rows="4"></textarea>
-
-                <button type="submit" class="cn shop" style="width: 180px; height: 45px;">
-                    Book Now
                 </button>
             </form>
             {% endif %}
 
-            <!-- FULL DESCRIPTION -->
             {% if item.description %}
             <div class="collection-detail-content">
                 {{ item.description|safe }}
             </div>
             {% endif %}
 
-            <!-- BACK LINK -->
             <a href="{% url 'shop:shop_index' %}" class="back-to-collections">
                 ← Back to Shop
             </a>
@@ -130,27 +113,9 @@
 
 {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function(){
-    var select = document.getElementById('product-unit-select');
-    var priceEl = document.getElementById('product-price');
-    var addBtn = document.getElementById('add-to-cart-btn');
-    if(select){
-        function updateState(){
-            var val = select.value;
-            var opt = select.options[select.selectedIndex];
-            if(opt && opt.dataset.price){
-                priceEl.textContent = '₹ ' + opt.dataset.price;
-            }
-            if(val){
-                addBtn.disabled = false;
-            } else {
-                addBtn.disabled = true;
-            }
-        }
-        // initialize
-        updateState();
-        select.addEventListener('change', updateState);
-    }
-});
+function ochreSwapImage(url){
+    var img = document.getElementById('ochreMainImage');
+    if(img){ img.src = url; }
+}
 </script>
 {% endblock %}

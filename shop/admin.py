@@ -1,21 +1,35 @@
 from django.contrib import admin
-from .models import ShopCategory, ShopItem, ExperienceBooking, UnitType, ProductType, ProductUnit
+from django.utils.html import format_html
+from .models import (
+    ShopCategory,
+    ShopItem,
+    ExperienceBooking,
+    UnitType,
+    ProductType,
+    ProductUnit,
+    ProductImage,
+)
 
-# Admin guidance:
-# Workflow for configuring product units:
-# 1) Create UnitType entries (one-time) such as "Volume" or "Size".
-# 2) Create or open a ShopItem in the admin.
-# 3) Under the ShopItem, use the "ProductUnit" inline to add sellable units for that product.
-# 4) Provide a clear Label and set the Unit Price for each ProductUnit.
-# 5) Mark exactly one ProductUnit as the Default unit for that product.
-# 6) Save and verify on the public site the correct selector and price are shown.
+
+class ProductUnitInline(admin.TabularInline):
+    model = ProductUnit
+    extra = 1
+    fields = ("unit_type", "label", "value", "price", "is_default", "is_active")
 
 
-@admin.register(ShopCategory)
-class ShopCategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug")
-    search_fields = ("name",)
-    prepopulated_fields = {"slug": ("name",)}
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+    fields = ("image", "order", "preview")
+    readonly_fields = ("preview",)
+
+    def preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="height:60px;object-fit:contain;" />',
+                obj.image.url
+            )
+        return "—"
 
 
 @admin.register(ShopItem)
@@ -25,19 +39,25 @@ class ShopItemAdmin(admin.ModelAdmin):
     search_fields = ("title", "description")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_at",)
-    fields = ("title", "slug", "category", "description", "price", "is_experience", "published")
-    inlines = []
+    fields = (
+        "title",
+        "slug",
+        "category",
+        "description",
+        "price",
+        "tax_percent",
+        "is_experience",
+        "image",
+        "published",
+    )
+    inlines = [ProductUnitInline, ProductImageInline]
 
 
-class ProductUnitInline(admin.TabularInline):
-    model = ProductUnit
-    extra = 1
-    fields = ("unit_type", "label", "value", "price", "is_default", "is_active")
-    readonly_fields = ()
-
-
-# attach inline to admin after inline definition
-ShopItemAdmin.inlines = [ProductUnitInline]
+@admin.register(ShopCategory)
+class ShopCategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug")
+    search_fields = ("name",)
+    prepopulated_fields = {"slug": ("name",)}
 
 
 @admin.register(ExperienceBooking)
