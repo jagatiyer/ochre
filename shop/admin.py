@@ -2,11 +2,11 @@ from django.contrib import admin
 from .models import (
     ShopCategory,
     ShopItem,
-    ProductImage,
     ExperienceBooking,
     UnitType,
     ProductType,
     ProductUnit,
+    ProductImage,
 )
 
 
@@ -17,17 +17,17 @@ class ShopCategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
+class ProductUnitInline(admin.TabularInline):
+    model = ProductUnit
+    extra = 1
+    fields = ("unit_type", "label", "value", "price", "is_default", "is_active")
+
+
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 1
     fields = ("image", "order")
     ordering = ("order",)
-
-
-class ProductUnitInline(admin.TabularInline):
-    model = ProductUnit
-    extra = 1
-    fields = ("unit_type", "label", "value", "price", "is_default", "is_active")
 
 
 @admin.register(ShopItem)
@@ -38,19 +38,19 @@ class ShopItemAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_at",)
 
-    # IMPORTANT: image field added here
+    # ✅ IMAGE FIELD IS INCLUDED HERE
     fields = (
         "title",
         "slug",
         "category",
         "description",
-        "image",        # 👈 MAIN IMAGE FIELD
+        "image",
         "price",
         "is_experience",
         "published",
     )
 
-    inlines = [ProductImageInline, ProductUnitInline]
+    inlines = [ProductUnitInline, ProductImageInline]
 
 
 @admin.register(ExperienceBooking)
