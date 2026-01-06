@@ -118,9 +118,7 @@ class ProductUnit(models.Model):
 
     def save(self, *args, **kwargs):
         if self.is_default:
-            ProductUnit.objects.filter(
-                product=self.product
-            ).update(is_default=False)
+            ProductUnit.objects.filter(product=self.product).update(is_default=False)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -162,6 +160,21 @@ class Cart(models.Model):
     def __str__(self):
         return f"Cart({self.user})" if self.user else "Cart(anonymous)"
 
+    def items_count(self):
+        return sum(item.qty for item in self.items.all())
+
+    def subtotal(self):
+        return sum(item.line_total() for item in self.items.all())
+
+    def total_tax(self):
+        return sum(
+            item.line_total() * (item.tax_percent / Decimal("100"))
+            for item in self.items.all()
+        )
+
+    def total(self):
+        return self.subtotal() + self.total_tax()
+
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
@@ -177,6 +190,13 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.qty} × {self.product}"
+
+    def line_total(self):
+        return (self.unit_price or Decimal("0.00")) * self.qty
+
+    @property
+    def tax_percent(self):
+        return self.product.tax_percent if self.product else Decimal("0.00")
 
 
 # ---------------------------
