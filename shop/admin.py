@@ -1,35 +1,33 @@
 from django.contrib import admin
-from django.utils.html import format_html
 from .models import (
     ShopCategory,
     ShopItem,
+    ProductImage,
     ExperienceBooking,
     UnitType,
     ProductType,
     ProductUnit,
-    ProductImage,
 )
+
+
+@admin.register(ShopCategory)
+class ShopCategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug")
+    search_fields = ("name",)
+    prepopulated_fields = {"slug": ("name",)}
+
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+    fields = ("image", "order")
+    ordering = ("order",)
 
 
 class ProductUnitInline(admin.TabularInline):
     model = ProductUnit
     extra = 1
     fields = ("unit_type", "label", "value", "price", "is_default", "is_active")
-
-
-class ProductImageInline(admin.TabularInline):
-    model = ProductImage
-    extra = 1
-    fields = ("image", "order", "preview")
-    readonly_fields = ("preview",)
-
-    def preview(self, obj):
-        if obj.image:
-            return format_html(
-                '<img src="{}" style="height:60px;object-fit:contain;" />',
-                obj.image.url
-            )
-        return "—"
 
 
 @admin.register(ShopItem)
@@ -39,25 +37,20 @@ class ShopItemAdmin(admin.ModelAdmin):
     search_fields = ("title", "description")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_at",)
+
+    # IMPORTANT: image field added here
     fields = (
         "title",
         "slug",
         "category",
         "description",
+        "image",        # 👈 MAIN IMAGE FIELD
         "price",
-        "tax_percent",
         "is_experience",
-        "image",
         "published",
     )
-    inlines = [ProductUnitInline, ProductImageInline]
 
-
-@admin.register(ShopCategory)
-class ShopCategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug")
-    search_fields = ("name",)
-    prepopulated_fields = {"slug": ("name",)}
+    inlines = [ProductImageInline, ProductUnitInline]
 
 
 @admin.register(ExperienceBooking)
@@ -77,4 +70,3 @@ class ExperienceBookingAdmin(admin.ModelAdmin):
 
 admin.site.register(UnitType)
 admin.site.register(ProductType)
-admin.site.register(ProductUnit)
