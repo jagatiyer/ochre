@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}Media & Press | Ochre{% endblock %}
+
 {% block content %}
 
 <div class="media-page">
 
-  <!-- HEADER -->
+  <!-- ================= HEADER ================= -->
   <div class="media-header">
     <p class="craft-spirits">
       <span class="dash">—</span>PRESS & RECOGNITIONS<span class="dash">—</span>
@@ -19,21 +21,25 @@
     </p>
   </div>
 
-  <!-- FEATURED PRESS -->
+  <!-- ================= FEATURED PRESS ================= -->
   <section class="press-section">
     <h2 class="press-title">
       Featured <span>Press</span>
     </h2>
 
     <div class="press-cards">
+
       {% if featured %}
         {% for article in featured %}
           <div class="press-card">
 
             <div class="card-header">
               <div class="publication-logo">
-                {% if article.cover_image %}
-                  <img src="{{ article.cover_image.url }}" alt="{{ article.title }}">
+                {% if article.cover_image and article.cover_image.url %}
+                  <div class="publication-logo-img">
+                    <img src="{{ article.cover_image.url }}"
+                         alt="{{ article.title }}">
+                  </div>
                 {% else %}
                   <i class="fa-regular fa-newspaper"></i>
                 {% endif %}
@@ -59,27 +65,35 @@
           </div>
         {% endfor %}
       {% else %}
-        <p style="color:#999;">No featured articles yet.</p>
+        <p class="empty-state">
+          No featured press articles yet.
+        </p>
       {% endif %}
+
     </div>
   </section>
 
-  <!-- ALL PRESS -->
+  <!-- ================= ALL PRESS ================= -->
   <section class="all-press-section">
     <h2 class="all-press-title">
       All Press <span class="highlight-green">Coverage</span>
     </h2>
 
     <div class="press-list">
+
       {% if all_press %}
         {% for article in all_press %}
           <div class="press-list-item">
 
             <div class="item-content">
               <div class="item-meta">
-                <span class="publication-name">{{ article.publication_name }}</span>
+                <span class="publication-name">
+                  {{ article.publication_name }}
+                </span>
                 <span class="separator">•</span>
-                <span class="item-date">{{ article.date|date:"F d, Y" }}</span>
+                <span class="item-date">
+                  {{ article.date|date:"F d, Y" }}
+                </span>
               </div>
 
               <h3 class="item-title">{{ article.title }}</h3>
@@ -93,12 +107,15 @@
           </div>
         {% endfor %}
       {% else %}
-        <p style="color:#aaa;">No press articles available.</p>
+        <p class="empty-state">
+          No press coverage available yet.
+        </p>
       {% endif %}
+
     </div>
   </section>
 
-  <!-- PRESS KIT -->
+  <!-- ================= PRESS KIT ================= -->
   <section class="press-kit-section text-center">
 
     <h2 class="press-kit-title">
