@@ -29,12 +29,24 @@
         {{ form.password }}
       </div>
 
-      <button type="submit" class="cn auth-btn">Sign In</button>
-    </form>
+      {# ---- ACTION BUTTONS ROW ---- #}
+      <div style="margin-top:14px; display:flex; gap:12px; justify-content:center; align-items:center;">
 
-    <div style="margin-top:14px; text-align:center;">
-      <a href="{% provider_login_url "google" %}" class="cn auth-btn">Continue with Google</a>
-    </div>
+        <button type="submit" class="cn auth-btn">
+          Sign In
+        </button>
+
+        {% get_providers as socialaccount_providers %}
+        {% for provider in socialaccount_providers %}
+          {% if provider.id == "google" %}
+            <a href="{% provider_login_url 'google' %}" class="cn auth-btn">
+              Continue with Google
+            </a>
+          {% endif %}
+        {% endfor %}
+
+      </div>
+    </form>
 
     <div style="margin-top:20px; text-align:center;">
       <a href="{% url 'account_signup' %}" class="auth-link">

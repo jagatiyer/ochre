@@ -35,12 +35,24 @@
             {% endif %}
           {% endfor %}
 
-          <button type="submit" class="cn">CREATE ACCOUNT</button>
-        </form>
+          {# ---- ACTION BUTTONS ROW ---- #}
+          <div style="margin-top:14px; display:flex; gap:12px; align-items:center;">
 
-        <div style="margin-top:14px;">
-          <a href="{% provider_login_url "google" %}" class="cn">Continue with Google</a>
-        </div>
+            <button type="submit" class="cn">
+              CREATE ACCOUNT
+            </button>
+
+            {% get_providers as socialaccount_providers %}
+            {% for provider in socialaccount_providers %}
+              {% if provider.id == "google" %}
+                <a href="{% provider_login_url 'google' %}" class="cn">
+                  Continue with Google
+                </a>
+              {% endif %}
+            {% endfor %}
+
+          </div>
+        </form>
 
         <p style="margin-top:16px;">
           Already registered?
