@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load socialaccount %}
 
 {% block content %}
 <main class="auth-page">
@@ -30,6 +31,10 @@
 
       <button type="submit" class="cn auth-btn">Sign In</button>
     </form>
+
+    <div style="margin-top:14px; text-align:center;">
+      <a href="{% provider_login_url "google" %}" class="cn auth-btn">Continue with Google</a>
+    </div>
 
     <div style="margin-top:20px; text-align:center;">
       <a href="{% url 'account_signup' %}" class="auth-link">

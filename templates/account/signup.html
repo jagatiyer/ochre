@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load socialaccount %}
 
 {% block content %}
 
@@ -36,6 +37,10 @@
 
           <button type="submit" class="cn">CREATE ACCOUNT</button>
         </form>
+
+        <div style="margin-top:14px;">
+          <a href="{% provider_login_url "google" %}" class="cn">Continue with Google</a>
+        </div>
 
         <p style="margin-top:16px;">
           Already registered?
