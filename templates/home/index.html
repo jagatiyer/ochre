@@ -156,6 +156,23 @@
     </section>
 
   </div>
+
+  <section class="collections-page">
+    <div class="collections-header">
+      <h2>Featured Products</h2>
+    </div>
+    {% include "home/includes/featured_products.html" with products=featured_products %}
+  </section>
+  
+  <div class="buttons home-cta-buttons"></div>
+
+  <section class="collections-page">
+    <div class="collections-header">
+      <h2>Watch our videos</h2>
+    </div>
+    {% include "home/includes/home_videos.html" with home_videos=home_videos %}
+  </section>
+  {% include "home/includes/home_content_sections.html" with home_content_sections=home_content_sections %}
 </div>
 
 {% endblock %}

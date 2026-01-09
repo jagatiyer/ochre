@@ -1,0 +1,33 @@
+{% comment %}Render admin-managed HomeContentSection blocks using existing layout patterns.{% endcomment %}
+
+{% if home_content_sections %}
+  {% for section in home_content_sections %}
+    <section class="collections-page">
+      <div class="products-section">
+        <div class="story-content">
+          {% if section.image_position == 'left' %}
+            <div class="story-image">
+              {% if section.image and section.image.url %}
+                <img src="{{ section.image.url }}" alt="{{ section.title }}">
+              {% endif %}
+            </div>
+            <div class="story-text">
+              <h2>{{ section.title }}</h2>
+              {{ section.body|linebreaks }}
+            </div>
+          {% else %}
+            <div class="story-text">
+              <h2>{{ section.title }}</h2>
+              {{ section.body|linebreaks }}
+            </div>
+            <div class="story-image">
+              {% if section.image and section.image.url %}
+                <img src="{{ section.image.url }}" alt="{{ section.title }}">
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+  {% endfor %}
+{% endif %}

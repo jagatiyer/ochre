@@ -42,6 +42,10 @@ class ShopItem(models.Model):
     )
     is_experience = models.BooleanField(default=False)
     image = models.ImageField(upload_to="shop/", blank=True, null=True)
+
+    # ✅ FEATURED FLAG (NEW)
+    is_featured = models.BooleanField(default=False)
+
     created_at = models.DateTimeField(auto_now_add=True)
     published = models.BooleanField(default=True)
 

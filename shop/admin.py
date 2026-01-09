@@ -43,26 +43,37 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(ShopItem)
 class ShopItemAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "is_experience", "price", "published")
-    list_filter = ("category", "is_experience", "published")
+    # ✅ FEATURED FLAG VISIBLE + EDITABLE
+    list_display = (
+        "title",
+        "category",
+        "is_experience",
+        "is_featured",
+        "price",
+        "published",
+        "created_at",
+    )
+    list_editable = ("is_featured", "published")
+    list_filter = ("category", "is_experience", "is_featured", "published")
     search_fields = ("title", "description")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_at",)
 
-    # 🔴 THIS WAS THE BUG — image MUST be listed here
+    # Fields shown on edit page
     fields = (
         "title",
         "slug",
         "category",
         "description",
-        "image",        # ✅ MAIN IMAGE FIELD
+        "image",
         "price",
         "tax_percent",
         "is_experience",
+        "is_featured",   # ✅ FEATURED CHECKBOX
         "published",
     )
 
-    # 🔴 Gallery inline must be explicitly attached
+    # Inlines
     inlines = [
         ProductUnitInline,
         ProductImageInline,

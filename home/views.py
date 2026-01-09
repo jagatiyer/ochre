@@ -2,7 +2,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from .models import CarouselSlide
+from .models import CarouselSlide, HomePageVideo, HomeContentSection
+from shop.models import ShopItem
 
 
 def index(request):
@@ -11,6 +12,25 @@ def index(request):
     context = {
         'carousel_slides': slides,
     }
+    # featured products: prefer explicit featured flag if present, otherwise fall back to recent published products
+    shop_fields = [f.name for f in ShopItem._meta.get_fields()]
+    featured_qs = ShopItem.objects.filter(published=True)
+    if 'is_featured' in shop_fields:
+        featured_qs = featured_qs.filter(is_featured=True)
+    elif 'featured' in shop_fields:
+        featured_qs = featured_qs.filter(featured=True)
+    else:
+        # no explicit featured flag — show recent non-experience published items
+        featured_qs = featured_qs.exclude(is_experience=True)
+
+    featured_products = featured_qs.select_related('category').order_by('-created_at')[:8]
+    context['featured_products'] = featured_products
+    # home videos: only active, ordered by `order`, limit 6
+    home_videos = HomePageVideo.objects.filter(is_active=True).order_by('order')[:6]
+    context['home_videos'] = home_videos
+    # home content sections (admin-managed blocks)
+    home_content_sections = HomeContentSection.objects.filter(is_active=True).order_by('order')
+    context['home_content_sections'] = home_content_sections
     return render(request, "home/index.html", context)
 # append to home/views.py
 

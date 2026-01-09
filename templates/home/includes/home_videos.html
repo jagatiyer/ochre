@@ -1,0 +1,19 @@
+{% comment %}Render up to 6 home videos in rows of 3 using existing card classes{% endcomment %}
+
+{% comment %}Render up to 6 home videos in rows of 3 using existing card classes{% endcomment %}
+
+{% if home_videos %}
+    <div class="products-scroll" style="max-width:1200px; margin:0 auto; padding:0 20px;">
+        {% for video in home_videos %}
+            <div class="collection-card">
+                <video controls preload="metadata">
+                    <source src="{{ video.video.url }}">
+                    Your browser does not support the video tag.
+                </video>
+                {% if video.title %}
+                    <p class="collection-card-title">{{ video.title }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
