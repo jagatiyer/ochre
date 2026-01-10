@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 
     # CKEditor 5 (rich text for blog admin)
     "django_ckeditor_5",
@@ -225,6 +226,28 @@ ACCOUNT_SIGNUP_FIELDS = ["username", "email", "password1", "password2"]
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+
+# Configure social account providers (Google OAuth2)
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+        "OAUTH_PKCE": True,
+        # Credentials should be supplied via Django admin (SocialApp) or
+        # environment variables. Do not hardcode secrets here.
+        "APP": {
+            "client_id": os.environ.get("GOOGLE_CLIENT_ID", ""),
+            "secret": os.environ.get("GOOGLE_CLIENT_SECRET", ""),
+            "key": "",
+        },
+    }
+}
 
 
 # ============================================================

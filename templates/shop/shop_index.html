@@ -2,36 +2,7 @@
 {% load static %}
 
 {% block extra_head %}
-<style>
-/* Product unit select styling (match site form controls) */
-.product-unit-selector, #product-unit-select {
-    background: var(--bg-main);
-    border: 1px solid #222428;
-    color: #ffffff;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 15px;
-    width: 100%;
-    appearance: none;
-}
-.product-unit-selector:focus, #product-unit-select:focus {
-    border-color: var(--accent-red);
-    outline: none;
-}
-
-/* Card actions: left = view link, right = add-to-cart */
-.collection-card .card-actions{
-    display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:8px;
-}
-.collection-card .card-actions .left-action { flex:1; }
-.collection-card .card-actions .right-action { flex:0 0 auto; }
-.collection-card .index-add-btn.cn.shop{ padding:8px 14px; border-radius:8px; }
-
-@media (max-width:720px){
-    .collection-card .card-actions{ flex-direction:column; align-items:stretch; }
-    .collection-card .card-actions .right-action{ text-align:right; }
-}
-</style>
+{% include 'shop/includes/product_unit_styles.html' %}
 {% endblock %}
 
 {% block content %}
@@ -124,29 +95,5 @@
 {% endblock %}
 
     {% block extra_js %}
-    <script>
-    document.addEventListener('DOMContentLoaded', function(){
-        document.querySelectorAll('.product-unit-selector').forEach(function(sel){
-            sel.addEventListener('change', function(){
-                var prodId = sel.dataset.productId;
-                var opt = sel.options[sel.selectedIndex];
-                var priceEl = document.querySelector('.product-price[data-product-id="'+prodId+'"]');
-                if(priceEl && opt){
-                    var p = opt.dataset.price || '';
-                    priceEl.textContent = p ? ('₹ ' + p) : '';
-                }
-                // sync with index add form for this product
-                var form = document.querySelector('.index-add-form[data-product-id="'+prodId+'"]');
-                if(form){
-                    var hidden = form.querySelector('input[name="product_unit_id"]');
-                    if(hidden){ hidden.value = opt ? opt.value : ''; }
-                    var btn = form.querySelector('.index-add-btn');
-                    if(btn){ btn.disabled = !opt || !opt.value; }
-                }
-            });
-            // trigger change once to initialize state
-            sel.dispatchEvent(new Event('change'));
-        });
-    });
-    </script>
+    {% include 'includes/product_unit_script.html' %}
     {% endblock %}

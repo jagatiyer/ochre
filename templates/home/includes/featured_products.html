@@ -1,65 +1,97 @@
-<!-- ITEMS GRID (copied from templates/shop/shop_index.html; loop uses `products`) -->
+{# templates/home/includes/featured_products.html #}
+
 <div class="products-scroll" style="max-width:1200px; margin: 0 auto; padding: 0 20px;">
-	{% if products %}
-		{% for product in products %}
-		<div class="collection-card">
-			{% if product.image and product.image.url %}
-				<img src="{{ product.image.url }}" alt="{{ product.title }}" loading="lazy"
-					 style="width:100%; border-radius:8px 8px 0 0; height:auto;">
-			{% else %}
-				<div style="height:220px; background:#111; border-radius:8px;"></div>
-			{% endif %}
+  {% if products %}
+    {% for product in products %}
+      <div class="collection-card">
 
-			<p class="collection-card-category">{{ product.category.name }}</p>
+        {% if product.image and product.image.url %}
+          <img src="{{ product.image.url }}"
+               alt="{{ product.title }}"
+               loading="lazy"
+               style="width:100%; border-radius:8px 8px 0 0; height:auto;">
+        {% else %}
+          <div style="height:220px; background:#111; border-radius:8px;"></div>
+        {% endif %}
 
-			<h3 class="collection-card-title">{{ product.title }}</h3>
+        <p class="collection-card-category">
+          {{ product.category.name }}
+        </p>
 
-			<p class="collection-card-excerpt">
-				{{ product.description|striptags|truncatewords:20 }}
-			</p>
+        <h3 class="collection-card-title">
+          {{ product.title }}
+        </h3>
 
-			{% if not product.is_experience %}
-				{% if product.has_units %}
-					<p class="product-price" data-product-id="{{ product.id }}" style="color:#fff; font-size:16px; margin-bottom:6px;">
-						₹ {% with d=product.default_unit %}{% if d %}{{ d.price }}{% else %}{{ product.price }}{% endif %}{% endwith %}
-					</p>
-					<p style="color:#fff; font-size:14px; margin:6px 0 4px;">Unit:</p>
-					<select class="product-unit-selector" data-product-id="{{ product.id }}" style="margin-bottom:8px; width:100%;">
-						{% for u in product.active_units %}
-							<option value="{{ u.id }}" data-price="{{ u.price }}" {% if u.is_default %}selected{% endif %}>{{ u.label }}</option>
-						{% endfor %}
-					</select>
-				{% else %}
-					<p style="color:#fff; font-size:16px; margin-bottom:10px;">
-						{{ product.price_display }}
-					</p>
-				{% endif %}
-			{% endif %}
+        <p class="collection-card-excerpt">
+          {{ product.description|striptags|truncatewords:20 }}
+        </p>
 
-			<div class="card-actions">
-				<div class="left-action">
-					{% if product.is_experience %}
-						<a href="{% url 'shop:product_detail' product.slug %}" class="collection-card-btn">Book Now</a>
-					{% else %}
-						<a href="{% url 'shop:product_detail' product.slug %}" class="collection-card-btn">View Details</a>
-					{% endif %}
-				</div>
-				<div class="right-action">
-					{% if not product.is_experience %}
-					<form method="post" action="{% url 'shop:add_to_cart' %}" class="index-add-form" data-product-id="{{ product.id }}">
-						{% csrf_token %}
-						<input type="hidden" name="product_id" value="{{ product.id }}">
-						<input type="hidden" name="qty" value="1">
-						<input type="hidden" name="product_unit_id" value="{% if product.default_unit %}{{ product.default_unit.id }}{% endif %}">
-						<button type="submit" class="cn shop index-add-btn" {% if product.has_units and not product.default_unit %}disabled{% endif %}>Add to Cart</button>
-					</form>
-					{% endif %}
-				</div>
-			</div>
-		</div>
-		{% endfor %}
-	{% else %}
-		<p class="no-products">No items found.</p>
-	{% endif %}
+        {% if not product.is_experience %}
+          {% if product.has_units %}
+            <p class="product-price" data-product-id="{{ product.id }}" style="color:#fff; font-size:16px; margin-bottom:6px;">
+              ₹ {% with d=product.default_unit %}
+                  {% if d %}{{ d.price }}{% else %}{{ product.price }}{% endif %}
+                {% endwith %}
+            </p>
+            <p style="color:#fff; font-size:14px; margin:6px 0 4px;">Unit:</p>
+
+            <select class="product-unit-selector"
+                    data-product-id="{{ product.id }}" style="margin-bottom:8px; width:100%;">
+              {% for u in product.active_units %}
+                <option value="{{ u.id }}"
+                        data-price="{{ u.price }}"
+                        {% if u.is_default %}selected{% endif %}>
+                  {{ u.label }}
+                </option>
+              {% endfor %}
+            </select>
+          {% else %}
+            <p class="product-price">
+              {{ product.price_display }}
+            </p>
+          {% endif %}
+        {% endif %}
+
+        <div class="card-actions">
+          <div class="left-action">
+            {% if product.is_experience %}
+              <a href="{% url 'shop:product_detail' product.slug %}"
+                 class="collection-card-btn">
+                Book Now
+              </a>
+            {% else %}
+              <a href="{% url 'shop:product_detail' product.slug %}"
+                 class="collection-card-btn">
+                View Details
+              </a>
+            {% endif %}
+          </div>
+
+          <div class="right-action">
+            {% if not product.is_experience %}
+              <form method="post"
+                    action="{% url 'shop:add_to_cart' %}"
+                    class="index-add-form"
+                    data-product-id="{{ product.id }}">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="hidden" name="qty" value="1">
+                <input type="hidden"
+                       name="product_unit_id"
+                       value="{% if product.default_unit %}{{ product.default_unit.id }}{% endif %}">
+                <button type="submit"
+                  class="cn shop index-add-btn"
+                  {% if product.has_units and not product.default_unit %}disabled{% endif %}>
+                  Add to Cart
+                </button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="no-products">No items found.</p>
+  {% endif %}
 </div>
-

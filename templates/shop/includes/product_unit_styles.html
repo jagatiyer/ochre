@@ -1,0 +1,30 @@
+<style>
+/* Product unit select styling (match site form controls) */
+.product-unit-selector, #product-unit-select {
+    background: var(--bg-main);
+    border: 1px solid #222428;
+    color: #ffffff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    width: 100%;
+    appearance: none;
+}
+.product-unit-selector:focus, #product-unit-select:focus {
+    border-color: var(--accent-red);
+    outline: none;
+}
+
+/* Card actions: left = view link, right = add-to-cart */
+.collection-card .card-actions{
+    display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:8px;
+}
+.collection-card .card-actions .left-action { flex:1; }
+.collection-card .card-actions .right-action { flex:0 0 auto; }
+.collection-card .index-add-btn.cn.shop{ padding:8px 14px; border-radius:8px; }
+
+@media (max-width:720px){
+    .collection-card .card-actions{ flex-direction:column; align-items:stretch; }
+    .collection-card .card-actions .right-action{ text-align:right; }
+}
+</style>

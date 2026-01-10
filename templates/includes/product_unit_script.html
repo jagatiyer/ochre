@@ -1,0 +1,26 @@
+{% comment %}Reusable product unit selector script used by shop and featured products{% endcomment %}
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.product-unit-selector').forEach(function(sel){
+        sel.addEventListener('change', function(){
+            var prodId = sel.dataset.productId;
+            var opt = sel.options[sel.selectedIndex];
+            var priceEl = document.querySelector('.product-price[data-product-id="'+prodId+'"]');
+            if(priceEl && opt){
+                var p = opt.dataset.price || '';
+                priceEl.textContent = p ? ('₹ ' + p) : '';
+            }
+            // sync with index add form for this product
+            var form = document.querySelector('.index-add-form[data-product-id="'+prodId+'"]');
+            if(form){
+                var hidden = form.querySelector('input[name="product_unit_id"]');
+                if(hidden){ hidden.value = opt ? opt.value : ''; }
+                var btn = form.querySelector('.index-add-btn');
+                if(btn){ btn.disabled = !opt || !opt.value; }
+            }
+        });
+        // trigger change once to initialize state
+        sel.dispatchEvent(new Event('change'));
+    });
+});
+</script>
