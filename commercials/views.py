@@ -1,7 +1,10 @@
 from django.shortcuts import render
+from .models import CommercialVideo
 
-# Create your views here.
-from django.shortcuts import render
 
-def commercials_index(request):
-    return render(request, "commercials/index.html")
+def index(request):
+    videos = CommercialVideo.objects.filter(is_active=True).order_by('order')
+    return render(request, 'commercials/index.html', {
+        'videos': videos,
+        'current': 'commercials',
+    })

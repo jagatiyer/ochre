@@ -1,12 +1,8 @@
-
-# commercials/urls.py
 from django.urls import path
-from django.http import HttpResponse
+from . import views
 
+# Expose both names for compatibility with existing templates
 urlpatterns = [
-    path(
-        "",
-        lambda request: HttpResponse("Commercials index placeholder"),
-        name="commercials_index",
-    ),
+    path('', views.index, name='commercials'),
+    path('', views.index, name='commercials_index'),
 ]

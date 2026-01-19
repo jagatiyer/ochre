@@ -2,11 +2,25 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import os
+import sys
+from django.core.exceptions import ImproperlyConfigured
+
+# Expected environment: local | test | live
+# Default to 'local' when not provided to keep developer
+# experience smooth.
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "local").lower()
+# Convenience flags for app logic
+IS_TEST = ENVIRONMENT == "test"
+IS_LIVE = ENVIRONMENT == "live"
+
 
 # ============================================================
 # SECURITY
 # ============================================================
 
+# NOTE: Do NOT change SECRET_KEY, DEBUG, or ALLOWED_HOSTS in this
+# reconciled file — they are preserved from the original source.
 SECRET_KEY = "dev-secret-key-change-me-in-prod"
 DEBUG = True
 
@@ -47,6 +61,10 @@ INSTALLED_APPS = [
     "users",
     # Image thumbnailing
     "sorl.thumbnail",
+    # Commercials (added in stash)
+    "commercials",
+    # Payments integration (guarded/test-aware)
+    "payments",
 ]
 
 SITE_ID = 1
@@ -93,9 +111,12 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-
                 # Shop
                 "shop.context_processors.cart_count",
+                # Provide site-wide contact email from settings
+                "ochre.context_processors.contact_email",
+                # Global feature flags for templates
+                "ochre.context_processors.global_feature_flags",
             ],
         },
     }
@@ -106,12 +127,40 @@ TEMPLATES = [
 # DATABASE
 # ============================================================
 
+# Default to SQLite so local/test run without extra config.
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# Optional: if a DATABASE_URL is provided, configure PostgreSQL.
+# This keeps SQLite as the default and only activates Postgres when
+# an explicit DATABASE_URL (or POSTGRES_* env vars) is present.
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
+if DATABASE_URL:
+    # Minimal parsing of DATABASE_URL (postgres://user:pass@host:port/dbname)
+    from urllib.parse import urlparse
+
+    parsed = urlparse(DATABASE_URL)
+    if parsed.scheme.startswith("postgres"):
+        POSTGRES_DB = (parsed.path or "").lstrip("/")
+        POSTGRES_USER = parsed.username
+        POSTGRES_PASSWORD = parsed.password
+        POSTGRES_HOST = parsed.hostname
+        POSTGRES_PORT = parsed.port or os.environ.get("POSTGRES_PORT", "5432")
+
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": POSTGRES_DB,
+                "USER": POSTGRES_USER,
+                "PASSWORD": POSTGRES_PASSWORD,
+                "HOST": POSTGRES_HOST,
+                "PORT": POSTGRES_PORT,
+            }
+        }
 
 
 # ============================================================
@@ -155,8 +204,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # TinyMCE Cloud API key - read from environment. Set this in production.
-import os
-TINYMCE_API_KEY = os.environ.get('TINYMCE_API_KEY')
+TINYMCE_API_KEY = os.environ.get('TINYMCE_API_KEY', "")
 
 # CKEditor5 upload path (relative to MEDIA_ROOT)
 CKEDITOR5_UPLOAD_PATH = "ckeditor5/"
@@ -210,6 +258,7 @@ CKEDITOR5_CONFIGS["blog"] = {
 # variants are available without modifying site-packages.
 CKEDITOR_5_CONFIGS = CKEDITOR5_CONFIGS
 
+
 # ============================================================
 # AUTH / ALLAUTH
 # ============================================================
@@ -231,23 +280,42 @@ LOGOUT_REDIRECT_URL = "/"
 # Configure social account providers (Google OAuth2)
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
-        "SCOPE": [
-            "profile",
-            "email",
-        ],
-        "AUTH_PARAMS": {
-            "access_type": "online",
-        },
-        "OAUTH_PKCE": True,
-        # Credentials should be supplied via Django admin (SocialApp) or
-        # environment variables. Do not hardcode secrets here.
-        "APP": {
-            "client_id": os.environ.get("GOOGLE_CLIENT_ID", ""),
-            "secret": os.environ.get("GOOGLE_CLIENT_SECRET", ""),
-            "key": "",
-        },
+        # DB-backed SocialApp is authoritative.
+        # Do NOT define APP here.
     }
 }
+
+
+# Feature flags and external integrations readiness (credential-ready)
+# Do not hardcode secrets; use env vars with empty-string fallback.
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
+GOOGLE_OAUTH_CONFIGURED = bool(GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET)
+
+# OTP provider (placeholder API key expected)
+OTP_PROVIDER_BACKEND = os.getenv('OTP_PROVIDER_BACKEND', '')
+OTP_PROVIDER_API_KEY = os.environ.get("OTP_PROVIDER_API_KEY", "")
+OTP_PROVIDER_CONFIGURED = bool(OTP_PROVIDER_BACKEND or OTP_PROVIDER_API_KEY)
+
+# SMTP / Email readiness (no live-only exceptions here; just flags)
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_CONFIGURED = bool(EMAIL_HOST and EMAIL_HOST_USER and EMAIL_HOST_PASSWORD)
+
+# Razorpay keys: read from env, expose a boolean indicating if test keys provided
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "")
+RAZORPAY_TEST_KEYS_PROVIDED = bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET)
+
+# MSG91 (OTP) placeholders
+MSG91_AUTH_KEY = os.environ.get("MSG91_AUTH_KEY", "")
+MSG91_SENDER_ID = os.environ.get("MSG91_SENDER_ID", "")
+MSG91_TEMPLATE_ID = os.environ.get("MSG91_TEMPLATE_ID", "")
+
+# Analytics / pixels
+GOOGLE_ANALYTICS_ID = os.environ.get("GOOGLE_ANALYTICS_ID", "")
+META_PIXEL_ID = os.environ.get("META_PIXEL_ID", "")
 
 
 # ============================================================
@@ -255,3 +323,6 @@ SOCIALACCOUNT_PROVIDERS = {
 # ============================================================
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Contact configuration (single point of truth for contact email)
+CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "contact@domain.com")

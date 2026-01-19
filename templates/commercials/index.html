@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <section class="media-page commercials-page">
+    <div class="products-scroll" style="max-width:1200px; margin:0 auto; padding:0 20px;">
+      {% for video in videos %}
+
+        {% if video.video and video.video.name %}
+          <div class="collection-card">
+            <video controls preload="metadata">
+              <source src="{{ video.video.url }}">
+              Your browser does not support the video tag.
+            </video>
+            {% if video.title %}
+              <p class="collection-card-title">{{ video.title }}</p>
+            {% endif %}
+          </div>
+
+        {% elif video.embed_html %}
+          {% with emb=video.embed_html|lower %}
+            {% if "example.com" not in emb %}
+              <div class="collection-card">
+                {{ video.embed_html|safe }}
+                {% if video.title %}
+                  <p class="collection-card-title">{{ video.title }}</p>
+                {% endif %}
+              </div>
+            {% else %}
+              {% if video.embed_url %}
+                <div class="collection-card">
+                  <div class="video-embed iframe-embed">
+                    <iframe src="{{ video.embed_url }}" allowfullscreen loading="lazy"></iframe>
+                  </div>
+                  {% if video.title %}
+                    <p class="collection-card-title">{{ video.title }}</p>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endwith %}
+
+        {% elif video.embed_url %}
+          <div class="collection-card">
+            <div class="video-embed iframe-embed">
+              <iframe src="{{ video.embed_url }}" allowfullscreen loading="lazy"></iframe>
+            </div>
+            {% if video.title %}
+              <p class="collection-card-title">{{ video.title }}</p>
+            {% endif %}
+          </div>
+
+        {% endif %}
+
+      {% endfor %}
+    </div>
+  </section>
+
+{% endblock %}
