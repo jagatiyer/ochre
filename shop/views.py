@@ -15,12 +15,15 @@ from .models import (
     ExperienceBooking,
     ProductUnit,
 )
+from .models import Order
 from .cart_utils import (
     add_to_session_cart,
     remove_from_session_cart,
     session_cart_to_items,
     get_session_cart,
 )
+from django.conf import settings
+import razorpay
 
 
 def _is_ajax_request(request):
@@ -230,15 +233,68 @@ def checkout_view(request):
     if not cart or not cart.items.exists():
         return redirect("shop:shop_index")
 
+    # create internal Order record (guard against duplicate creation on refresh)
+    subtotal = cart.subtotal()
+    tax_total = cart.total_tax()
+    total = cart.total()
+
+    # Reuse an existing recent order in CREATED or PAYMENT_PENDING state
+    existing_order = (
+        Order.objects.filter(user=request.user, status__in=[Order.STATUS_CREATED, Order.STATUS_PAYMENT_PENDING])
+        .order_by("-created_at")
+        .first()
+    )
+
+    if existing_order and existing_order.total == total:
+        order = existing_order
+    else:
+        order = Order.objects.create(
+            user=request.user,
+            subtotal=subtotal,
+            tax_total=tax_total,
+            total=total,
+            total_amount=total,
+            currency="INR",
+            status=Order.STATUS_CREATED,
+        )
+
+    razorpay_order_id = None
+    razorpay_amount = int((total * 100).quantize(Decimal("1"))) if hasattr(total, 'quantize') else int(total * 100)
+
+    if settings.RAZORPAY_TEST_KEYS_PROVIDED:
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+        try:
+            # If an order already has a razorpay_order_id, reuse it (idempotent)
+            if order.razorpay_order_id:
+                razorpay_order_id = order.razorpay_order_id
+                order.status = Order.STATUS_PAYMENT_PENDING
+                order.save()
+            else:
+                rp_order = client.order.create(
+                    dict(amount=razorpay_amount, currency="INR", receipt=str(order.uuid), payment_capture=1)
+                )
+                razorpay_order_id = rp_order.get("id")
+                order.razorpay_order_id = razorpay_order_id
+                order.status = Order.STATUS_PAYMENT_PENDING
+                order.save()
+        except Exception:
+            # keep order in CREATED state; template will hide pay button
+            razorpay_order_id = None
+
     return render(
         request,
         "shop/checkout.html",
         {
             "cart": cart,
             "items": cart.items.select_related("product"),
-            "subtotal": cart.subtotal(),
-            "tax_total": cart.total_tax(),
-            "total": cart.total(),
+            "subtotal": subtotal,
+            "tax_total": tax_total,
+            "total": total,
+            "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+            "razorpay_order_id": razorpay_order_id,
+            "razorpay_amount": razorpay_amount,
+            "order_internal_id": str(order.uuid),
+            "RAZORPAY_AVAILABLE": settings.RAZORPAY_TEST_KEYS_PROVIDED,
         },
     )
 

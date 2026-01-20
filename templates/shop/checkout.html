@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<style>
+  /* Scoped checkout centering: small, safe, local to this template */
+  .checkout-container { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+  @media (max-width: 640px) { .checkout-container { max-width: 100%; padding: 0 12px; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="shop-checkout-page">
+  <div class="container">
+    <div class="checkout-container">
+    <header class="page-header">
+      <h1>Checkout</h1>
+    </header>
+
+    <section class="cart-summary">
+      {% comment %}Reuse existing cart context if available: `cart_items` with `product`, `product_unit`, `qty`, `line_total`{% endcomment %}
+      {% if cart_items %}
+        <ul class="cart-items">
+          {% for row in cart_items %}
+            <li class="cart-item">
+              <div class="cart-item-title">{{ row.product.title|default:row.product.name }}</div>
+              {% if row.product_unit %}
+                <div class="cart-item-unit">{{ row.product_unit.name }}</div>
+              {% endif %}
+              <div class="cart-item-qty">Qty: {{ row.qty }}</div>
+              <div class="cart-item-line">{{ row.line_total }}</div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Your cart is empty.</p>
+      {% endif %}
+    </section>
+
+    <section class="cart-total">
+      <h2>Total</h2>
+      {% if cart_total is not None %}
+        <div class="total-amount">{{ cart_total }}</div>
+      {% else %}
+        <div class="total-amount">{{ cart_total_amount|default:total|default:"-" }}</div>
+      {% endif %}
+    </section>
+
+    <section class="payment-placeholder">
+      <h3>Payment</h3>
+      {% if RAZORPAY_AVAILABLE and razorpay_order_id %}
+        <p>Amount: ₹{{ total }}</p>
+        <button id="rzp-pay-btn" class="cn">Pay Now</button>
+      {% else %}
+        <p>Payment is not configured. Please contact site administrator.</p>
+      {% endif %}
+    </section>
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  {% if RAZORPAY_AVAILABLE and razorpay_order_id %}
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    (function(){
+      function getCookie(name) {
+        var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        if (match) return match[2];
+        return null;
+      }
+
+      var payBtn = document.getElementById('rzp-pay-btn');
+      if (!payBtn) return;
+
+      payBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        var options = {
+          key: "{{ razorpay_key_id }}",
+          order_id: "{{ razorpay_order_id }}",
+          amount: "{{ razorpay_amount }}",
+          currency: "INR",
+          name: "Ochre",
+          description: "Order {{ order_internal_id }}",
+          handler: function (response){
+            // POST to server to verify signature and update order
+            fetch("/payments/verify/", {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken')
+              },
+              body: new URLSearchParams({
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                order_internal_id: "{{ order_internal_id }}"
+              })
+            }).then(function(res){
+              return res.json();
+            }).then(function(data){
+              if (data && data.ok) {
+                window.location.href = window.location.href + '?paid=1';
+              } else {
+                alert('Payment verification failed.');
+              }
+            }).catch(function(){ alert('Payment verification failed.'); });
+          },
+          modal: { ondismiss: function(){ /* noop */ } }
+        };
+        var rzp = new Razorpay(options);
+        rzp.open();
+      });
+    })();
+  </script>
+  {% endif %}
+{% endblock %}

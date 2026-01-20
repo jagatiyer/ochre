@@ -2,6 +2,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
+import uuid
 
 User = settings.AUTH_USER_MODEL
 
@@ -256,40 +257,56 @@ class ExperienceBooking(models.Model):
 
 
 # ---------------------------
-# Orders (LEGACY – REQUIRED)
+# Orders
 # ---------------------------
 class Order(models.Model):
-    STATUS_PENDING = "pending"
+    """Order model for shop payments.
+
+    Keep a UUID for external references while retaining DB integer PK
+    compatibility to avoid invasive migrations elsewhere.
+    """
+
+    STATUS_CREATED = "created"
+    STATUS_PAYMENT_PENDING = "payment_pending"
     STATUS_PAID = "paid"
+    STATUS_FAILED = "failed"
     STATUS_CANCELLED = "cancelled"
 
     STATUS_CHOICES = (
-        (STATUS_PENDING, "Pending"),
+        (STATUS_CREATED, "Created"),
+        (STATUS_PAYMENT_PENDING, "Payment pending"),
         (STATUS_PAID, "Paid"),
+        (STATUS_FAILED, "Failed"),
         (STATUS_CANCELLED, "Cancelled"),
     )
 
-    user = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.SET_NULL
-    )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    status = models.CharField(
-        max_length=24,
-        choices=STATUS_CHOICES,
-        default=STATUS_PENDING,
-    )
+    status = models.CharField(max_length=32, choices=STATUS_CHOICES, default=STATUS_CREATED)
 
     subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
     tax_total = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
     total = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
+    total_amount = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
+    currency = models.CharField(max_length=6, default="INR")
+
+    # Razorpay integration fields
+    razorpay_order_id = models.CharField(max_length=255, blank=True, null=True)
+    razorpay_payment_id = models.CharField(max_length=255, blank=True, null=True)
+    razorpay_signature = models.CharField(max_length=255, blank=True, null=True)
 
     payment_ref = models.CharField(max_length=255, blank=True, null=True)
     metadata = models.JSONField(blank=True, null=True)
 
+    class Meta:
+        ordering = ("-created_at",)
+
     def __str__(self):
-        return f"Order #{self.pk}"
+        return f"Order {self.uuid} (user={self.user})"
 
 
 class OrderItem(models.Model):
