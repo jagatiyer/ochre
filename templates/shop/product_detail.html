@@ -54,6 +54,16 @@
                         loading="lazy"
                         style="max-width:100%;height:auto;border-radius:8px;"
                     >
+                {% elif item.gallery_images.all %}
+                    {% for g in item.gallery_images.all|slice:":1" %}
+                        <img
+                            id="ochreMainImage"
+                            src="{{ g.image.url }}"
+                            alt="{{ item.title }}"
+                            loading="lazy"
+                            style="max-width:100%;height:auto;border-radius:8px;"
+                        >
+                    {% endfor %}
                 {% else %}
                     <img
                         id="ochreMainImage"
@@ -132,6 +142,26 @@
                 <button type="submit" class="cn shop">
                     Add to Cart
                 </button>
+            </form>
+            {% else %}
+            {# Experience booking UI (UI-only): posts to booking endpoint; backend handles storage. #}
+            <form method="post" action="{% url 'shop:experience_booking_create' %}" class="contact-form">
+                {% csrf_token %}
+                <input type="hidden" name="experience_id" value="{{ item.id }}">
+
+                <div class="form-row">
+                    <input id="booking-name" name="customer_name" type="text" placeholder="Full name" required>
+                    <input id="booking-email" name="customer_email" type="email" placeholder="Email" required>
+                </div>
+
+                <div class="form-row">
+                    <input id="booking-phone" name="customer_phone" type="tel" placeholder="Phone (optional)">
+                    <input id="booking-date" name="preferred_date" type="text" placeholder="Preferred date (optional)">
+                </div>
+
+                <textarea id="booking-notes" name="notes" rows="3" placeholder="Notes (optional)"></textarea>
+
+                <button type="submit" class="cn shop">Request Booking</button>
             </form>
             {% endif %}
 

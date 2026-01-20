@@ -1,7 +1,7 @@
 # shop/cart_utils.py
 from decimal import Decimal
 from django.conf import settings
-from .models import Cart, CartItem, ShopItem
+from .models import Cart, CartItem, ShopItem, ProductUnit
 
 SESSION_KEY = "cart"  # {'<product_id>' or '<product_id>|<unit_id>': qty, ...}
 

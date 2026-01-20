@@ -3,6 +3,16 @@
 {% if home_content_sections %}
   {% for section in home_content_sections %}
     <section class="collections-page">
+      {% if forloop.first %}
+      <div class="collections-header">
+        {# Micro-heading omitted if not provided in model #}
+        <h1>{{ section.title }}</h1>
+        {# Description omitted if no subtitle/short description field exists #}
+        {% if section.subtitle %}
+        <p class="description">{{ section.subtitle }}</p>
+        {% endif %}
+      </div>
+      {% endif %}
       <div class="products-section">
         <div class="story-content">
           {% if section.image_position == 'left' %}
