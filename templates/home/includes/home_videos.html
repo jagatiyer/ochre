@@ -1,19 +1,50 @@
 {% comment %}Render up to 6 home videos in rows of 3 using existing card classes{% endcomment %}
 
-{% comment %}Render up to 6 home videos in rows of 3 using existing card classes{% endcomment %}
-
 {% if home_videos %}
     <div class="products-scroll" style="max-width:1200px; margin:0 auto; padding:0 20px;">
         {% for video in home_videos %}
             <div class="collection-card">
-                <video controls preload="metadata">
-                    <source src="{{ video.video.url }}">
-                    Your browser does not support the video tag.
-                </video>
+
+                {# 1) Uploaded file (safe check) #}
+                {% if video.video and video.video.name %}
+                    <video controls preload="metadata">
+                        <source src="{{ video.video.url }}">
+                        Your browser does not support the video tag.
+                    </video>
+
+                {# 2) Raw embed HTML, but ignore known placeholder hosts like example.com #}
+                {% elif video.embed_html %}
+                    {% with emb=video.embed_html|lower %}
+                        {% if "example.com" not in emb %}
+                            {{ video.embed_html|safe }}
+                        {% endif %}
+                    {% endwith %}
+
+                {# 3) Embed URL / direct mp4: prefer direct media files, otherwise render as iframe
+                    Use `embed_url` field name which exists on both HomePageVideo and CommercialVideo. #}
+                {% elif video.embed_url %}
+                    {% with url=video.embed_url|lower %}
+                        {% if url|slice:"-4:" == ".mp4" or url|slice:"-5:" == ".webm" or url|slice:"-4:" == ".ogg" %}
+                            <video controls preload="metadata">
+                                <source src="{{ video.embed_url }}">
+                                Your browser does not support the video tag.
+                            </video>
+                        {% else %}
+                            {% if "example.com" not in url %}
+                                <div class="video-embed iframe-embed">
+                                    <iframe src="{{ video.embed_url }}" allowfullscreen loading="lazy"></iframe>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endwith %}
+                {% endif %}
+
                 {% if video.title %}
                     <p class="collection-card-title">{{ video.title }}</p>
                 {% endif %}
+
             </div>
         {% endfor %}
     </div>
 {% endif %}
+

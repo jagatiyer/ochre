@@ -236,6 +236,9 @@ class ExperienceBooking(models.Model):
 
     notes = models.TextField(blank=True)
     metadata = models.JSONField(blank=True, null=True)
+    # Booking date and time slot
+    date = models.DateField(null=True, blank=True)
+    time_slot = models.TimeField(null=True, blank=True)
 
     status = models.CharField(
         max_length=24,

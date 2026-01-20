@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="collection-detail-page">
+  <div class="collection-detail-container">
+
+    <!-- LEFT: IMAGE / GALLERY -->
+    <div class="collection-detail-image">
+
+      {% if experience.image %}
+        <img
+          id="ochreMainImage"
+          src="{{ experience.image.url }}"
+          alt="{{ experience.title }}"
+          loading="lazy"
+        >
+      {% else %}
+        <img
+          id="ochreMainImage"
+          src="{% static 'img/placeholder.png' %}"
+          alt="{{ experience.title }}"
+          loading="lazy"
+        >
+      {% endif %}
+
+      {% if experience.gallery_images.all %}
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+        {% for g in experience.gallery_images.all %}
+          <img
+            src="{{ g.image.url }}"
+            alt="{{ experience.title }}"
+            style="width:70px;height:70px;object-fit:cover;cursor:pointer;border:1px solid #333;border-radius:6px;"
+            onclick="ochreSwapImage('{{ g.image.url }}')"
+          >
+        {% endfor %}
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- RIGHT: DETAILS + BOOKING FORM -->
+    <div class="collection-detail-info">
+
+      <div class="collection-detail-category">
+        {{ experience.category.name }}
+      </div>
+
+      <h1 class="collection-detail-title">{{ experience.title }}</h1>
+
+      {% if experience.description %}
+      <p class="collection-detail-excerpt">
+        {{ experience.description|striptags|truncatewords:30 }}
+      </p>
+      {% endif %}
+
+      <div style="font-size:22px;color:#00d2c7;margin-bottom:12px;">
+        <span id="product-price">{{ experience.price_display }}</span>
+      </div>
+
+      <form method="post" action="{% url 'payments:booking_details' %}" class="contact-form">
+        {% csrf_token %}
+        {{ form.experience_id }}
+
+        <div class="form-row">
+          <div>
+            <label for="id_date">{{ form.date.label }}</label>
+            {{ form.date }}
+          </div>
+          <div>
+            <label for="id_time_slot">{{ form.time_slot.label }}</label>
+            {{ form.time_slot }}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label for="id_customer_name">{{ form.customer_name.label }}</label>
+            {{ form.customer_name }}
+          </div>
+          <div>
+            <label for="id_customer_email">{{ form.customer_email.label }}</label>
+            {{ form.customer_email }}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label for="id_customer_phone">{{ form.customer_phone.label }}</label>
+            {{ form.customer_phone }}
+          </div>
+          <div></div>
+        </div>
+
+        <div>
+          <label for="id_notes">{{ form.notes.label }}</label>
+          {{ form.notes }}
+        </div>
+
+        <button type="submit" class="cn shop">Continue to review</button>
+      </form>
+
+      {% if experience.description %}
+      <div class="collection-detail-content">
+        {{ experience.description|safe }}
+      </div>
+      {% endif %}
+
+      <a href="{% url 'shop:shop_index' %}" class="back-to-collections">← Back to Shop</a>
+
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function ochreSwapImage(url){
+  var img = document.getElementById('ochreMainImage');
+  if(img){ img.src = url; }
+}
+</script>
+{% endblock %}

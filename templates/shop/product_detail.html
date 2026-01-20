@@ -46,6 +46,7 @@
         <div class="collection-detail-image">
             <div class="ochre-product-gallery">
 
+<<<<<<< Updated upstream
                 {% if item.image %}
                     <img
                         id="ochreMainImage"
@@ -64,6 +65,20 @@
                             style="max-width:100%;height:auto;border-radius:8px;"
                         >
                     {% endfor %}
+=======
+                        <a href="{% url 'shop:shop_index' %}" class="back-to-collections top-back">
+                            ← Back to Shop
+                        </a>
+
+                        {% if item.image %}
+                            <img
+                                id="ochreMainImage"
+                                src="{{ item.image.url }}"
+                                alt="{{ item.title }}"
+                                loading="lazy"
+                                style="max-width:100%;height:auto;border-radius:8px;"
+                            >
+>>>>>>> Stashed changes
                 {% else %}
                     <img
                         id="ochreMainImage"
@@ -118,7 +133,7 @@
                 </span>
             </div>
 
-            <!-- ADD TO CART -->
+            <!-- ADD TO CART / BOOKING -->
             {% if not item.is_experience %}
             <form method="post" action="{% url 'shop:add_to_cart' %}">
                 {% csrf_token %}
@@ -144,6 +159,7 @@
                 </button>
             </form>
             {% else %}
+<<<<<<< Updated upstream
             {# Experience booking UI (UI-only): posts to booking endpoint; backend handles storage. #}
             <form method="post" action="{% url 'shop:experience_booking_create' %}" class="contact-form">
                 {% csrf_token %}
@@ -163,6 +179,9 @@
 
                 <button type="submit" class="cn shop">Request Booking</button>
             </form>
+=======
+                <a href="{% url 'payments:booking_start' item.id %}" class="cn shop">BOOK NOW</a>
+>>>>>>> Stashed changes
             {% endif %}
 
             {% if item.description %}
@@ -171,9 +190,7 @@
             </div>
             {% endif %}
 
-            <a href="{% url 'shop:shop_index' %}" class="back-to-collections">
-                ← Back to Shop
-            </a>
+            
 
         </div>
     </div>

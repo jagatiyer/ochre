@@ -232,6 +232,7 @@ def checkout_view(request):
     cart = getattr(request.user, "cart", None)
     if not cart or not cart.items.exists():
         return redirect("shop:shop_index")
+<<<<<<< Updated upstream
 
     # create internal Order record (guard against duplicate creation on refresh)
     subtotal = cart.subtotal()
@@ -297,6 +298,11 @@ def checkout_view(request):
             "RAZORPAY_AVAILABLE": settings.RAZORPAY_TEST_KEYS_PROVIDED,
         },
     )
+=======
+    # Redirect to canonical payments checkout flow (single checkout system)
+    from django.urls import reverse
+    return redirect(reverse('payments:checkout_address'))
+>>>>>>> Stashed changes
 
 
 # ============================================================

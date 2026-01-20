@@ -37,8 +37,6 @@
     </div>
     {% endif %}
   {% block extra_head %}
-  {{ block.super }}
-  {% include 'shop/includes/product_unit_styles.html' %}
   <style>
     /* Scoped carousel styles */
     /* Pull carousel slightly up to compensate for global header padding; homepage-only spacing control */
@@ -142,7 +140,6 @@
       startTimer();
     })();
   </script>
-  {% include 'includes/product_unit_script.html' %}
   {% endblock %}
 
     <!-- CTA BUTTONS -->

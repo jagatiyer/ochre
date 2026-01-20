@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+  <h1>Sign In</h1>
+
+  {% if not GOOGLE_OAUTH_CONFIGURED and not OTP_PROVIDER_CONFIGURED %}
+    <p class="no-stories">Login temporarily unavailable — admin configuration required.</p>
+  {% endif %}
+
+  <div>
+    <h3>Social Login</h3>
+    {% if GOOGLE_OAUTH_CONFIGURED %}
+      <a href="/accounts/google/login/" class="cn shop">Continue with Google</a>
+    {% else %}
+      <button class="cn shop" disabled>Continue with Google (unavailable)</button>
+    {% endif %}
+  </div>
+
+  <div style="margin-top:20px;">
+    <h3>Mobile OTP</h3>
+    {% if OTP_PROVIDER_CONFIGURED %}
+      <a href="{% url 'users:otp_start' %}" class="cn shop">Continue with Mobile OTP</a>
+    {% else %}
+      <button class="cn shop" disabled>Mobile OTP (unavailable)</button>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

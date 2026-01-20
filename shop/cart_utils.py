@@ -40,42 +40,56 @@ def session_cart_to_items(request):
     product_keys = []
     unit_keys = {}
     for key in cart.keys():
-        if "|" in key:
-            pid_str, unit_str = key.split("|", 1)
-            product_keys.append(int(pid_str))
-            unit_keys.setdefault(int(pid_str), []).append(int(unit_str))
-        else:
-            product_keys.append(int(key))
+        try:
+            if "|" in key:
+                pid_str, unit_str = key.split("|", 1)
+                pid = int(pid_str)
+                uid = int(unit_str)
+                product_keys.append(pid)
+                unit_keys.setdefault(pid, []).append(uid)
+            else:
+                pid = int(key)
+                product_keys.append(pid)
+        except (ValueError, TypeError):
+            # skip malformed session keys
+            continue
 
     products = ShopItem.objects.filter(id__in=product_keys, published=True)
     products_map = {p.id: p for p in products}
 
     # preload units for relevant products
-    from .models import ProductUnit
     unit_ids = []
     for vals in unit_keys.values():
-        unit_ids.extend(vals)
+        for v in vals:
+            try:
+                unit_ids.append(int(v))
+            except (ValueError, TypeError):
+                continue
     units = ProductUnit.objects.filter(id__in=unit_ids, is_active=True) if unit_ids else []
     units_map = {u.id: u for u in units}
 
     for key, qty in cart.items():
-        if "|" in key:
-            pid_str, unit_str = key.split("|", 1)
-            pid = int(pid_str)
-            uid = int(unit_str)
-            p = products_map.get(pid)
-            u = units_map.get(uid)
-            if not p or not u:
-                continue
-            line_total = (u.price or 0) * int(qty)
-            rows.append({"product": p, "product_unit": u, "qty": qty, "line_total": line_total})
-        else:
-            pid = int(key)
-            p = products_map.get(pid)
-            if not p:
-                continue
-            line_total = (p.price or 0) * int(qty)
-            rows.append({"product": p, "product_unit": None, "qty": qty, "line_total": line_total})
+        try:
+            if "|" in key:
+                pid_str, unit_str = key.split("|", 1)
+                pid = int(pid_str)
+                uid = int(unit_str)
+                p = products_map.get(pid)
+                u = units_map.get(uid)
+                if not p or not u:
+                    continue
+                line_total = (u.price or 0) * int(qty)
+                rows.append({"product": p, "product_unit": u, "qty": qty, "line_total": line_total})
+            else:
+                pid = int(key)
+                p = products_map.get(pid)
+                if not p:
+                    continue
+                line_total = (p.price or 0) * int(qty)
+                rows.append({"product": p, "product_unit": None, "qty": qty, "line_total": line_total})
+        except (ValueError, TypeError):
+            # skip malformed cart entries
+            continue
 
     return rows
 
@@ -86,13 +100,18 @@ def merge_session_cart_to_user(request, user):
         return
     cart, _ = Cart.objects.get_or_create(user=user)
     for key, qty in session_cart.items():
-        if "|" in key:
-            pid_str, uid_str = key.split("|", 1)
-            pid = int(pid_str)
-            uid = int(uid_str)
-        else:
-            pid = int(key)
-            uid = None
+        try:
+            if "|" in key:
+                pid_str, uid_str = key.split("|", 1)
+                pid = int(pid_str)
+                uid = int(uid_str)
+            else:
+                pid = int(key)
+                uid = None
+        except (ValueError, TypeError):
+            # skip malformed keys
+            continue
+
         try:
             product = ShopItem.objects.get(id=pid, published=True)
         except ShopItem.DoesNotExist:

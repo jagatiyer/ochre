@@ -1,0 +1,33 @@
+{
+  "admin_validations": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "admin_errors": {
+    "f1": {},
+    "f2": {},
+    "f3": {},
+    "f4": {
+      "__all__": [
+        "Please provide only one of: upload file, embed URL, or embed HTML."
+      ]
+    }
+  },
+  "admin_created_count": 3,
+  "commercials_status": 200,
+  "commercials_has_title": true,
+  "commercials_has_grid": true,
+  "commercials_h1_count": 1,
+  "home_status": 200,
+  "home_has_story_content": true,
+  "footer_logo_exists": true,
+  "footer_has_social": true,
+  "free_booking_status": 200,
+  "free_booking_final_path": "/payments/booking/start/9/",
+  "paid_booking_status": 200,
+  "paid_booking_final_path": "/payments/booking/start/10/",
+  "book_now_text": true,
+  "back_link_top": true
+}

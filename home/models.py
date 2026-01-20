@@ -19,7 +19,12 @@ class CarouselSlide(models.Model):
 
 class HomePageVideo(models.Model):
     title = models.CharField(max_length=255, blank=True)
-    video = models.FileField(upload_to='home/videos/')
+    video = models.FileField(upload_to='home/videos/', blank=True, null=True)
+    # Optional embed fields: either `embed_url` (e.g. YouTube/Vimeo share URL)
+    # or `embed_html` (raw iframe/embed code). Admin should ensure only
+    # one of these sources is used per record.
+    embed_url = models.CharField(max_length=800, blank=True)
+    embed_html = models.TextField(blank=True)
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)

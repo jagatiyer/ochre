@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+  <h1>Your Cart</h1>
+  {% if cart %}
+    <table>
+      <thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead>
+      <tbody>
+        {% for item in cart %}
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.qty }}</td>
+            <td>₹{{ item.price|floatformat:-2|stringformat:"s"|slice:":-2" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p>Total: ₹{{ total|floatformat:-2 }}</p>
+    <a class="cn shop" href="{% url 'payments:checkout_address' %}">Checkout</a>
+  {% else %}
+    <p class="no-stories">Your cart is empty.</p>
+    <p>To add a demo item, use <code>/payments/cart/add/?sku=SKU1&name=Test&price=10000</code></p>
+  {% endif %}
+</div>
+{% endblock %}

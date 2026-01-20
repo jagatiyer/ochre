@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+  <h1>Review Your Order</h1>
+  <h3>Items</h3>
+  <ul>
+    {% for item in cart %}
+      <li>{{ item.name }} × {{ item.qty }} — ₹{{ item.price|floatformat:-2 }}</li>
+    {% endfor %}
+  </ul>
+  <h3>Delivery</h3>
+  {% if address %}
+    <p>{{ address.full_name }}<br>{{ address.line1 }}{% if address.line2 %}, {{ address.line2 }}{% endif %}<br>{{ address.city }}, {{ address.state }} — {{ address.postcode }}<br>{{ address.country }}</p>
+  {% else %}
+    <p>No address provided.</p>
+  {% endif %}
+
+  <p>Total: ₹{{ total|floatformat:-2 }}</p>
+
+  <button id="payBtn" class="cn shop">Pay (test)</button>
+
+  {% if RAZORPAY_TEST_KEYS_PROVIDED %}
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  {% endif %}
+
+  <script>
+    document.getElementById('payBtn').addEventListener('click', function(){
+      fetch('{% url "payments:create_order" %}', {method: 'POST'})
+        .then(r=>r.json())
+        .then(data=>{
+          {% if RAZORPAY_TEST_KEYS_PROVIDED %}
+            var options = {
+              "key": data.key,
+              "amount": data.amount,
+              "currency": data.currency,
+              "order_id": data.order_id,
+              "handler": function (response){
+                var form = new FormData();
+                form.append('razorpay_order_id', response.razorpay_order_id);
+                form.append('razorpay_payment_id', response.razorpay_payment_id);
+                form.append('razorpay_signature', response.razorpay_signature);
+                fetch('{% url "payments:verify_payment" %}', {method: 'POST', body: form})
+                  .then(r=>r.json()).then(()=>{window.location = '{% url "payments:transaction_detail" "ORDER_ID" %}'.replace('ORDER_ID', data.order_id)})
+              }
+            };
+            var rzp = new Razorpay(options);
+            rzp.open();
+          {% else %}
+            window.location = '{% url "payments:transaction_detail" "ORDER_ID" %}'.replace('ORDER_ID', data.order_id);
+          {% endif %}
+        }).catch(e=>{alert('Create order failed')});
+    });
+  </script>
+</div>
+{% endblock %}

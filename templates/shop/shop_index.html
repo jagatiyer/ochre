@@ -66,21 +66,19 @@
 
                 <div class="card-actions">
                     <div class="left-action">
-                        {% if item.is_experience %}
-                            <a href="{% url 'shop:product_detail' item.slug %}" class="collection-card-btn">Book Now</a>
-                        {% else %}
-                            <a href="{% url 'shop:product_detail' item.slug %}" class="collection-card-btn">View Details</a>
-                        {% endif %}
+                        <a href="{% url 'shop:product_detail' item.slug %}" class="collection-card-btn">View Details</a>
                     </div>
                     <div class="right-action">
-                        {% if not item.is_experience %}
-                        <form method="post" action="{% url 'shop:add_to_cart' %}" class="index-add-form" data-product-id="{{ item.id }}">
-                            {% csrf_token %}
-                            <input type="hidden" name="product_id" value="{{ item.id }}">
-                            <input type="hidden" name="qty" value="1">
-                            <input type="hidden" name="product_unit_id" value="{% if item.default_unit %}{{ item.default_unit.id }}{% endif %}">
-                            <button type="submit" class="cn shop index-add-btn" {% if item.has_units and not item.default_unit %}disabled{% endif %}>Add to Cart</button>
-                        </form>
+                        {% if item.is_experience %}
+                            <a href="{% url 'payments:booking_start' item.id %}" class="cn shop index-add-btn">BOOK NOW</a>
+                        {% else %}
+                            <form method="post" action="{% url 'shop:add_to_cart' %}" class="index-add-form" data-product-id="{{ item.id }}">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ item.id }}">
+                                <input type="hidden" name="qty" value="1">
+                                <input type="hidden" name="product_unit_id" value="{% if item.default_unit %}{{ item.default_unit.id }}{% endif %}">
+                                <button type="submit" class="cn shop index-add-btn" {% if item.has_units and not item.default_unit %}disabled{% endif %}>Add to Cart</button>
+                            </form>
                         {% endif %}
                     </div>
                 </div>

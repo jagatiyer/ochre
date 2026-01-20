@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <div class="collections-header">
+      <h1>Mobile OTP</h1>
+      <p class="description">Enter your mobile number to receive a one-time code.</p>
+    </div>
+
+    <form method="post" action="">
+      {% csrf_token %}
+      {% if error %}<p class="error">{{ error }}</p>{% endif %}
+      <label>Mobile number</label>
+      <input name="phone" placeholder="+919876543210" required>
+      <button class="cn" type="submit">Send OTP</button>
+    </form>
+  </div>
+{% endblock %}

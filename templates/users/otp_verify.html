@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <div class="collections-header">
+      <h1>Enter OTP</h1>
+      <p class="description">We sent a code to {{ phone }}</p>
+    </div>
+
+    <form method="post" action="">
+      {% csrf_token %}
+      {% if error %}<p class="error">{{ error }}</p>{% endif %}
+      <label>One-time code</label>
+      <input name="code" placeholder="123456" required>
+      <button class="cn" type="submit">Verify</button>
+    </form>
+  </div>
+{% endblock %}

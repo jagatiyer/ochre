@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+  <h1>Transaction {{ payment.order_id }}</h1>
+  <p>Status: 
+    {% if payment.status == 'PAID' %}
+      <span class="txn-status-success">PAID</span>
+    {% elif payment.status == 'CREATED' %}
+      CREATED
+    {% else %}
+      <span class="txn-status-failed">{{ payment.status }}</span>
+    {% endif %}
+  </p>
+  <p>Amount: ₹{{ payment.amount|floatformat:-2 }}</p>
+  {% if payment.payment_id %}
+    <p>Payment ID: {{ payment.payment_id }}</p>
+  {% endif %}
+
+  {% if address %}
+    <h3>Delivery Address</h3>
+    <p>{{ address.full_name }}<br>{{ address.line1 }}{% if address.line2 %}, {{ address.line2 }}{% endif %}<br>{{ address.city }}, {{ address.state }} — {{ address.postcode }}<br>{{ address.country }}</p>
+  {% endif %}
+
+  {% comment %} Booking details may be stored in session during the flow; show them when present. {% endcomment %}
+  {% with booking=request.session.booking %}
+    {% if booking %}
+      <h3>Booking</h3>
+      <p>Name: {{ booking.customer_name }}<br>
+      Email: {{ booking.customer_email }}<br>
+      Phone: {{ booking.customer_phone }}<br>
+      Date: {{ booking.date }} at {{ booking.time_slot }}</p>
+    {% endif %}
+  {% endwith %}
+
+</div>
+{% endblock %}

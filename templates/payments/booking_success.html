@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="collections-header">
+    <div class="craft-spirits">
+      <span class="dash">—</span> BOOKING <span class="dash">—</span>
+    </div>
+    <h1>Booking Confirmed</h1>
+    <p class="description">Thank you — your booking has been received.</p>
+  </div>
+
+  <div class="products-section" style="margin-top:18px;">
+    <div class="products-scroll">
+      <div class="collection-card">
+        <h3 class="collection-card-title">{{ booking.experience.title }}</h3>
+        <p class="collection-card-desc">{{ booking.experience.description|default:booking.experience.title }}</p>
+
+        <div style="margin-top:12px;">
+          <p><strong>Name:</strong> {{ booking.customer_name }}</p>
+          <p><strong>Email:</strong> {{ booking.customer_email }}</p>
+          <p><strong>Phone:</strong> {{ booking.customer_phone }}</p>
+          <p><strong>Date:</strong> {{ booking.date }} at {{ booking.time_slot }}</p>
+          {% if booking.notes %}<p><strong>Notes:</strong> {{ booking.notes }}</p>{% endif %}
+        </div>
+
+        <p class="txn-status-success" style="margin-top:12px;">Your booking is confirmed. We'll email you the details shortly.</p>
+
+        <a href="{% url 'shop:shop_index' %}" class="cn" style="display:inline-block;margin-top:12px;">Continue browsing</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
