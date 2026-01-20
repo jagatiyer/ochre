@@ -318,6 +318,109 @@
 })();
 </script>
 
+  {# -- Feature flags exposed for client-side UI hooks (hidden) -- #}
+  <div id="ochre-feature-flags" hidden
+       data-google="{% if GOOGLE_OAUTH_AVAILABLE %}1{% else %}0{% endif %}"
+       data-razorpay="{% if RAZORPAY_AVAILABLE %}1{% else %}0{% endif %}"
+       data-sms="{% if SMS_OTP_AVAILABLE %}1{% else %}0{% endif %}">
+  </div>
+
+  {# -- Age verification modal markup (no CSS changes) -- #}
+  <div id="ochre-age-modal-root" aria-hidden="true"></div>
+
+  <script>
+  (function(){
+    // Age gate: show on first visit, store acceptance in localStorage.
+    try {
+      var key = 'ochre_age_verified_v1';
+      if (localStorage && localStorage.getItem && localStorage.getItem(key)) {
+        return; // already accepted
+      }
+    } catch (e) { /* localStorage unavailable; proceed to show gate */ }
+
+    function buildModal() {
+      var root = document.getElementById('ochre-age-modal-root');
+      if (!root) return null;
+
+      // overlay
+      var overlay = document.createElement('div');
+      overlay.setAttribute('id','ochre-age-overlay');
+
+      // modal container - reuse existing site wrapper so styles apply
+      var modal = document.createElement('div');
+      modal.setAttribute('id','ochre-age-modal');
+      // reuse site-level form wrapper so site button/form styles apply
+      modal.className = 'contact-form';
+
+      // heading
+      var h = document.createElement('h2');
+      h.textContent = 'Age verification';
+
+      var p = document.createElement('p');
+      p.textContent = 'You must be 18 years or older to enter this site. Please confirm.';
+
+      var accept = document.createElement('button');
+      accept.type = 'button';
+      accept.textContent = 'I am 18+';
+      // reuse site button classes used across forms
+      accept.className = 'cn';
+
+      var decline = document.createElement('button');
+      decline.type = 'button';
+      decline.textContent = 'Leave site';
+      decline.className = 'cn';
+
+      modal.appendChild(h);
+      modal.appendChild(p);
+      modal.appendChild(accept);
+      modal.appendChild(decline);
+
+      root.appendChild(overlay);
+      root.appendChild(modal);
+
+      return {root: root, overlay: overlay, modal: modal, accept: accept, decline: decline};
+    }
+
+    function showModal(m) {
+      if (!m) return;
+      // prefer CSS-based styling: add an 'open' state so the appended stylesheet can scope styles
+      m.overlay.classList.add('ochre-open');
+      m.modal.classList.add('ochre-open');
+
+      // focus handling
+      m.accept.focus();
+    }
+
+    function removeModal(m) {
+      if (!m) return;
+      if (m.root && m.root.parentNode) {
+        m.root.parentNode.removeChild(m.root);
+      }
+    }
+
+    var modal = buildModal();
+    if (!modal) return;
+    showModal(modal);
+
+    modal.accept.addEventListener('click', function(){
+      try { localStorage.setItem('ochre_age_verified_v1', '1'); } catch(e){}
+      removeModal(modal);
+    });
+    modal.decline.addEventListener('click', function(){
+      // redirect away; don't attempt to close window programmatically
+      window.location.href = 'https://www.google.com';
+    });
+
+    // prevent tabbing into background content while modal is open
+    document.addEventListener('focus', function trapFocus(e){
+      if (!modal.modal.contains(e.target)) {
+        e.stopPropagation();
+        modal.accept.focus();
+      }
+    }, true);
+  })();
+  </script>
+
   {% block extra_js %}{% endblock %}
 </body>
 </html>

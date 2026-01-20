@@ -3,6 +3,38 @@
 {% load socialaccount %}
 
 {% block content %}
+<style>
+  /* Google-branded button for auth pages only (official look) */
+  .google-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    background: #fff;
+    color: #3c4043;
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .google-btn:hover {
+    background: #f7f8f8;
+  }
+
+  .google-icon {
+    width: 18px;
+    height: 18px;
+    background-image: url("https://developers.google.com/identity/images/g-logo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+</style>
+
 <main class="auth-page">
   <div class="auth-card">
 
@@ -39,8 +71,8 @@
         {% get_providers as socialaccount_providers %}
         {% for provider in socialaccount_providers %}
           {% if provider.id == "google" %}
-            <a href="{% provider_login_url 'google' %}" class="cn auth-btn">
-              Continue with Google
+            <a href="{% provider_login_url 'google' process='login' %}" rel="nofollow">
+              <img src="https://developers.google.com/identity/images/btn_google_signin_light_normal_web.png" alt="Continue with Google">
             </a>
           {% endif %}
         {% endfor %}
@@ -55,5 +87,7 @@
     </div>
 
   </div>
+
 </main>
+
 {% endblock %}

@@ -608,6 +608,86 @@ header, .site-header { margin-bottom: 24px !important; }
   color: var(--accent-red);
 }
 
+/* Logo image sizing (header/footer) — minimal, responsive rules only */
+.logo img.site-logo {
+  display: block;
+  max-height: 48px; /* desktop baseline */
+  width: auto;
+  height: auto;
+}
+
+/* Footer slightly smaller */
+.footer-logo img.footer-site-logo {
+  max-height: 32px;
+  width: auto;
+  height: auto;
+}
+
+@media (max-width: 1024px) {
+  .logo img.site-logo { max-height: 40px; }
+  .footer-logo img.footer-site-logo { max-height: 28px; }
+}
+
+@media (max-width: 480px) {
+  .logo img.site-logo { max-height: 32px; }
+  .footer-logo img.footer-site-logo { max-height: 24px; }
+}
+
+/* ============================
+   GLOBAL LOGO SIZING (ADDED)
+   Appended to end to ensure override safety
+   ============================ */
+
+/* === GLOBAL LOGO SIZING (HEADER) === */
+header img.site-logo {
+  height: clamp(36px, 4.5vh, 56px);
+  width: auto;
+  max-width: 180px;
+  display: block;
+}
+
+/* Also cover this project's navbar structure where <nav class="navbar"> is used */
+.navbar img.site-logo {
+  height: clamp(36px, 4.5vh, 56px);
+  width: auto;
+  max-width: 180px;
+  display: block;
+}
+
+/* Align logo visually with navbar text */
+header .navbar,
+header nav,
+.navbar {
+  align-items: center;
+}
+
+/* === FOOTER LOGO (SLIGHTLY SMALLER) === */
+footer img.footer-site-logo {
+  height: clamp(28px, 3.5vh, 44px);
+  width: auto;
+  max-width: 160px;
+  display: block;
+}
+
+/* === MOBILE SAFETY === */
+@media (max-width: 768px) {
+  header img.site-logo {
+    height: 34px;
+    max-width: 140px;
+  }
+
+  .navbar img.site-logo {
+    height: 34px;
+    max-width: 140px;
+  }
+
+  footer img.footer-site-logo {
+    height: 28px;
+    max-width: 120px;
+  }
+}
+
+
 /* ------------------------------------------------------------
    MENU (PRIMARY NAV LINKS)
    ------------------------------------------------------------ */
@@ -1926,7 +2006,7 @@ header, .site-header { margin-bottom: 24px !important; }
 
 .story-philosophy {
   padding: 80px 20px 60px;
-  text-align: left;
+  text-align: center;
 }
 
 .story-philosophy h2 {
@@ -1942,10 +2022,10 @@ header, .site-header { margin-bottom: 24px !important; }
 
 .philosophy-grid {
   display: grid;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 40px;
   max-width: 1000px;
-  margin-top: 60px;
+  margin: 60px auto 0;
 }
 
 .philosophy-number {
@@ -2723,6 +2803,7 @@ color: #2b0f10;
   padding-right: 20px;
 }
 
+
 /* ---------- SECTION LABEL (— OUR COLLECTIONS — etc.) ---------- */
 
 .collections-header .craft-spirits,
@@ -2730,18 +2811,32 @@ color: #2b0f10;
 .shop-header .craft-spirits,
 .contact-label {
   font-family: 'Satoshi', sans-serif;
-  font-size: 20px;
-  color: #ff5b5f;
+  /* slightly reduced size to sit below Playfair headings */
+  font-size: 16px !important;
+  /* softened, slightly darker red to reduce visual jarring */
+  color: #cc484c !important;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 20px;
+  /* editorial letter-spacing, less shouty */
+  letter-spacing: 1.2px !important;
+  margin-bottom: 14px !important;
   display: flex;
   align-items: center;
 }
 
-/* dash between words */
+/* dash between words: tighten spacing and hide trailing dash to avoid mirrored em-dash */
 .craft-spirits .dash {
-  margin: 0 10px;
+  margin: 0 8px !important;
+}
+
+/* Hide any trailing dash so pattern becomes: — HEADING (or HEADING) */
+.craft-spirits .dash:last-child {
+  display: none !important;
+}
+
+/* Also ensure story/year style follows the same single-leading-dash rule */
+.story-page .story-year .dash:last-child,
+.story-page .story-philosophy .philosophy-label .dash:last-child {
+  display: none !important;
 }
 
 /* ---------- PAGE TITLE ---------- */
@@ -4225,6 +4320,101 @@ footer,
   object-position: center;
   display: block;
 }
+
+
+/* ==========================
+   AGE GATE (SCOPED OVERRIDES)
+   Scoped only to the age gate IDs appended by base.html
+   ========================== */
+
+/* overlay */
+#ochre-age-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 9998;
+}
+
+/* modal container — reuse site form styles via .contact-form (added on creation)
+   and scope visuals here so we don't affect other forms */
+#ochre-age-modal.contact-form {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-card, #ffffff);
+  color: var(--text-main);
+  padding: 22px;
+  z-index: 9999;
+  max-width: 420px;
+  border-radius: 10px;
+  font-family: 'Satoshi', sans-serif;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+#ochre-age-modal.contact-form h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+
+#ochre-age-modal.contact-form p {
+  margin-bottom: 16px;
+  color: var(--text-soft);
+}
+
+/* Buttons: reuse `cn` button pattern but ensure spacing inside this modal */
+#ochre-age-modal.contact-form .cn {
+  display: inline-block;
+  margin-right: 12px;
+}
+
+/* small utility to make the modal visible when JS adds the open state */
+#ochre-age-overlay.ochre-open,
+#ochre-age-modal.ochre-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+/* ==========================
+   LOGO OVERRIDES (HIGH-SPECIFICITY, APPEND-ONLY)
+   Ensure header/footer sizing meets the industry-standard targets
+   ========================== */
+
+/* Desktop header ~48-56px, mobile ~32-36px */
+header img.site-logo,
+header .navbar img.site-logo,
+.navbar header img.site-logo,
+.navbar img.site-logo {
+  height: clamp(48px, 4.2vh, 56px);
+  width: auto;
+  max-height: none;
+  display: block;
+}
+
+/* Footer slightly larger than header for visual anchor */
+footer img.footer-site-logo {
+  height: clamp(52px, 5vh, 64px);
+  width: auto;
+  max-height: none;
+  display: block;
+}
+
+/* Mobile safety */
+@media (max-width: 768px) {
+  header img.site-logo,
+  .navbar img.site-logo {
+    height: clamp(32px, 4.2vh, 36px);
+    max-width: 160px;
+  }
+
+  footer img.footer-site-logo {
+    height: 40px;
+    max-width: 140px;
+  }
+}
+
 
 
 
