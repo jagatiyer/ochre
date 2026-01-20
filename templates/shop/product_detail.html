@@ -1,197 +1,79 @@
 {% extends "base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block extra_head %}
 <style>
-/* ================================
-   OCHRE PRODUCT DETAIL – UNIT SELECT
-   ================================ */
-
-#product-unit-select {
-    width: 100%;
-    padding: 12px 14px;
-    margin: 10px 0 18px;
-    font-size: 15px;
-    border-radius: 8px;
-    border: 1px solid #2a2a2a;
-    background-color: #111;
-    color: #ffffff;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-
-    background-image:
-        linear-gradient(45deg, transparent 50%, #fff 50%),
-        linear-gradient(135deg, #fff 50%, transparent 50%);
-    background-position:
-        calc(100% - 20px) 50%,
-        calc(100% - 14px) 50%;
-    background-size: 6px 6px, 6px 6px;
-    background-repeat: no-repeat;
-}
-
-#product-unit-select:focus {
-    outline: none;
-    border-color: #c92a2a; /* Ochre red */
-}
+/* Minimal styles preserved for unit select */
+#product-unit-select { width:100%; padding:10px; margin:10px 0; }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="collection-detail-page">
     <div class="collection-detail-container">
-
-        <!-- LEFT: IMAGE / GALLERY -->
         <div class="collection-detail-image">
             <div class="ochre-product-gallery">
+                <a href="{% url 'shop:shop_index' %}" class="back-to-collections top-back">← Back to Shop</a>
 
-<<<<<<< Updated upstream
                 {% if item.image %}
-                    <img
-                        id="ochreMainImage"
-                        src="{{ item.image.url }}"
-                        alt="{{ item.title }}"
-                        loading="lazy"
-                        style="max-width:100%;height:auto;border-radius:8px;"
-                    >
+                    <img id="ochreMainImage" src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy" style="max-width:100%;height:auto;border-radius:8px;" />
                 {% elif item.gallery_images.all %}
-                    {% for g in item.gallery_images.all|slice:":1" %}
-                        <img
-                            id="ochreMainImage"
-                            src="{{ g.image.url }}"
-                            alt="{{ item.title }}"
-                            loading="lazy"
-                            style="max-width:100%;height:auto;border-radius:8px;"
-                        >
-                    {% endfor %}
-=======
-                        <a href="{% url 'shop:shop_index' %}" class="back-to-collections top-back">
-                            ← Back to Shop
-                        </a>
-
-                        {% if item.image %}
-                            <img
-                                id="ochreMainImage"
-                                src="{{ item.image.url }}"
-                                alt="{{ item.title }}"
-                                loading="lazy"
-                                style="max-width:100%;height:auto;border-radius:8px;"
-                            >
->>>>>>> Stashed changes
+                    {% with g=item.gallery_images.all.0 %}
+                        {% if g %}
+                            <img id="ochreMainImage" src="{{ g.image.url }}" alt="{{ item.title }}" loading="lazy" style="max-width:100%;height:auto;border-radius:8px;" />
+                        {% endif %}
+                    {% endwith %}
                 {% else %}
-                    <img
-                        id="ochreMainImage"
-                        src="{% static 'img/placeholder.png' %}"
-                        alt="{{ item.title }}"
-                        loading="lazy"
-                        style="max-width:100%;height:auto;border-radius:8px;"
-                    >
+                    <img id="ochreMainImage" src="{% static 'img/placeholder.png' %}" alt="{{ item.title }}" loading="lazy" style="max-width:100%;height:auto;border-radius:8px;" />
                 {% endif %}
 
                 {% if item.gallery_images.all %}
                 <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
                     {% for g in item.gallery_images.all %}
-                        <img
-                            src="{{ g.image.url }}"
-                            alt="{{ item.title }}"
-                            style="width:70px;height:70px;object-fit:cover;cursor:pointer;border:1px solid #333;border-radius:6px;"
-                            onclick="ochreSwapImage('{{ g.image.url }}')"
-                        >
+                        <img src="{{ g.image.url }}" alt="{{ item.title }}" style="width:70px;height:70px;object-fit:cover;cursor:pointer;border:1px solid #333;border-radius:6px;" onclick="ochreSwapImage('{{ g.image.url }}')" />
                     {% endfor %}
                 </div>
                 {% endif %}
-
             </div>
         </div>
 
-        <!-- RIGHT: DETAILS -->
         <div class="collection-detail-info">
-
-            <div class="collection-detail-category">
-                {{ item.category.name }}
-            </div>
-
+            <div class="collection-detail-category">{{ item.category.name }}</div>
             <h1 class="collection-detail-title">{{ item.title }}</h1>
 
             {% if item.description %}
-            <p class="collection-detail-excerpt">
-                {{ item.description|striptags|truncatewords:30 }}
-            </p>
+            <p class="collection-detail-excerpt">{{ item.description|striptags|truncatewords:30 }}</p>
             {% endif %}
 
-            <!-- PRICE -->
-            <div style="font-size:22px;color:#00d2c7;margin-bottom:12px;">
-                <span id="product-price">
-                    {% if item.has_units %}
-                        {% with d=item.default_unit %}
-                            {% if d %}₹ {{ d.price }}{% else %}{{ item.price_display }}{% endif %}
-                        {% endwith %}
-                    {% else %}
-                        {{ item.price_display }}
-                    {% endif %}
-                </span>
-            </div>
-
-            <!-- ADD TO CART / BOOKING -->
-            {% if not item.is_experience %}
-            <form method="post" action="{% url 'shop:add_to_cart' %}">
-                {% csrf_token %}
-                <input type="hidden" name="product_id" value="{{ item.id }}">
-                <input type="hidden" name="qty" value="1">
-
-                {% if item.has_units %}
-                <label style="font-size:14px;margin-bottom:4px;display:block;">
-                    Size
-                </label>
+            {% if item.active_units %}
+                <label for="product-unit-select">Size</label>
                 <select id="product-unit-select" name="product_unit_id">
                     {% for u in item.active_units %}
-                        <option value="{{ u.id }}" data-price="{{ u.price }}"
-                                {% if u.is_default %}selected{% endif %}>
-                            {{ u.label }}
-                        </option>
+                        <option value="{{ u.id }}" data-price="{{ u.price }}" {% if u.is_default %}selected{% endif %}>{{ u.label }}</option>
                     {% endfor %}
                 </select>
-                {% endif %}
-
-                <button type="submit" class="cn shop">
-                    Add to Cart
-                </button>
-            </form>
             {% else %}
-<<<<<<< Updated upstream
-            {# Experience booking UI (UI-only): posts to booking endpoint; backend handles storage. #}
-            <form method="post" action="{% url 'shop:experience_booking_create' %}" class="contact-form">
-                {% csrf_token %}
-                <input type="hidden" name="experience_id" value="{{ item.id }}">
-
-                <div class="form-row">
-                    <input id="booking-name" name="customer_name" type="text" placeholder="Full name" required>
-                    <input id="booking-email" name="customer_email" type="email" placeholder="Email" required>
-                </div>
-
-                <div class="form-row">
-                    <input id="booking-phone" name="customer_phone" type="tel" placeholder="Phone (optional)">
-                    <input id="booking-date" name="preferred_date" type="text" placeholder="Preferred date (optional)">
-                </div>
-
-                <textarea id="booking-notes" name="notes" rows="3" placeholder="Notes (optional)"></textarea>
-
-                <button type="submit" class="cn shop">Request Booking</button>
-            </form>
-=======
-                <a href="{% url 'payments:booking_start' item.id %}" class="cn shop">BOOK NOW</a>
->>>>>>> Stashed changes
+                {# Experience booking UI #}
+                <form method="post" action="{% url 'shop:experience_booking_create' %}" class="contact-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="experience_id" value="{{ item.id }}">
+                    <div class="form-row">
+                        <input id="booking-name" name="customer_name" type="text" placeholder="Full name" required>
+                        <input id="booking-email" name="customer_email" type="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-row">
+                        <input id="booking-phone" name="customer_phone" type="tel" placeholder="Phone (optional)">
+                        <input id="booking-date" name="preferred_date" type="text" placeholder="Preferred date (optional)">
+                    </div>
+                    <textarea id="booking-notes" name="notes" rows="3" placeholder="Notes (optional)"></textarea>
+                    <button type="submit" class="cn shop">Request Booking</button>
+                </form>
             {% endif %}
 
             {% if item.description %}
-            <div class="collection-detail-content">
-                {{ item.description|safe }}
-            </div>
+            <div class="collection-detail-content">{{ item.description|safe }}</div>
             {% endif %}
-
-            
-
         </div>
     </div>
 </div>
@@ -199,9 +81,7 @@
 
 {% block extra_js %}
 <script>
-function ochreSwapImage(url){
-    var img = document.getElementById('ochreMainImage');
-    if(img){ img.src = url; }
-}
+function ochreSwapImage(url){ var img = document.getElementById('ochreMainImage'); if(img){ img.src = url; } }
 </script>
 {% endblock %}
+                        loading="lazy"

@@ -17,15 +17,6 @@ def feature_flags(request):
     }
 
 def contact_email(request):
-<<<<<<< Updated upstream
-    return {
-        "CONTACT_EMAIL": getattr(settings, "CONTACT_EMAIL", "")
-    }
-
-def global_feature_flags(request):
-    return feature_flags(request)
-
-=======
     """Expose CONTACT_EMAIL to templates as `CONTACT_EMAIL`."""
     return {"CONTACT_EMAIL": getattr(settings, "CONTACT_EMAIL", "contact@domain.com")}
 
@@ -49,4 +40,4 @@ def global_feature_flags(request):
         "GOOGLE_ANALYTICS_ID": getattr(settings, "GOOGLE_ANALYTICS_ID", ""),
         "META_PIXEL_ID": getattr(settings, "META_PIXEL_ID", ""),
     }
->>>>>>> Stashed changes
+

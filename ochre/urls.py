@@ -24,12 +24,7 @@ urlpatterns = [
     path("blog/", include("blog.urls", namespace="blog")),
     path("contact/", include("contact.urls", namespace="contact")),
     path("shop/", include("shop.urls", namespace="shop")),
-<<<<<<< Updated upstream
     path("payments/", include("payments.urls", namespace="payments")),
-=======
-    # Payments (Razorpay test endpoints)
-    path("payments/", include("payments.urls")),
->>>>>>> Stashed changes
 
     # CKEditor5    
     path("ckeditor5/", include("django_ckeditor_5.urls")),
