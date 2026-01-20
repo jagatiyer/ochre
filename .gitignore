@@ -24,3 +24,12 @@ media/
 # Ignore generated vendor static assets
 static/vendor/
 
+# Local safety / stash artifacts
+safety-*
+stash-*.recovered
+stash-*
+*.recovered
+*.patch
+ochre/settings.py.pre-reconciled.bak
+static/images/.DS_Store
+
