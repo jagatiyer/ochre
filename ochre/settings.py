@@ -285,6 +285,10 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+# When True, visiting a social login URL via GET will immediately
+# redirect to the provider (avoids the intermediate confirmation page).
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
 
 # Feature flags and external integrations readiness (credential-ready)
 # Do not hardcode secrets; use env vars with empty-string fallback.
@@ -303,6 +307,10 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 EMAIL_CONFIGURED = bool(EMAIL_HOST and EMAIL_HOST_USER and EMAIL_HOST_PASSWORD)
 
+# NOTE: SMTP is intentionally pending due to DNS/DLT delays for this deployment.
+# Email sending is guarded by `EMAIL_CONFIGURED` — the codebase will not fail
+# when SMTP is not configured; email hooks are non-blocking and logged.
+
 # Razorpay keys: read from env, expose a boolean indicating if test keys provided
 RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "")
 RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "")
@@ -312,6 +320,7 @@ RAZORPAY_TEST_KEYS_PROVIDED = bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET)
 MSG91_AUTH_KEY = os.environ.get("MSG91_AUTH_KEY", "")
 MSG91_SENDER_ID = os.environ.get("MSG91_SENDER_ID", "")
 MSG91_TEMPLATE_ID = os.environ.get("MSG91_TEMPLATE_ID", "")
+# NOTE: SMS (MSG91) integration is intentionally pending; hooks are stubs/logged.
 
 # Analytics / pixels
 GOOGLE_ANALYTICS_ID = os.environ.get("GOOGLE_ANALYTICS_ID", "")
