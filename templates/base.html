@@ -326,7 +326,6 @@
   </div>
 
   {# -- Age verification modal markup (no CSS changes) -- #}
-  <div id="ochre-age-modal-root" aria-hidden="true"></div>
 
   <script>
   (function(){
@@ -422,5 +421,10 @@
   </script>
 
   {% block extra_js %}{% endblock %}
+
+  {# Place modal root at document end so it escapes layout stacking contexts #}
+  <div id="ochre-age-modal-root" aria-hidden="true"></div>
+
 </body>
+</html>
 </html>

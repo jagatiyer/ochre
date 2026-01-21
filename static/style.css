@@ -508,6 +508,13 @@ header, .site-header { margin-bottom: 24px !important; }
 
 
 
+/* === AGE GATE MODAL ROOT — STACKING CONTEXT OVERRIDE === */
+body > #ochre-age-modal-root {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483647 !important; /* max safe z-index */
+  pointer-events: none;
+}
 
 /* Off-canvas mobile navigation ------------------------------------------------- */
 .mobile-nav-toggle { display: none; background: transparent; border: none; font-size: 20px; color: var(--text-primary); }
@@ -4356,6 +4363,15 @@ footer,
   margin-top: 0;
   margin-bottom: 8px;
   color: var(--text-main);
+}
+
+/* Ensure the age modal root escapes any layout stacking context so
+   the overlay/modal render above all page content. This is a
+   minimal, scoped rule. */
+#ochre-age-modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
 }
 
 #ochre-age-modal.contact-form p {
