@@ -528,8 +528,11 @@
         m.overlay.classList.add('ochre-open');
         m.modal.classList.add('ochre-open');
 
-        // focus handling
-        m.accept.focus();
+          // focus handling: focus the first interactive element inside the modal if present
+          try {
+            var firstInteractive = m.modal.querySelector('button, [tabindex]:not([tabindex="-1"]), a[href]');
+            if (firstInteractive && typeof firstInteractive.focus === 'function') firstInteractive.focus();
+          } catch (e) { /* ignore focus errors */ }
       }
 
       function removeModal(m) {
