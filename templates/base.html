@@ -379,6 +379,11 @@
         var groupsContainer = document.createElement('div');
         groupsContainer.style.display = 'none';
         groupsContainer.style.marginTop = '14px';
+        // center group buttons horizontally
+        groupsContainer.style.display = 'none';
+        groupsContainer.style.flexWrap = 'wrap';
+        groupsContainer.style.justifyContent = 'center';
+        groupsContainer.style.alignItems = 'center';
 
         // years container (hidden until a group chosen)
         var yearsContainer = document.createElement('div');
@@ -424,6 +429,8 @@
           grid.style.flexWrap = 'wrap';
           grid.style.gap = '8px';
           grid.style.marginTop = '12px';
+          // center year buttons within the grid
+          grid.style.justifyContent = 'center';
           for (var y=end; y>=start; y--) {
             var ybtn = document.createElement('button');
             ybtn.type = 'button';
@@ -459,7 +466,10 @@
             var start = parseInt(this.getAttribute('data-start'),10);
             var end = parseInt(this.getAttribute('data-end'),10);
             yearsContainer.appendChild(buildYearGrid(start,end));
-            yearsContainer.style.display = '';
+            // show as flex so the grid can be centered
+            yearsContainer.style.display = 'flex';
+            yearsContainer.style.justifyContent = 'center';
+            yearsContainer.style.alignItems = 'center';
             yearsContainer.setAttribute('aria-hidden','false');
           });
         });
@@ -468,7 +478,10 @@
         yesBtn.addEventListener('click', function(){
           entryRow.style.display = 'none';
           underageMsg.style.display = 'none';
-          groupsContainer.style.display = '';
+          // show groups as centered flex
+          groupsContainer.style.display = 'flex';
+          // re-enable background page scroll while keeping modal/overlay
+          try { document.body.style.overflow = ''; } catch (e) {}
           // focus first group
           if (groupButtons.length && typeof groupButtons[0].focus === 'function') groupButtons[0].focus();
         });
