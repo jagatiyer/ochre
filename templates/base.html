@@ -356,12 +356,46 @@
         var p = document.createElement('p');
         p.textContent = 'Please select your year of birth to confirm you are 18 or older.';
 
-        // groups container
-        var groupsContainer = document.createElement('div');
+        // entry choice buttons (Yes / No)
+        var entryRow = document.createElement('div');
+        entryRow.style.display = 'flex';
+        entryRow.style.gap = '12px';
+        entryRow.style.marginTop = '12px';
 
-        // years container (populated when a group is chosen)
+        var yesBtn = document.createElement('button');
+        yesBtn.type = 'button';
+        yesBtn.textContent = 'Yes, I am 18 or above';
+        yesBtn.className = 'cn';
+
+        var noBtn = document.createElement('button');
+        noBtn.type = 'button';
+        noBtn.textContent = 'No, I am under 18';
+        noBtn.className = 'cn stories';
+
+        entryRow.appendChild(yesBtn);
+        entryRow.appendChild(noBtn);
+
+        // groups container (hidden until YES)
+        var groupsContainer = document.createElement('div');
+        groupsContainer.style.display = 'none';
+        groupsContainer.style.marginTop = '14px';
+
+        // years container (hidden until a group chosen)
         var yearsContainer = document.createElement('div');
+        yearsContainer.style.display = 'none';
         yearsContainer.setAttribute('aria-hidden','true');
+
+        // underage message (hidden by default)
+        var underageMsg = document.createElement('div');
+        underageMsg.style.display = 'none';
+        var underP = document.createElement('p');
+        underP.textContent = 'You must be 18 years or older to enter this site.';
+        var leaveBtn = document.createElement('button');
+        leaveBtn.type = 'button';
+        leaveBtn.textContent = 'Leave site';
+        leaveBtn.className = 'cn stories';
+        underageMsg.appendChild(underP);
+        underageMsg.appendChild(leaveBtn);
 
         // predefined groups
         var groups = [
@@ -371,6 +405,7 @@
           {label: '2001 – Present', start: 2001, end: (new Date()).getFullYear()}
         ];
 
+        var groupButtons = [];
         groups.forEach(function(g){
           var btn = document.createElement('button');
           btn.type = 'button';
@@ -378,56 +413,79 @@
           btn.className = 'cn';
           btn.setAttribute('data-start', String(g.start));
           btn.setAttribute('data-end', String(g.end));
-          btn.addEventListener('click', function(){
-            // populate years grid for this group
-            yearsContainer.innerHTML = '';
-            var start = parseInt(this.getAttribute('data-start'),10);
-            var end = parseInt(this.getAttribute('data-end'),10);
-            var grid = document.createElement('div');
-            grid.style.display = 'flex';
-            grid.style.flexWrap = 'wrap';
-            grid.style.gap = '8px';
-            grid.style.marginTop = '12px';
-
-            for (var y=end; y>=start; y--) {
-              var ybtn = document.createElement('button');
-              ybtn.type = 'button';
-              ybtn.textContent = String(y);
-              ybtn.className = 'cn';
-              (function(year){
-                ybtn.addEventListener('click', function(){
-                  var currentYear = (new Date()).getFullYear();
-                  var age = currentYear - year;
-                  try {
-                    if (age >= 18) {
-                      localStorage.setItem('ochre_age_verified_v1','1');
-                      removeModal(modalObj);
-                    } else {
-                      window.location.href = 'https://www.google.com';
-                    }
-                  } catch(e) {
-                    // ignore storage errors
-                    if (age >= 18) removeModal(modalObj);
-                    else window.location.href = 'https://www.google.com';
-                  }
-                });
-              })(y);
-              grid.appendChild(ybtn);
-            }
-            yearsContainer.appendChild(grid);
-            yearsContainer.setAttribute('aria-hidden','false');
-            // focus first year button if present
-            var first = grid.querySelector('button');
-            if (first && typeof first.focus === 'function') first.focus();
-          });
-
+          groupButtons.push(btn);
           groupsContainer.appendChild(btn);
         });
 
+        // year grid builder
+        function buildYearGrid(start,end){
+          var grid = document.createElement('div');
+          grid.style.display = 'flex';
+          grid.style.flexWrap = 'wrap';
+          grid.style.gap = '8px';
+          grid.style.marginTop = '12px';
+          for (var y=end; y>=start; y--) {
+            var ybtn = document.createElement('button');
+            ybtn.type = 'button';
+            ybtn.textContent = String(y);
+            ybtn.className = 'cn';
+            (function(year){
+              ybtn.addEventListener('click', function(){
+                var currentYear = (new Date()).getFullYear();
+                var age = currentYear - year;
+                if (age >= 18) {
+                  try { localStorage.setItem('ochre_age_verified_v1','1'); } catch(e){}
+                  removeModal(modalObj);
+                } else {
+                  // show underage message
+                  groupsContainer.style.display = 'none';
+                  yearsContainer.style.display = 'none';
+                  underageMsg.style.display = '';
+                }
+              });
+            })(y);
+            grid.appendChild(ybtn);
+          }
+          return grid;
+        }
+
+        // wire group button clicks (activate styling and populate years)
+        groupButtons.forEach(function(btn){
+          btn.addEventListener('click', function(){
+            // active state: remove 'shop' class from all, add to clicked
+            groupButtons.forEach(function(b){ b.classList.remove('shop'); });
+            this.classList.add('shop');
+            yearsContainer.innerHTML = '';
+            var start = parseInt(this.getAttribute('data-start'),10);
+            var end = parseInt(this.getAttribute('data-end'),10);
+            yearsContainer.appendChild(buildYearGrid(start,end));
+            yearsContainer.style.display = '';
+            yearsContainer.setAttribute('aria-hidden','false');
+          });
+        });
+
+        // wire entry buttons
+        yesBtn.addEventListener('click', function(){
+          entryRow.style.display = 'none';
+          underageMsg.style.display = 'none';
+          groupsContainer.style.display = '';
+          // focus first group
+          if (groupButtons.length && typeof groupButtons[0].focus === 'function') groupButtons[0].focus();
+        });
+        noBtn.addEventListener('click', function(){
+          entryRow.style.display = 'none';
+          groupsContainer.style.display = 'none';
+          yearsContainer.style.display = 'none';
+          underageMsg.style.display = '';
+        });
+        leaveBtn.addEventListener('click', function(){ window.location.href = 'https://www.google.com'; });
+
         modal.appendChild(h);
         modal.appendChild(p);
+        modal.appendChild(entryRow);
         modal.appendChild(groupsContainer);
         modal.appendChild(yearsContainer);
+        modal.appendChild(underageMsg);
 
         root.appendChild(overlay);
         root.appendChild(modal);
@@ -450,10 +508,15 @@
         if (m.root && m.root.parentNode) {
           m.root.parentNode.removeChild(m.root);
         }
+        try { document.body.style.overflow = ''; } catch (e) {}
       }
 
       var modalObj = buildModal();
       if (!modalObj) return;
+      // ensure modal captures pointer events even if root has pointer-events:none
+      try { modalObj.modal.style.pointerEvents = 'auto'; modalObj.overlay.style.pointerEvents = 'auto'; } catch (e) {}
+      // prevent background scroll while modal open
+      try { document.body.style.overflow = 'hidden'; } catch (e) {}
       showModal(modalObj);
 
       // provide decline path if someone wants to leave immediately (click outside overlay)
@@ -465,8 +528,8 @@
       document.addEventListener('focus', function trapFocus(e){
         if (!modalObj.modal.contains(e.target)) {
           e.stopPropagation();
-          // focus first interactive element: first group button
-          var fg = modalObj.groupsContainer.querySelector('button');
+          // focus first interactive element: first entry button
+          var fg = modalObj.modal.querySelector('button');
           if (fg && typeof fg.focus === 'function') fg.focus();
         }
       }, true);
