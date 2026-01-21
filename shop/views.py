@@ -26,6 +26,36 @@ from django.conf import settings
 import razorpay
 
 
+def _sanitize_product_image(product):
+    """Ensure `product.image` refers to an existing storage file. If missing,
+    null out `product.image` to prevent template or code from accessing file-backed
+    attributes which may raise FileNotFoundError."""
+    try:
+        img = getattr(product, 'image', None)
+        if not img:
+            return
+        name = getattr(img, 'name', None)
+        storage = getattr(img, 'storage', None)
+        if not name or not storage:
+            # no file associated
+            product.image = None
+            return
+        # storage.exists is the canonical check; wrap in try/except
+        exists = False
+        try:
+            exists = storage.exists(name)
+        except Exception:
+            exists = False
+        if not exists:
+            product.image = None
+    except Exception:
+        # be defensive: if anything unexpected happens, remove image to avoid crashes
+        try:
+            product.image = None
+        except Exception:
+            pass
+
+
 def _is_ajax_request(request):
     return (
         request.headers.get("x-requested-with") == "XMLHttpRequest"
@@ -193,18 +223,20 @@ def cart_view(request):
         if cart:
             for ci in cart.items.select_related("product", "product_unit"):
                 line_total = ci.line_total()
-                items.append(
-                    {
-                        "product": ci.product,
-                        "product_unit": ci.product_unit,
-                        "qty": ci.qty,
-                        "unit_price": ci.unit_price,
-                        "line_total": line_total,
-                    }
-                )
+                # sanitize product image to avoid FileNotFoundError when media is missing
+                _sanitize_product_image(ci.product)
+                items.append({
+                    "product": ci.product,
+                    "product_unit": ci.product_unit,
+                    "qty": ci.qty,
+                    "unit_price": ci.unit_price,
+                    "line_total": line_total,
+                })
                 subtotal += line_total
     else:
         for row in session_cart_to_items(request):
+            # sanitize row product image as session rows include the product object
+            _sanitize_product_image(row.get('product'))
             items.append(row)
             subtotal += row["line_total"]
 
