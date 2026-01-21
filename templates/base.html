@@ -341,7 +341,6 @@
       function buildModal() {
         var root = document.getElementById('ochre-age-modal-root');
         if (!root) return null;
-
         // overlay
         var overlay = document.createElement('div');
         overlay.setAttribute('id','ochre-age-overlay');
@@ -349,36 +348,91 @@
         // modal container - reuse existing site wrapper so styles apply
         var modal = document.createElement('div');
         modal.setAttribute('id','ochre-age-modal');
-        // reuse site-level form wrapper so site button/form styles apply
         modal.className = 'contact-form';
 
-        // heading
+        // heading and description
         var h = document.createElement('h2');
         h.textContent = 'Age verification';
-
         var p = document.createElement('p');
-        p.textContent = 'You must be 18 years or older to enter this site. Please confirm.';
+        p.textContent = 'Please select your year of birth to confirm you are 18 or older.';
 
-        var accept = document.createElement('button');
-        accept.type = 'button';
-        accept.textContent = 'I am 18+';
-        // reuse site button classes used across forms
-        accept.className = 'cn';
+        // groups container
+        var groupsContainer = document.createElement('div');
 
-        var decline = document.createElement('button');
-        decline.type = 'button';
-        decline.textContent = 'Leave site';
-        decline.className = 'cn';
+        // years container (populated when a group is chosen)
+        var yearsContainer = document.createElement('div');
+        yearsContainer.setAttribute('aria-hidden','true');
+
+        // predefined groups
+        var groups = [
+          {label: '1900 – 1950', start: 1900, end: 1950},
+          {label: '1951 – 1975', start: 1951, end: 1975},
+          {label: '1976 – 2000', start: 1976, end: 2000},
+          {label: '2001 – Present', start: 2001, end: (new Date()).getFullYear()}
+        ];
+
+        groups.forEach(function(g){
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = g.label;
+          btn.className = 'cn';
+          btn.setAttribute('data-start', String(g.start));
+          btn.setAttribute('data-end', String(g.end));
+          btn.addEventListener('click', function(){
+            // populate years grid for this group
+            yearsContainer.innerHTML = '';
+            var start = parseInt(this.getAttribute('data-start'),10);
+            var end = parseInt(this.getAttribute('data-end'),10);
+            var grid = document.createElement('div');
+            grid.style.display = 'flex';
+            grid.style.flexWrap = 'wrap';
+            grid.style.gap = '8px';
+            grid.style.marginTop = '12px';
+
+            for (var y=end; y>=start; y--) {
+              var ybtn = document.createElement('button');
+              ybtn.type = 'button';
+              ybtn.textContent = String(y);
+              ybtn.className = 'cn';
+              (function(year){
+                ybtn.addEventListener('click', function(){
+                  var currentYear = (new Date()).getFullYear();
+                  var age = currentYear - year;
+                  try {
+                    if (age >= 18) {
+                      localStorage.setItem('ochre_age_verified_v1','1');
+                      removeModal(modalObj);
+                    } else {
+                      window.location.href = 'https://www.google.com';
+                    }
+                  } catch(e) {
+                    // ignore storage errors
+                    if (age >= 18) removeModal(modalObj);
+                    else window.location.href = 'https://www.google.com';
+                  }
+                });
+              })(y);
+              grid.appendChild(ybtn);
+            }
+            yearsContainer.appendChild(grid);
+            yearsContainer.setAttribute('aria-hidden','false');
+            // focus first year button if present
+            var first = grid.querySelector('button');
+            if (first && typeof first.focus === 'function') first.focus();
+          });
+
+          groupsContainer.appendChild(btn);
+        });
 
         modal.appendChild(h);
         modal.appendChild(p);
-        modal.appendChild(accept);
-        modal.appendChild(decline);
+        modal.appendChild(groupsContainer);
+        modal.appendChild(yearsContainer);
 
         root.appendChild(overlay);
         root.appendChild(modal);
 
-        return {root: root, overlay: overlay, modal: modal, accept: accept, decline: decline};
+        return {root: root, overlay: overlay, modal: modal, groupsContainer: groupsContainer, yearsContainer: yearsContainer};
       }
 
       function showModal(m) {
@@ -398,24 +452,22 @@
         }
       }
 
-      var modal = buildModal();
-      if (!modal) return;
-      showModal(modal);
+      var modalObj = buildModal();
+      if (!modalObj) return;
+      showModal(modalObj);
 
-      modal.accept.addEventListener('click', function(){
-        try { localStorage.setItem('ochre_age_verified_v1', '1'); } catch(e){}
-        removeModal(modal);
-      });
-      modal.decline.addEventListener('click', function(){
-        // redirect away; don't attempt to close window programmatically
+      // provide decline path if someone wants to leave immediately (click outside overlay)
+      modalObj.overlay.addEventListener('click', function(){
         window.location.href = 'https://www.google.com';
       });
 
       // prevent tabbing into background content while modal is open
       document.addEventListener('focus', function trapFocus(e){
-        if (!modal.modal.contains(e.target)) {
+        if (!modalObj.modal.contains(e.target)) {
           e.stopPropagation();
-          modal.accept.focus();
+          // focus first interactive element: first group button
+          var fg = modalObj.groupsContainer.querySelector('button');
+          if (fg && typeof fg.focus === 'function') fg.focus();
         }
       }, true);
     })();
