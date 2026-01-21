@@ -193,6 +193,25 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+# ============================================================
+# STATIC & MEDIA NOTE (IMPORTANT — DO NOT CHANGE CASUALLY)
+#
+# Current behavior:
+#   - Local + Server both use BASE_DIR/staticfiles and BASE_DIR/media
+#
+# Planned change (DEFERRED, DO NOT APPLY YET):
+#   - Production should use:
+#       STATIC_ROOT = /var/www/ochre/static
+#       MEDIA_ROOT  = /var/www/ochre/media
+#   - Controlled via ENV=production
+#
+# This change MUST be done together with:
+#   1. nginx alias verification
+#   2. systemd ENV injection
+#   3. collectstatic rerun
+#
+# Reference: Jan 21, 2026 stabilization discussion
+# ============================================================
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
