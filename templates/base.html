@@ -344,11 +344,15 @@
         // overlay
         var overlay = document.createElement('div');
         overlay.setAttribute('id','ochre-age-overlay');
+        // ensure overlay blocks clicks but doesn't disable pointer behavior for modal children
+        overlay.style.pointerEvents = 'auto';
 
         // modal container - reuse existing site wrapper so styles apply
         var modal = document.createElement('div');
         modal.setAttribute('id','ochre-age-modal');
         modal.className = 'contact-form';
+        // ensure modal and children receive pointer events
+        modal.style.pointerEvents = 'auto';
 
         // heading and description
         var h = document.createElement('h2');
@@ -366,11 +370,15 @@
         yesBtn.type = 'button';
         yesBtn.textContent = 'Yes, I am 18 or above';
         yesBtn.className = 'cn';
+        yesBtn.style.cursor = 'pointer';
+        yesBtn.style.pointerEvents = 'auto';
 
         var noBtn = document.createElement('button');
         noBtn.type = 'button';
         noBtn.textContent = 'No, I am under 18';
         noBtn.className = 'cn stories';
+        noBtn.style.cursor = 'pointer';
+        noBtn.style.pointerEvents = 'auto';
 
         entryRow.appendChild(yesBtn);
         entryRow.appendChild(noBtn);
@@ -399,6 +407,8 @@
         leaveBtn.type = 'button';
         leaveBtn.textContent = 'Leave site';
         leaveBtn.className = 'cn stories';
+        leaveBtn.style.cursor = 'pointer';
+        leaveBtn.style.pointerEvents = 'auto';
         underageMsg.appendChild(underP);
         underageMsg.appendChild(leaveBtn);
 
@@ -418,6 +428,9 @@
           btn.className = 'cn';
           btn.setAttribute('data-start', String(g.start));
           btn.setAttribute('data-end', String(g.end));
+          // ensure pointer cursor and events for group buttons
+          btn.style.cursor = 'pointer';
+          btn.style.pointerEvents = 'auto';
           groupButtons.push(btn);
           groupsContainer.appendChild(btn);
         });
@@ -436,6 +449,9 @@
             ybtn.type = 'button';
             ybtn.textContent = String(y);
             ybtn.className = 'cn';
+            // ensure pointer cursor and events for year buttons
+            ybtn.style.cursor = 'pointer';
+            ybtn.style.pointerEvents = 'auto';
             (function(year){
               ybtn.addEventListener('click', function(){
                 var currentYear = (new Date()).getFullYear();
