@@ -755,6 +755,18 @@ footer img.footer-site-logo {
   }
 }
 
+/* === COMMERCIALS GRID: PREVENT FULL-WIDTH SPANNING === */
+.commercials-grid > .commercial-item {
+  grid-column: auto;
+  width: 100%;
+}
+
+/* Neutralise full-width card styles when used inside grid */
+.commercials-grid .collection-card {
+  width: 100%;
+  max-width: 100%;
+}
+
 /* Commercial title styling */
 .commercial-title {
   margin-top: 8px;
