@@ -20,6 +20,7 @@ class CarouselSlide(models.Model):
 class HomePageVideo(models.Model):
     title = models.CharField(max_length=255, blank=True)
     video = models.FileField(upload_to='home/videos/')
+    embed_html = models.TextField(blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
