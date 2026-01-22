@@ -726,6 +726,52 @@ footer img.footer-site-logo {
   color: var(--accent-orange);
 }
 
+/* Commercials grid layout: responsive 3 / 2 / 1 columns */
+.commercials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.commercial-item video,
+.commercial-item iframe {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .commercials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .commercials-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Commercial title styling */
+.commercial-title {
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #222;
+  text-align: center;
+  word-break: break-word;
+}
+
+@media (max-width: 600px) {
+  .commercial-title {
+    font-size: 14px;
+  }
+}
+
 /* ------------------------------------------------------------
    NAV SHOP BUTTON
    ------------------------------------------------------------ */

@@ -11,63 +11,97 @@
     </div>
     <div class="products-scroll" style="max-width:1200px; margin:0 auto; padding:0 20px;">
       {% if videos %}
+      <div class="commercials-grid">
       {% for video in videos %}
-
-        {% if video.video and video.video.name %}
-          <div class="collection-card">
-            <video controls preload="metadata" loop muted playsinline>
-              <source src="{{ video.video.url }}">
-              Your browser does not support the video tag.
-            </video>
-            {# per-video titles intentionally omitted for grid coherence #}
-          </div>
-
-        {% elif video.embed_html %}
-          {% with emb=video.embed_html|lower %}
-            {% if "example.com" not in emb %}
+        <div class="commercial-item">
+          {% if video.video and video.video.name %}
+            <div class="commercial-media">
               <div class="collection-card">
-                {{ video.embed_html|safe }}
-                {# per-video titles intentionally omitted for grid coherence #}
+                <video controls preload="metadata" loop muted playsinline>
+                  <source src="{{ video.video.url }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
               </div>
-            {% else %}
-              {% if video.embed_url %}
-                <div class="collection-card">
-                  <div class="video-embed iframe-embed">
-                    <iframe src="{{ video.embed_url }}" allowfullscreen loading="lazy"></iframe>
+            </div>
+            {% if video.title %}
+              <h4 class="commercial-title">{{ video.title }}</h4>
+            {% endif %}
+
+          {% elif video.embed_html %}
+            {% with emb=video.embed_html|lower %}
+              {% if "example.com" not in emb %}
+                <div class="commercial-media">
+                  <div class="collection-card">
+                    {{ video.embed_html|safe }}
+                  </div>
+                </div>
+                {% if video.title %}
+                  <h4 class="commercial-title">{{ video.title }}</h4>
+                {% endif %}
+              {% else %}
+                {% if video.embed_url %}
+                  <div class="commercial-media">
+                    <div class="collection-card">
+                      <div class="video-embed iframe-embed">
+                        <iframe src="{{ video.embed_url }}" allowfullscreen loading="lazy"></iframe>
+                      </div>
+                    </div>
                   </div>
                   {% if video.title %}
-                    <p class="collection-card-title">{{ video.title }}</p>
+                    <h4 class="commercial-title">{{ video.title }}</h4>
                   {% endif %}
-                </div>
+                {% endif %}
               {% endif %}
-            {% endif %}
-          {% endwith %}
+            {% endwith %}
 
-        {% elif video.embed_url %}
-          <div class="collection-card">
-            <div class="video-embed iframe-embed">
-              <iframe src="{{ video.embed_url }}" allowfullscreen loading="lazy"></iframe>
+          {% elif video.embed_url %}
+            <div class="commercial-media">
+              <div class="collection-card">
+                <div class="video-embed iframe-embed">
+                  <iframe src="{{ video.embed_url }}" allowfullscreen loading="lazy"></iframe>
+                </div>
+              </div>
             </div>
-            {# per-video titles intentionally omitted for grid coherence #}
-          </div>
+            {% if video.title %}
+              <h4 class="commercial-title">{{ video.title }}</h4>
+            {% endif %}
 
-        {% endif %}
-
+          {% endif %}
+        </div>
       {% endfor %}
+      </div>
       {% else %}
         {# Fallback: render at least two local sample videos from repo media. Do not use external URLs. #}
-        <div class="collection-card">
-          <video controls preload="metadata" loop muted playsinline>
-            <source src="/media/commercials/videos/Blue_Black_and_Green_Minimalist_Modern_Customer_Success_Stories_Video_Message.mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
+        <div class="commercials-grid">
+          <div class="commercial-item">
+            <div class="commercial-item">
+              <div class="commercial-media">
+                <div class="collection-card">
+                  <video controls preload="metadata" loop muted playsinline>
+                    <source src="/media/commercials/videos/Blue_Black_and_Green_Minimalist_Modern_Customer_Success_Stories_Video_Message.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+              {# fallback sample title for local preview #}
+              <h4 class="commercial-title">Sample commercial</h4>
+            </div>
+          </div>
 
-        <div class="collection-card">
-          <video controls preload="metadata" loop muted playsinline>
-            <source src="/media/commercials/videos/Blue_Black_and_Green_Minimalist_Modern_Customer_Success_Stories_Video_Message.mp4">
-            Your browser does not support the video tag.
-          </video>
+          <div class="commercial-item">
+            <div class="commercial-item">
+              <div class="commercial-media">
+                <div class="collection-card">
+                  <video controls preload="metadata" loop muted playsinline>
+                    <source src="/media/commercials/videos/Blue_Black_and_Green_Minimalist_Modern_Customer_Success_Stories_Video_Message.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+              {# fallback sample title for local preview #}
+              <h4 class="commercial-title">Sample commercial</h4>
+            </div>
+          </div>
         </div>
       {% endif %}
     </div>
