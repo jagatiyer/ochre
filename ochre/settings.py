@@ -218,9 +218,19 @@ STATICFILES_DIRS = [
 #   Ochre deployment stabilization — Jan 21, 2026
 # ============================================================
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
+import os
+
+ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
+
+STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+
+if ENVIRONMENT in ("test", "live"):
+    STATIC_ROOT = "/var/www/ochre/static"
+    MEDIA_ROOT = "/var/www/ochre/media"
+else:
+    STATIC_ROOT = BASE_DIR / "staticfiles"
+    MEDIA_ROOT = BASE_DIR / "media"
 
 
 # ============================================================
