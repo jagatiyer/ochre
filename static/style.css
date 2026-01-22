@@ -618,7 +618,7 @@ body > #ochre-age-modal-root {
 /* Logo image sizing (header/footer) — minimal, responsive rules only */
 .logo img.site-logo {
   display: block;
-  max-height: 48px; /* desktop baseline */
+  max-height: 72px; /* desktop baseline (increased 50%) */
   width: auto;
   height: auto;
 }
@@ -631,12 +631,12 @@ body > #ochre-age-modal-root {
 }
 
 @media (max-width: 1024px) {
-  .logo img.site-logo { max-height: 40px; }
+  .logo img.site-logo { max-height: 60px; }
   .footer-logo img.footer-site-logo { max-height: 28px; }
 }
 
 @media (max-width: 480px) {
-  .logo img.site-logo { max-height: 32px; }
+  .logo img.site-logo { max-height: 48px; }
   .footer-logo img.footer-site-logo { max-height: 24px; }
 }
 
@@ -647,7 +647,7 @@ body > #ochre-age-modal-root {
 
 /* === GLOBAL LOGO SIZING (HEADER) === */
 header img.site-logo {
-  height: clamp(36px, 4.5vh, 56px);
+  height: clamp(54px, 4.5vh, 84px);
   width: auto;
   max-width: 180px;
   display: block;
@@ -655,7 +655,7 @@ header img.site-logo {
 
 /* Also cover this project's navbar structure where <nav class="navbar"> is used */
 .navbar img.site-logo {
-  height: clamp(36px, 4.5vh, 56px);
+  height: clamp(54px, 4.5vh, 84px);
   width: auto;
   max-width: 180px;
   display: block;
@@ -679,12 +679,12 @@ footer img.footer-site-logo {
 /* === MOBILE SAFETY === */
 @media (max-width: 768px) {
   header img.site-logo {
-    height: 34px;
+    height: 51px;
     max-width: 140px;
   }
 
   .navbar img.site-logo {
-    height: 34px;
+    height: 51px;
     max-width: 140px;
   }
 
@@ -4403,7 +4403,7 @@ header img.site-logo,
 header .navbar img.site-logo,
 .navbar header img.site-logo,
 .navbar img.site-logo {
-  height: clamp(48px, 4.2vh, 56px);
+  height: clamp(72px, 4.2vh, 84px);
   width: auto;
   max-height: none;
   display: block;
@@ -4411,7 +4411,7 @@ header .navbar img.site-logo,
 
 /* Footer slightly larger than header for visual anchor */
 footer img.footer-site-logo {
-  height: clamp(52px, 5vh, 64px);
+  height: clamp(78px, 5vh, 96px);
   width: auto;
   max-height: none;
   display: block;
@@ -4421,12 +4421,12 @@ footer img.footer-site-logo {
 @media (max-width: 768px) {
   header img.site-logo,
   .navbar img.site-logo {
-    height: clamp(32px, 4.2vh, 36px);
+    height: clamp(48px, 4.2vh, 54px);
     max-width: 160px;
   }
 
   footer img.footer-site-logo {
-    height: 40px;
+    height: 60px;
     max-width: 140px;
   }
 }

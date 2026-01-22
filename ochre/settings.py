@@ -193,26 +193,34 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
 # ============================================================
-# STATIC & MEDIA NOTE (IMPORTANT — DO NOT CHANGE CASUALLY)
+# ⚠️ STATIC & MEDIA DEPLOYMENT REMINDER (READ BEFORE DEPLOY)
 #
-# Current behavior:
-#   - Local + Server both use BASE_DIR/staticfiles and BASE_DIR/media
+# Local development:
+#   STATIC_ROOT = BASE_DIR / "staticfiles"
+#   MEDIA_ROOT  = BASE_DIR / "media"
 #
-# Planned change (DEFERRED, DO NOT APPLY YET):
-#   - Production should use:
-#       STATIC_ROOT = /var/www/ochre/static
-#       MEDIA_ROOT  = /var/www/ochre/media
-#   - Controlled via ENV=production
+# Test / Production (NGINX SERVES FROM /var/www):
+#   STATIC_ROOT = /var/www/ochre/static
+#   MEDIA_ROOT  = /var/www/ochre/media
 #
-# This change MUST be done together with:
-#   1. nginx alias verification
-#   2. systemd ENV injection
-#   3. collectstatic rerun
+# IMPORTANT:
+# - Do NOT change paths manually in code.
+# - Switching to /var/www MUST be done via ENVIRONMENT=test|live
+# - Requires:
+#     1. ENVIRONMENT set in .env
+#     2. systemd EnvironmentFile loaded
+#     3. nginx alias verified
+#     4. collectstatic re-run
 #
-# Reference: Jan 21, 2026 stabilization discussion
+# Reference:
+#   Ochre deployment stabilization — Jan 21, 2026
 # ============================================================
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 
 # ============================================================
