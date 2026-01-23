@@ -135,30 +135,26 @@
                     {% endfor %}
                 </select>
 
-                                <div class="product-option">
-                                        <label for="quantity">Quantity</label>
-                                        <div class="select-wrapper">
-                                                <select id="quantity" name="quantity" class="select-input">
-                                                    {% for i in "12345678910"|make_list %}
-                                                        <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                        </div>
-                                </div>
+                <label style="font-size:14px;margin-bottom:4px;display:block;">
+                    Quantity
+                </label>
+                <select id="quantity" name="quantity">
+                  {% for i in "12345678910"|make_list %}
+                    <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                  {% endfor %}
+                </select>
                 {% endif %}
 
-                {% if not item.has_units %}
-                                <div class="product-option">
-                                        <label for="quantity">Quantity</label>
-                                        <div class="select-wrapper">
-                                                <select id="quantity" name="quantity" class="select-input">
-                                                    {% for i in "12345678910"|make_list %}
-                                                        <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                        </div>
-                                </div>
-                {% endif %}
+                                {% if not item.has_units %}
+                                <label style="font-size:14px;margin-bottom:4px;display:block;">
+                                        Quantity
+                                </label>
+                                <select id="quantity" name="quantity">
+                                    {% for i in "12345678910"|make_list %}
+                                        <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                                    {% endfor %}
+                                </select>
+                                {% endif %}
 
                 <button type="submit" class="cn shop">
                     Add to Cart
