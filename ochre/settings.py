@@ -204,14 +204,16 @@ STATICFILES_DIRS = [
 
 import os
 
-ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "").lower()
 
+STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
 if ENVIRONMENT in ("test", "live", "production"):
     STATIC_ROOT = "/var/www/ochre/static"
     MEDIA_ROOT = "/var/www/ochre/media"
 else:
+    # LOCAL DEFAULT — SAFE
     STATIC_ROOT = BASE_DIR / "staticfiles"
     MEDIA_ROOT = BASE_DIR / "media"
 
