@@ -20,18 +20,22 @@
     <section class="cart-summary">
       {% comment %}Reuse existing cart context if available: `cart_items` with `product`, `product_unit`, `qty`, `line_total`{% endcomment %}
       {% if cart_items %}
-        <ul class="cart-items">
+        <div class="cart-summary-list">
           {% for row in cart_items %}
-            <li class="cart-item">
-              <div class="cart-item-title">{{ row.product.title }}</div>
-              {% if row.product_unit %}
-                <div class="cart-item-unit">{{ row.product_unit.label }}</div>
-              {% endif %}
-              <div class="cart-item-qty">Qty: {{ row.qty }}</div>
-              <div class="cart-item-line">{{ row.line_total }}</div>
-            </li>
+            <div class="cart-row" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+              <div class="cart-item" style="flex:1;min-width:0;">
+                <div class="cart-meta">
+                  <div class="cart-item-title">{{ row.product.title }}</div>
+                  {% if row.product_unit %}
+                    <div class="cart-item-unit">{{ row.product_unit.label }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="cart-qty" style="width:80px;text-align:center;">Qty: {{ row.qty }}</div>
+              <div class="cart-price" style="width:120px;text-align:right;">₹{{ row.line_total }}</div>
+            </div>
           {% endfor %}
-        </ul>
+        </div>
       {% else %}
         <p>Your cart is empty.</p>
       {% endif %}
