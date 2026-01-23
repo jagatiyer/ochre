@@ -195,37 +195,20 @@ STATICFILES_DIRS = [
 ]
 
 # ============================================================
-# ⚠️ STATIC & MEDIA DEPLOYMENT REMINDER (READ BEFORE DEPLOY)
+# STATIC & MEDIA DEPLOYMENT
 #
-# Local development:
-#   STATIC_ROOT = BASE_DIR / "staticfiles"
-#   MEDIA_ROOT  = BASE_DIR / "media"
-#
-# Test / Production (NGINX SERVES FROM /var/www):
-#   STATIC_ROOT = /var/www/ochre/static
-#   MEDIA_ROOT  = /var/www/ochre/media
-#
-# IMPORTANT:
-# - Do NOT change paths manually in code.
-# - Switching to /var/www MUST be done via ENVIRONMENT=test|live
-# - Requires:
-#     1. ENVIRONMENT set in .env
-#     2. systemd EnvironmentFile loaded
-#     3. nginx alias verified
-#     4. collectstatic re-run
-#
-# Reference:
-#   Ochre deployment stabilization — Jan 21, 2026
+# Local development: keep media under BASE_DIR/media
+# Test / Production: nginx serves from /var/www/ochre
+# The ENVIRONMENT env var controls the switch (local|test|live|production)
 # ============================================================
 
 import os
 
 ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
 
-STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
-if ENVIRONMENT in ("test", "live"):
+if ENVIRONMENT in ("test", "live", "production"):
     STATIC_ROOT = "/var/www/ochre/static"
     MEDIA_ROOT = "/var/www/ochre/media"
 else:
@@ -237,8 +220,7 @@ else:
 # MEDIA FILES  ✅ CRITICAL FOR BLOG IMAGES
 # ============================================================
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+# MEDIA_URL and MEDIA_ROOT are configured above according to ENVIRONMENT
 
 # TinyMCE Cloud API key - read from environment. Set this in production.
 TINYMCE_API_KEY = os.environ.get('TINYMCE_API_KEY', "")
