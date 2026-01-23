@@ -30,7 +30,9 @@
                 <button class="filter-btn {% if active_category_slug == 'all' %}active{% endif %}" data-filter="all">ALL</button>
             </a>
             {% for category in categories %}
-            <button class="filter-btn {% if active_category_slug == category.slug %}active{% endif %}" data-filter="{{ category.slug }}">{{ category.name|upper }}</button>
+            <a href="{% url 'shop:shop_index' %}?category={{ category.slug }}">
+                <button class="filter-btn {% if active_category_slug == category.slug %}active{% endif %}" data-filter="{{ category.slug }}">{{ category.name|upper }}</button>
+            </a>
             {% endfor %}
         </div>
     </div>
