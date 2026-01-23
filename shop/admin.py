@@ -62,6 +62,7 @@ class ShopItemAdmin(admin.ModelAdmin):
     # Fields shown on edit page
     fields = (
         "title",
+        "caption",
         "slug",
         "category",
         "description",

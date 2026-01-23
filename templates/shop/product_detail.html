@@ -99,10 +99,8 @@
 
             <h1 class="collection-detail-title">{{ item.title }}</h1>
 
-            {% if item.description %}
-            <p class="collection-detail-excerpt">
-                {{ item.description|striptags|truncatewords:30 }}
-            </p>
+            {% if item.caption %}
+            <p class="product-caption">{{ item.caption }}</p>
             {% endif %}
 
             <!-- PRICE -->
@@ -166,8 +164,8 @@
             {% endif %}
 
             {% if item.description %}
-            <div class="collection-detail-content">
-                {{ item.description|safe }}
+            <div class="product-description">
+                {{ item.description|linebreaks }}
             </div>
             {% endif %}
 

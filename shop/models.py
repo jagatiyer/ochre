@@ -33,6 +33,11 @@ class ShopCategory(models.Model):
 class ShopItem(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
+    caption = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Short caption shown in shop listings",
+    )
     category = models.ForeignKey(
         ShopCategory, related_name="shopitem", on_delete=models.CASCADE
     )

@@ -51,9 +51,9 @@
 
                 <h3 class="collection-card-title">{{ item.title }}</h3>
 
-                <p class="collection-card-excerpt">
-                    {{ item.description|striptags|truncatewords:20 }}
-                </p>
+                {% if item.caption %}
+                <p class="product-caption">{{ item.caption }}</p>
+                {% endif %}
 
                 {% if not item.is_experience %}
                     {% if item.has_units %}
