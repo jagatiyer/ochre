@@ -69,7 +69,8 @@ def _is_ajax_request(request):
 
 def shop_index(request):
     category_slug = request.GET.get("category")
-    categories = ShopCategory.objects.all()
+    # Use existing ShopCategory entries from admin; order for consistent UI
+    categories = ShopCategory.objects.all().order_by("name")
 
     items = ShopItem.objects.filter(published=True).select_related("category")
     if category_slug:

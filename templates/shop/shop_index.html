@@ -24,13 +24,22 @@
         <!-- TAB SELECTOR (centered) -->
 
     <!-- CATEGORY FILTERS (centered) -->
-        <!-- Shop tabs & category filters removed (frozen) -->
+    <div class="articles-section">
+        <div class="article-filters">
+            <a href="{% url 'shop:shop_index' %}">
+                <button class="filter-btn {% if active_category_slug == 'all' %}active{% endif %}" data-filter="all">ALL</button>
+            </a>
+            {% for category in categories %}
+            <button class="filter-btn {% if active_category_slug == category.slug %}active{% endif %}" data-filter="{{ category.slug }}">{{ category.name|upper }}</button>
+            {% endfor %}
+        </div>
+    </div>
 
     <!-- ITEMS GRID -->
     <div class="products-scroll" style="max-width:1200px; margin: 0 auto; padding: 0 20px;">
         {% if items %}
             {% for item in items %}
-            <div class="collection-card">
+            <div class="collection-card" data-category="{{ item.category.slug }}">
                 {% if item.image and item.image.url %}
                     <img src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy"
                          style="width:100%; border-radius:8px 8px 0 0; height:auto;">
