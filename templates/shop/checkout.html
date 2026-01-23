@@ -23,7 +23,7 @@
         <ul class="cart-items">
           {% for row in cart_items %}
             <li class="cart-item">
-              <div class="cart-item-title">{{ row.product.title|default:row.product.name }}</div>
+              <div class="cart-item-title">{{ row.product.title }}</div>
               {% if row.product_unit %}
                 <div class="cart-item-unit">{{ row.product_unit.label }}</div>
               {% endif %}
