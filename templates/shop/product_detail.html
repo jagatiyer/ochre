@@ -150,6 +150,11 @@
                 </div>
                 {% endif %}
 
+                <div class="product-total" style="margin:10px 0;font-size:18px;color:#fff;">
+                    <strong>Total: </strong>
+                    <span id="total-price">₹ {% with d=item.default_unit %}{% if d %}{{ d.price }}{% else %}{{ item.price_display }}{% endif %}{% endwith %}</span>
+                </div>
+
                                 {% if not item.has_units %}
                                 <div class="product-option">
                                         <label for="quantity">Quantity</label>
@@ -212,5 +217,40 @@ function ochreSwapImage(url){
     var img = document.getElementById('ochreMainImage');
     if(img){ img.src = url; }
 }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    function updateTotal(){
+        var sizeSelect = document.getElementById('product-unit-select');
+        var qtySelect = document.getElementById('quantity');
+        var totalEl = document.getElementById('total-price');
+        if(!totalEl) return;
+
+        var unitPrice = 0;
+        if(sizeSelect){
+            var opt = sizeSelect.options[sizeSelect.selectedIndex];
+            unitPrice = parseFloat(opt && opt.dataset && opt.dataset.price ? opt.dataset.price : 0) || 0;
+        } else {
+            // fallback: try to read product-price element's data-base-price
+            var priceEl = document.querySelector('.product-price');
+            unitPrice = priceEl && priceEl.dataset && priceEl.dataset.basePrice ? parseFloat(priceEl.dataset.basePrice) || 0 : 0;
+        }
+
+        var qty = qtySelect ? parseInt(qtySelect.value || '1', 10) : 1;
+        if(isNaN(qty) || qty < 1) qty = 1;
+
+        var total = unitPrice * qty;
+        totalEl.textContent = '₹' + total.toFixed(2);
+    }
+
+    document.addEventListener('change', function(e){
+        if(e.target && (e.target.id === 'product-unit-select' || e.target.id === 'quantity')){
+            updateTotal();
+        }
+    });
+
+    // initialize on load
+    updateTotal();
+});
 </script>
 {% endblock %}

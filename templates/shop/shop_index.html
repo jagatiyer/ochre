@@ -57,7 +57,7 @@
 
                 {% if not item.is_experience %}
                     {% if item.has_units %}
-                        <p class="product-price" data-product-id="{{ item.id }}" style="color:#fff; font-size:16px; margin-bottom:6px;">
+                        <p class="product-price" data-product-id="{{ item.id }}" data-base-price="{% with d=item.default_unit %}{% if d %}{{ d.price }}{% else %}{{ item.price }}{% endif %}{% endwith %}" style="color:#fff; font-size:16px; margin-bottom:6px;">
                             ₹ {% with d=item.default_unit %}{% if d %}{{ d.price }}{% else %}{{ item.price }}{% endif %}{% endwith %}
                         </p>
                         <p style="color:#fff; font-size:14px; margin:6px 0 4px;">Unit:</p>
