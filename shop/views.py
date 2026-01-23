@@ -96,7 +96,12 @@ def shop_index(request):
 
 def product_detail(request, slug):
     item = get_object_or_404(ShopItem, slug=slug, published=True)
-    return render(request, "shop/product_detail.html", {"item": item})
+    # Preserve selected quantity when returning to the product detail.
+    # Prefer POST (form submit) but also accept GET query param as fallback.
+    selected_quantity = request.POST.get("quantity", request.GET.get("quantity", "1"))
+
+    context = {"item": item, "selected_quantity": selected_quantity}
+    return render(request, "shop/product_detail.html", context)
 
 
 # ============================================================
