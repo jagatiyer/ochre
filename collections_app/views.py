@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import CollectionItem, CATEGORY_CHOICES
-
-from .models import CollectionItem
+from .models import CollectionItem, CollectionCategory
+from django.db import models
 
 # -----------------------------------------------------------------------------
 # COLLECTIONS LIST PAGE (matches BLOG list layout + filter UI)
@@ -10,21 +9,19 @@ from .models import CollectionItem
 def collections_index(request):
     category = request.GET.get("category", "all")
 
-    # Categories shown in the filter bar (same as blog filter style)
-    categories = [
-        ("gin", "Gin"),
-        ("vodka", "Vodka"),
-        ("whiskey", "Whiskey"),
-        ("limited", "Limited Edition"),
-    ]
+    # Categories are now admin-managed. Show only active categories ordered
+    # by the admin-defined `order` field.
+    categories = CollectionCategory.objects.filter(is_active=True).order_by("order")
 
-    # Filtering logic
+    # Filtering logic: prefer the FK relation when present, otherwise fall
+    # back to the legacy string `category` for older rows.
     if category == "all":
         items = CollectionItem.objects.filter(published=True).order_by("-created_at")
     else:
         items = CollectionItem.objects.filter(
-            category=category,
-            published=True
+            published=True,
+        ).filter(
+            models.Q(category_fk__slug=category) | models.Q(category=category)
         ).order_by("-created_at")
 
     context = {
@@ -49,11 +46,15 @@ def collectionitem_detail(request, pk):
 
 
 def collections_by_category(request, category):
-    items = CollectionItem.objects.filter(category=category).order_by("-created_at")
+    items = CollectionItem.objects.filter(published=True).filter(
+        models.Q(category_fk__slug=category) | models.Q(category=category)
+    ).order_by("-created_at")
+
+    categories = CollectionCategory.objects.filter(is_active=True).order_by("order")
 
     context = {
         "items": items,
         "active_category": category,
-        "categories": CATEGORY_CHOICES,
+        "categories": categories,
     }
     return render(request, "collections/collections_list.html", context)

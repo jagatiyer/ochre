@@ -29,11 +29,11 @@
                 </button>
             </a>
 
-            <!-- category filters -->
-            {% for value,label in categories %}
-            <a href="{% url 'collections_app:collections_by_category' value %}">
-                <button class="filter-btn {% if active_category == value %}active{% endif %}">
-                    {{ label|upper }}
+            <!-- category filters (admin-managed) -->
+            {% for category in categories %}
+            <a href="{% url 'collections_app:collections_by_category' category.slug %}">
+                <button class="filter-btn {% if active_category == category.slug %}active{% endif %}">
+                    {{ category.name|upper }}
                 </button>
             </a>
             {% endfor %}
@@ -48,7 +48,7 @@
 
             {% if items %}
                 {% for item in items %}
-                <div class="collection-card">
+                <div class="collection-card" data-category="{% if item.category_fk %}{{ item.category_fk.slug }}{% else %}{{ item.category }}{% endif %}">
 
                     <!-- Image -->
                     {% if item.cover_image %}
