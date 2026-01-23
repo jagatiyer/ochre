@@ -107,7 +107,8 @@ def product_detail(request, slug):
 def add_to_cart(request):
     product_id = request.POST.get("product_id")
     product_unit_id = request.POST.get("product_unit_id")
-    qty_raw = request.POST.get("qty", 1)
+    # Read quantity from the form. Prefer `quantity` (new) but accept legacy `qty`.
+    qty_raw = request.POST.get("quantity", request.POST.get("qty", 1))
 
     if not product_id:
         return HttpResponseBadRequest("Missing product_id")
@@ -117,7 +118,7 @@ def add_to_cart(request):
         if qty < 1:
             raise ValueError()
     except (ValueError, TypeError):
-        return HttpResponseBadRequest("Invalid qty")
+        return HttpResponseBadRequest("Invalid quantity")
 
     product = get_object_or_404(ShopItem, id=product_id, published=True)
 
@@ -155,12 +156,7 @@ def add_to_cart(request):
         cart_count = cart.items_count()
 
     else:
-        add_to_session_cart(
-            request,
-            product.id,
-            qty,
-            product_unit_id=product_unit_id,
-        )
+        add_to_session_cart(request, product.id, qty, product_unit_id=product_unit_id)
         session_cart = get_session_cart(request)
         cart_count = sum(int(v) for v in session_cart.values()) if session_cart else 0
 

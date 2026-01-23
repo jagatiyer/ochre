@@ -86,7 +86,7 @@
                         <form method="post" action="{% url 'shop:add_to_cart' %}" class="index-add-form" data-product-id="{{ item.id }}">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ item.id }}">
-                            <input type="hidden" name="qty" value="1">
+                            <input type="hidden" name="quantity" value="1">
                             <input type="hidden" name="product_unit_id" value="{% if item.default_unit %}{{ item.default_unit.id }}{% endif %}">
                             <button type="submit" class="cn shop index-add-btn" {% if item.has_units and not item.default_unit %}disabled{% endif %}>Add to Cart</button>
                         </form>
