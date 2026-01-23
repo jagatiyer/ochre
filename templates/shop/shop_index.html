@@ -39,7 +39,7 @@
     <div class="products-scroll" style="max-width:1200px; margin: 0 auto; padding: 0 20px;">
         {% if items %}
             {% for item in items %}
-            <div class="collection-card" data-category="{{ item.category.slug }}">
+            <div class="collection-card" data-category="{% if item.category %}{{ item.category.slug }}{% else %}{{ item.category }}{% endif %}">
                 {% if item.image and item.image.url %}
                     <img src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy"
                          style="width:100%; border-radius:8px 8px 0 0; height:auto;">
