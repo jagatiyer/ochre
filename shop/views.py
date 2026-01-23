@@ -321,6 +321,16 @@ def checkout_view(request):
         {
             "cart": cart,
             "items": cart.items.select_related("product"),
+            # Provide explicit cart_items list for template rendering (product, product_unit, qty, line_total)
+            "cart_items": [
+                {
+                    "product": ci.product,
+                    "product_unit": ci.product_unit,
+                    "qty": ci.qty,
+                    "line_total": ci.line_total(),
+                }
+                for ci in cart.items.select_related("product", "product_unit")
+            ],
             "subtotal": subtotal,
             "tax_total": tax_total,
             "total": total,

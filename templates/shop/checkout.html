@@ -25,7 +25,7 @@
             <li class="cart-item">
               <div class="cart-item-title">{{ row.product.title|default:row.product.name }}</div>
               {% if row.product_unit %}
-                <div class="cart-item-unit">{{ row.product_unit.name }}</div>
+                <div class="cart-item-unit">{{ row.product_unit.label }}</div>
               {% endif %}
               <div class="cart-item-qty">Qty: {{ row.qty }}</div>
               <div class="cart-item-line">{{ row.line_total }}</div>
