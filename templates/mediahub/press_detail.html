@@ -10,21 +10,25 @@
 
     <div class="press-detail-header">
 
+        <a href="{% url 'mediahub:media_index' %}" class="back-to-collections">
+            ← Back to Press & Media
+        </a>
+
         <p class="press-detail-meta">
             <span class="pub">{{ article.publication_name }}</span>
             <span class="dot">•</span>
             <span class="date">{{ article.date|date:"F d, Y" }}</span>
         </p>
 
-        <h1 class="press-detail-title">
-            {{ article.title }}
-        </h1>
+        <h2 class="press-detail-title">
+            {% if article.title|length > 80 %}
+                {{ article.title|truncatechars:80 }}
+            {% else %}
+                {{ article.title }}
+            {% endif %}
+        </h2>
 
-        {% if article.external_link %}
-        <a href="{{ article.external_link }}" target="_blank" class="external-link-btn">
-            Read Original <i class="fa-solid fa-arrow-up-right-from-square"></i>
-        </a>
-        {% endif %}
+        {% comment %} CTA moved to end of article area per client brief {% endcomment %}
     </div>
 
     {% if article.cover_image %}
@@ -35,13 +39,16 @@
 
     <div class="press-detail-content">
         {{ article.description|safe }}
-        {{ article.content|safe }}
+        {# Full article body is not rendered; admin should provide an external link instead. #}
     </div>
 
     <div class="press-detail-footer">
-        <a href="{% url 'mediahub:media_index' %}" class="back-btn">
-            <i class="fa-solid fa-arrow-left"></i> Back to Press & Media
+        {% if article.external_link %}
+        <a href="{{ article.external_link }}" target="_blank" rel="noopener noreferrer" class="cn shop">
+            Read Full Article <i class="fa-solid fa-arrow-up-right-from-square"></i>
         </a>
+        {% endif %}
+
     </div>
 
 </div>
