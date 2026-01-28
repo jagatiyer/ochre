@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from .models import CarouselSlide, HomePageVideo, HomeContentSection
+from .models import CarouselSlide, HomePageVideo, HomeContentSection, HomeSectionHeader
 from shop.models import ShopItem
 
 
@@ -45,6 +45,8 @@ def index(request):
     # home content sections (admin-managed blocks)
     home_content_sections = HomeContentSection.objects.filter(is_active=True).order_by('order')
     context['home_content_sections'] = home_content_sections
+    # global header configuration for home sections (singleton)
+    context['home_section_header'] = HomeSectionHeader.objects.first()
     return render(request, "home/index.html", context)
 # append to home/views.py
 

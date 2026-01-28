@@ -48,6 +48,12 @@ class HomeContentSection(models.Model):
         (POSITION_RIGHT, 'Right'),
     ]
 
+    header = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Section header shown above the content block on the Home page",
+    )
+
     title = models.CharField(max_length=255)
     body = models.TextField()
     image = models.ImageField(upload_to='home/sections/')
@@ -61,3 +67,29 @@ class HomeContentSection(models.Model):
 
     def __str__(self):
         return self.title or f"HomeContentSection {self.pk}"
+
+
+class HomeSectionHeader(models.Model):
+    top_label = models.CharField(
+        max_length=120,
+        blank=True,
+        help_text="Small red label shown above the title (e.g. THE OCHRE WORLD)",
+    )
+
+    title = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Main section title (Playfair Display)",
+    )
+
+    description = models.TextField(
+        blank=True,
+        help_text="Section description (Satoshi)",
+    )
+
+    class Meta:
+        verbose_name = "Home Page - Content Section Header"
+        verbose_name_plural = "Home Page - Content Section Header"
+
+    def __str__(self):
+        return self.title or "Home Section Header"

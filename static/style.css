@@ -615,82 +615,42 @@ body > #ochre-age-modal-root {
   color: var(--accent-red);
 }
 
-/* Logo image sizing (header/footer) — minimal, responsive rules only */
-.logo img.site-logo {
-  display: block;
-  max-height: 72px; /* desktop baseline (increased 50%) */
-  width: auto;
-  height: auto;
-}
-
-/* Footer slightly smaller */
+/* Logo image sizing (header/footer) — neutralized earlier constraints
+   Earlier rules set restrictive max-heights which caused inconsistent
+   sizing across media queries. Leave sizing to the final authoritative
+   block at the end of this file. */
+   /*
+.logo img.site-logo,
 .footer-logo img.footer-site-logo {
-  max-height: 32px;
+  display: block;
   width: auto;
   height: auto;
+  max-height: none;
 }
-
-@media (max-width: 1024px) {
-  .logo img.site-logo { max-height: 60px; }
-  .footer-logo img.footer-site-logo { max-height: 28px; }
-}
-
-@media (max-width: 480px) {
-  .logo img.site-logo { max-height: 48px; }
-  .footer-logo img.footer-site-logo { max-height: 24px; }
-}
-
+*/
 /* ============================
    GLOBAL LOGO SIZING (ADDED)
    Appended to end to ensure override safety
    ============================ */
 
-/* === GLOBAL LOGO SIZING (HEADER) === */
-header img.site-logo {
-  height: clamp(54px, 4.5vh, 84px);
-  width: auto;
-  max-width: 180px;
-  display: block;
-}
-
-/* Also cover this project's navbar structure where <nav class="navbar"> is used */
+/* GLOBAL LOGO SIZING (NEUTRALIZED)
+   Earlier rules used clamp()/fixed heights which caused downstream
+   media queries to collapse the footer logo. Neutralize here so the
+   final authoritative block at EOF determines precise sizes. */
+header img.site-logo,
 .navbar img.site-logo {
-  height: clamp(54px, 4.5vh, 84px);
   width: auto;
-  max-width: 180px;
+  height: auto;
+  max-height: none;
   display: block;
 }
 
-/* Align logo visually with navbar text */
-header .navbar,
-header nav,
-.navbar {
-  align-items: center;
-}
-
-/* === FOOTER LOGO (SLIGHTLY SMALLER) === */
-footer img.footer-site-logo {
-  height: clamp(28px, 3.5vh, 44px);
-  width: auto;
-  max-width: 160px;
-  display: block;
-}
-
-/* === MOBILE SAFETY === */
+/* No mobile-specific logo caps here — EOF block will handle sizing */
 @media (max-width: 768px) {
-  header img.site-logo {
-    height: 51px;
-    max-width: 140px;
-  }
-
+  header img.site-logo,
   .navbar img.site-logo {
-    height: 51px;
-    max-width: 140px;
-  }
-
-  footer img.footer-site-logo {
-    height: 28px;
-    max-width: 120px;
+    height: auto;
+    max-width: none;
   }
 }
 
@@ -4481,41 +4441,49 @@ footer,
 }
 
 
-/* ==========================
-   LOGO OVERRIDES (HIGH-SPECIFICITY, APPEND-ONLY)
-   Ensure header/footer sizing meets the industry-standard targets
-   ========================== */
-
-/* Desktop header ~48-56px, mobile ~32-36px */
+/* FINAL LOGO SCALE — HEADER + FOOTER UNIFIED */
+/* FINAL LOGO SCALE — HEADER (primary anchor) */
 header img.site-logo,
-header .navbar img.site-logo,
-.navbar header img.site-logo,
 .navbar img.site-logo {
-  height: clamp(72px, 4.2vh, 84px);
+  height: 92px;
   width: auto;
-  max-height: none;
   display: block;
 }
 
-/* Footer slightly larger than header for visual anchor */
-footer img.footer-site-logo {
-  height: clamp(78px, 5vh, 96px);
-  width: auto;
-  max-height: none;
-  display: block;
-}
-
-/* Mobile safety */
 @media (max-width: 768px) {
   header img.site-logo,
   .navbar img.site-logo {
-    height: clamp(48px, 4.2vh, 54px);
-    max-width: 160px;
+    height: 68px;
   }
+}
 
+/* FOOTER LOGO — balanced for 3-column layout */
+footer img.footer-site-logo {
+  height: 68px; /* visually balanced vs 92px header */
+  width: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
   footer img.footer-site-logo {
-    height: 60px;
-    max-width: 140px;
+    height: 48px;
+  }
+}
+
+/* Footer layout: 3 equal columns on desktop, stacked on mobile */
+.footer-main {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: start;
+  padding: 40px 20px;
+}
+
+@media (max-width: 768px) {
+  .footer-main {
+    grid-template-columns: 1fr;
+    padding: 40px 20px 30px;
+    gap: 20px;
   }
 }
 

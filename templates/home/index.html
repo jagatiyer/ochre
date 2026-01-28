@@ -1,198 +1,252 @@
-{# templates/home/index.html #}
+<!-- templates/home/index.html -->
 {% extends "base.html" %}
+
+<!-- =========================================================
+  EXTRA HEAD — homepage-only styles
+  ========================================================= -->
+{% block extra_head %}
+{{ block.super }}
+{% include 'shop/includes/product_unit_styles.html' %}
+<style>
+  /* ===============================
+     HERO CAROUSEL
+     =============================== */
+  .carousel {
+    position: relative;
+    width: 100%;
+    max-width: var(--container-width);
+    margin: 24px auto;
+    overflow: hidden;
+    border-radius: 8px;
+    max-height: 88vh;
+  }
+  .carousel-track {
+    display: flex;
+    transition: transform 400ms ease;
+    will-change: transform;
+  }
+  .carousel-slide {
+    min-width: 100%;
+    position: relative;
+  }
+  .carousel-slide img {
+    width: 100%;
+    height: clamp(390px, 65vh, 900px);
+    object-fit: cover;
+    display: block;
+  }
+  .carousel-caption {
+    position: absolute;
+    left: 28px;
+    bottom: 22px;
+    color: #fff;
+  }
+  .carousel-caption h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.45);
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    font-size: 26px;
+    cursor: pointer;
+    z-index: 10;
+  }
+  .carousel-arrow.left { left: 8px; }
+  .carousel-arrow.right { right: 8px; }
+
+  .carousel-dots {
+    position: absolute;
+    left: 50%;
+    bottom: 12px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+  .carousel-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    border: none;
+    cursor: pointer;
+  }
+  .carousel-dots .dot.active {
+    background: var(--accent-red);
+  }
+
+  /* Reduce gap below CTA buttons (client request) */
+  .home-cta-buttons {
+    margin-bottom: 24px;
+  }
+
+  @media (max-width:768px) {
+    .carousel-slide img {
+      height: clamp(235px, 50vh, 470px);
+    }
+  }
+</style>
+{% endblock %}
+
+<!-- =========================================================
+  MAIN CONTENT
+  ========================================================= -->
 {% block content %}
 
 <div class="main">
   <div class="content home-content">
-    {% if carousel_slides and carousel_slides|length > 0 %}
-    <!-- HOMEPAGE CAROUSEL -->
+
+     <!-- ===============================
+       HERO CAROUSEL (images / videos)
+       =============================== -->
+    {% if carousel_slides %}
     <section class="home-hero">
-    <div class="carousel" id="home-carousel" data-autoplay-seconds="{{ carousel_slides.0.auto_slide_seconds|default:5 }}">
-      <div class="carousel-track">
-        {% for slide in carousel_slides %}
-        <div class="carousel-slide" data-index="{{ forloop.counter0 }}">
-          {% if forloop.first %}
-          <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}" width="1600" height="700" loading="eager" decoding="sync" fetchpriority="high" style="object-fit: cover;">
-          {% else %}
-          <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}" width="1600" height="700" loading="lazy" decoding="async" fetchpriority="low" style="object-fit: cover;">
-          {% endif %}
-          {% if slide.title or slide.cta_text %}
-          <div class="carousel-caption">
-            {% if slide.title %}<h3>{{ slide.title }}</h3>{% endif %}
-            {% if slide.cta_text %}<a class="cn carousel-cta" href="{{ slide.cta_url|default:'#' }}">{{ slide.cta_text }}</a>{% endif %}
+      <div class="carousel" id="home-carousel" data-autoplay-seconds="{{ carousel_slides.0.auto_slide_seconds|default:5 }}">
+        <div class="carousel-track">
+          {% for slide in carousel_slides %}
+          <div class="carousel-slide" data-index="{{ forloop.counter0 }}">
+            <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}">
+            {% if slide.title or slide.cta_text %}
+            <div class="carousel-caption">
+              {% if slide.title %}<h3>{{ slide.title }}</h3>{% endif %}
+              {% if slide.cta_text %}
+                <a class="cn carousel-cta" href="{{ slide.cta_url|default:'#' }}">{{ slide.cta_text }}</a>
+              {% endif %}
+            </div>
+            {% endif %}
           </div>
-          {% endif %}
+          {% endfor %}
         </div>
-        {% endfor %}
-      </div>
 
-      <button class="carousel-arrow left" aria-label="Previous slide">‹</button>
-      <button class="carousel-arrow right" aria-label="Next slide">›</button>
+        <button class="carousel-arrow left">‹</button>
+        <button class="carousel-arrow right">›</button>
 
-      <div class="carousel-dots">
-        {% for slide in carousel_slides %}
-          <button class="dot" data-index="{{ forloop.counter0 }}" aria-label="Go to slide {{ forloop.counter }}"></button>
-        {% endfor %}
+        <div class="carousel-dots">
+          {% for slide in carousel_slides %}
+            <button class="dot" data-index="{{ forloop.counter0 }}"></button>
+          {% endfor %}
+        </div>
       </div>
-    </div>
+    </section>
     {% endif %}
-  {% block extra_head %}
-  {{ block.super }}
-  {% include 'shop/includes/product_unit_styles.html' %}
-  <style>
-    /* Scoped carousel styles */
-    /* Pull carousel slightly up to compensate for global header padding; homepage-only spacing control */
-    /* Reduced negative margin to avoid overlap; ensure CTA buttons remain visible above the fold on small devices */
-    .carousel {
-      position: relative;
-      width: 100%;
-      max-width: var(--container-width);
-      margin: 24px auto;
-      padding-top: 0;
-      overflow: hidden;
-      border-radius: 8px;
-      max-height: 88vh;
-    }
-    .carousel-track { display: flex; transition: transform 400ms ease; will-change: transform; }
-    .carousel-slide { min-width: 100%; position: relative; touch-action: pan-y; }
-    .carousel-slide img { width: 100%; height: clamp(390px, 65vh, 900px); object-fit: cover; object-position: center; display: block; }
-    .carousel-caption { position: absolute; left: 28px; bottom: 22px; color: #fff; }
-    .carousel-caption h3 { font-size: 22px; margin-bottom: 8px; font-family: 'Playfair Display', serif; }
-    .carousel-cta { display: inline-block; margin-top: 6px; }
 
-    .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.45); color: #fff; border: none; padding: 10px 14px; font-size: 26px; cursor: pointer; z-index: 10; }
-    .carousel-arrow.left { left: 8px; }
-    .carousel-arrow.right { right: 8px; }
-
-    .carousel-dots { position: absolute; left: 50%; transform: translateX(-50%); bottom: 12px; display:flex; gap:8px; z-index: 10; }
-    .carousel-dots .dot { width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.35); border:none; cursor:pointer; }
-    .carousel-dots .dot.active { background: var(--accent-red); }
-
-    @media (max-width:768px) {
-      .carousel { margin-bottom: 16px; }
-      .carousel-slide img { height: clamp(235px, 50vh, 470px); }
-      .carousel-caption { left: 14px; right: 14px; bottom: 14px; }
-    }
-
-    @media (max-width:480px) {
-      .carousel-slide img { height: clamp(210px, 45vh, 390px); }
-      .carousel { margin-bottom: 12px; }
-      .carousel-caption h3 { font-size: 18px; }
-    }
-
-    /* CTA spacing now controlled by carousel bottom margin; reset buttons margin to avoid double-spacing */
-    .buttons { margin-top: 0; }
-  </style>
-  {% endblock %}
-
-  {% block extra_js %}
-  <script>
-    (function(){
-      const carousel = document.getElementById('home-carousel');
-      if (!carousel) return;
-
-      const track = carousel.querySelector('.carousel-track');
-      const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
-      const dots = Array.from(carousel.querySelectorAll('.dot'));
-      const left = carousel.querySelector('.carousel-arrow.left');
-      const right = carousel.querySelector('.carousel-arrow.right');
-      let index = 0;
-      const autoSeconds = parseInt(carousel.dataset.autoplaySeconds || 5) || 5;
-      let timer = null;
-
-      function goTo(i){
-        index = (i + slides.length) % slides.length;
-        track.style.transform = `translateX(-${index * 100}%)`;
-        dots.forEach(d=>d.classList.toggle('active', Number(d.dataset.index)===index));
-      }
-
-      function next(){ goTo(index+1); }
-      function prev(){ goTo(index-1); }
-
-      right && right.addEventListener('click', ()=>{ next(); resetTimer(); });
-      left && left.addEventListener('click', ()=>{ prev(); resetTimer(); });
-
-      dots.forEach(d => d.addEventListener('click', function(){ goTo(Number(this.dataset.index)); resetTimer(); }));
-
-      function startTimer(){ stopTimer(); timer = setInterval(next, autoSeconds * 1000); }
-      function stopTimer(){ if (timer) { clearInterval(timer); timer = null; } }
-      function resetTimer(){ stopTimer(); startTimer(); }
-
-      carousel.addEventListener('mouseenter', stopTimer);
-      carousel.addEventListener('mouseleave', startTimer);
-
-      // touch support with directional detection to avoid hijacking vertical scroll
-      let startX = 0, startY = 0, isScrolling = undefined;
-      carousel.addEventListener('touchstart', (e)=>{ startX = e.touches[0].clientX; startY = e.touches[0].clientY; isScrolling = undefined; stopTimer(); });
-      carousel.addEventListener('touchmove', (e)=>{
-        if (e.touches.length > 1) return; // ignore multi-touch
-        const dx = e.touches[0].clientX - startX;
-        const dy = e.touches[0].clientY - startY;
-        if (typeof isScrolling === 'undefined') { isScrolling = Math.abs(dy) > Math.abs(dx); }
-        if (!isScrolling) { e.preventDefault(); } // horizontal intent: prevent vertical page move while swiping slides
-      }, { passive: false });
-      carousel.addEventListener('touchend', (e)=>{ const dx = e.changedTouches[0].clientX - startX; if (Math.abs(dx) > 40 && !isScrolling) { if (dx > 0) prev(); else next(); } startTimer(); });
-
-      // keyboard
-      document.addEventListener('keydown', function(e){ if (e.key === 'ArrowLeft') prev(); if (e.key === 'ArrowRight') next(); });
-
-      // init
-      if (dots.length) dots[0].classList.add('active');
-      goTo(0);
-      startTimer();
-    })();
-  </script>
-  {% include 'includes/product_unit_script.html' %}
-  {% endblock %}
-
-    <!-- CTA BUTTONS -->
+     <!-- ===============================
+       CTA BUTTONS
+       =============================== -->
     <div class="buttons home-cta-buttons">
       <button class="cn shop">
-        <a href="{% url 'shop:shop_index' %}">SHOP ACCESSORIES</a>
+        <a href="{% url 'shop:shop_index' %}">SHOP</a>
       </button>
-
       <button class="cn stories">
-        <a href="{% url 'story:story_page' %}">READ OUR STORIES</a>
+        <a href="{% url 'story:story_page' %}">OUR STORY</a>
       </button>
     </div>
-
-    </section>
 
   </div>
 
+    <!-- ===============================
+      HANDPICKED SELECTION
+      =============================== -->
   <section class="collections-page">
     <div class="collections-header">
-        <div class="craft-spirits">
-          <span class="dash">—</span> HANDPICKED SELECTION <span class="dash">—</span>
-        </div>
+      <div class="craft-spirits">
+        <span class="dash">—</span> HANDPICKED SELECTION <span class="dash">—</span>
+      </div>
 
-        <h1>Our Featured Selection</h1>
+      <h1>The House Favourites</h1>
+      <p class="subtitle"><em>Bar-quality, without compromise.</em></p>
 
-        <p class="description">
-            These are the products our team recommends—chosen for quality, tested in real kitchens.
-        </p>
+      <p class="description">
+        Our most poured cocktail premixes are crafted with precision, balanced for clarity,
+        and designed to deliver a consistent, refined serve every time.
+        No excess. No shortcuts. Just the cocktail, as it should be.
+      </p>
     </div>
+
     {% include "home/includes/featured_products.html" with products=featured_products %}
   </section>
-  
-  <div class="buttons home-cta-buttons"></div>
 
+    <!-- ===============================
+      VIDEO COMMERCIALS
+      =============================== -->
   <section class="collections-page">
     <div class="collections-header">
-        <div class="craft-spirits">
-          <span class="dash">—</span> Watch Our Videos <span class="dash">—</span>
-        </div>
+      <div class="craft-spirits">
+        <span class="dash">—</span> WATCH OUR VIDEOS <span class="dash">—</span>
+      </div>
 
-        <h1>Ochre in Motion</h1>
+      <h1>Ochre Digital Video Commercials</h1>
+      <p class="subtitle"><em>We document culture. The pours are incidental.</em></p>
 
-        <p class="description">
-            See techniques, timing, and tips you can only learn by watching—
-            from searing to plating, in real time.
-        </p>
+      <p class="description">
+        Ochre doesn’t make ads. We make films which are observations of how modern
+        celebration actually looks, sounds, and feels.
+      </p>
     </div>
+
     {% include "home/includes/home_videos.html" with home_videos=home_videos %}
   </section>
+
+    <!-- ===============================
+      THE OCHRE WORLD
+      =============================== -->
   {% include "home/includes/home_content_sections.html" with home_content_sections=home_content_sections %}
+
 </div>
 
+{% endblock %}
+
+<!-- =========================================================
+  EXTRA JS — homepage-only scripts
+  ========================================================= -->
+{% block extra_js %}
+<script>
+(function(){
+  const carousel = document.getElementById('home-carousel');
+  if (!carousel) return;
+
+  const track = carousel.querySelector('.carousel-track');
+  const slides = carousel.querySelectorAll('.carousel-slide');
+  const dots = carousel.querySelectorAll('.dot');
+  const left = carousel.querySelector('.carousel-arrow.left');
+  const right = carousel.querySelector('.carousel-arrow.right');
+  let index = 0;
+  let timer = null;
+  const autoSeconds = parseInt(carousel.dataset.autoplaySeconds || 5);
+
+  function goTo(i){
+    index = (i + slides.length) % slides.length;
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach(d => d.classList.toggle('active', Number(d.dataset.index) === index));
+  }
+
+  function next(){ goTo(index + 1); }
+  function prev(){ goTo(index - 1); }
+
+  function start(){
+    stop();
+    timer = setInterval(next, autoSeconds * 1000);
+  }
+  function stop(){
+    if (timer) clearInterval(timer);
+  }
+
+  right && right.addEventListener('click', () => { next(); start(); });
+  left && left.addEventListener('click', () => { prev(); start(); });
+  dots.forEach(d => d.addEventListener('click', () => { goTo(Number(d.dataset.index)); start(); }));
+
+  goTo(0);
+  start();
+})();
+</script>
+
+{% include 'includes/product_unit_script.html' %}
 {% endblock %}

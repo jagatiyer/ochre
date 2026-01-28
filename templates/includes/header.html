@@ -1,18 +1,31 @@
-{# templates/includes/header.html #}
+<!-- templates/includes/header.html -->
 {% load static %}
 {% with current=request.resolver_match.url_name %}
 
 <nav class="navbar" role="navigation" aria-label="Main navigation">
   <div class="nav-left icon">
     <a href="{% url 'home' %}" class="logo-link" aria-label="Home">
+
+      <!-- ===============================
+        LOGO — INCREASED SIZE (CLIENT REQUEST)
+        =============================== -->
       <h2 class="logo">
-        <img src="{% static 'images/ochre_logo_leaf.png' %}" alt="Ochre" class="site-logo"/>
+        <img
+          src="{% static 'images/ochre_logo_leaf.png' %}"
+          alt="Ochre"
+          class="site-logo"
+        />
       </h2>
+
     </a>
   </div>
 
-  <!-- Mobile hamburger: visible only on small screens via CSS -->
-  <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-controls="main-menu" aria-expanded="false" aria-label="Open navigation">
+  <!-- Mobile hamburger -->
+  <button id="mobile-nav-toggle"
+          class="mobile-nav-toggle"
+          aria-controls="main-menu"
+          aria-expanded="false"
+          aria-label="Open navigation">
     <span class="sr-only">Open navigation</span>
     <i class="fa fa-bars" aria-hidden="true"></i>
   </button>
@@ -20,11 +33,7 @@
   <div class="menu" id="main-menu" aria-hidden="true">
     <ul class="nav-menu" role="menubar">
 
-      <li>
-        <a href="{% url 'home' %}" class="{% if current == 'home' %}active{% endif %}">
-          HOME
-        </a>
-      </li>
+      <li><a href="{% url 'home' %}" class="{% if current == 'home' %}active{% endif %}">HOME</a></li>
 
       <li>
         <a href="{% url 'collections_app:collections_index' %}"
@@ -40,19 +49,20 @@
         </a>
       </li>
 
-      <!-- STORY removed from top-level nav—available under MEDIA dropdown only -->
-
       <li class="nav-dropdown-wrapper">
         <div class="nav-dropdown" id="media-dropdown-wrapper">
-          <button id="media-toggle" class="nav-link nav-dropdown-toggle {% if current == 'media_index' or current == 'blog_list' or current == 'story_page' %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
+          <button id="media-toggle"
+                  class="nav-link nav-dropdown-toggle {% if current == 'media_index' or current == 'blog_list' or current == 'story_page' %}active{% endif %}"
+                  aria-haspopup="true"
+                  aria-expanded="false">
             MEDIA
             <i class="fa fa-chevron-down" aria-hidden="true" style="margin-left:8px;font-size:12px;"></i>
           </button>
 
           <div id="media-dropdown" class="nav-dropdown-menu" aria-hidden="true" role="menu">
-            <a role="menuitem" href="{% url 'mediahub:media_index' %}" class="dropdown-item {% if current == 'media_index' %}active{% endif %}">Media</a>
-            <a role="menuitem" href="{% url 'blog:blog_list' %}" class="dropdown-item {% if current == 'blog_list' %}active{% endif %}">Blog</a>
-            <a role="menuitem" href="{% url 'story:story_page' %}" class="dropdown-item {% if current == 'story_page' %}active{% endif %}">Story</a>
+            <a href="{% url 'mediahub:media_index' %}" class="dropdown-item">Media</a>
+            <a href="{% url 'blog:blog_list' %}" class="dropdown-item">Blog</a>
+            <a href="{% url 'story:story_page' %}" class="dropdown-item">Story</a>
           </div>
         </div>
       </li>
@@ -64,8 +74,7 @@
       </li>
 
       <li>
-        <a href="{% url 'shop:shop_index' %}"
-           class="{% if current == 'shop_index' %}active{% endif %}">
+        <a href="{% url 'shop:shop_index' %}" class="{% if current == 'shop_index' %}active{% endif %}">
           SHOP
         </a>
       </li>
@@ -73,7 +82,6 @@
       <li class="nav-icons">
 
         {% if user.is_authenticated %}
-
           <div class="user-dropdown-wrapper">
             <button id="user-toggle" class="icon-link user-toggle">
               <i class="fa-regular fa-user"></i>
@@ -84,40 +92,29 @@
                 <span class="u-name">{{ user.first_name|default:user.username }}</span>
                 <span class="u-email">{{ user.email }}</span>
               </div>
-
               <a href="{% url 'users:profile' %}" class="dropdown-item">Profile</a>
-
               <form method="post" action="{% url 'account_logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="logout-btn">Logout</button>
               </form>
             </div>
           </div>
-
         {% else %}
           <a href="{% url 'account_login' %}" class="icon-link">
             <i class="fa-regular fa-user"></i>
           </a>
         {% endif %}
 
-        {# ✅ FIXED CART LINK #}
-        <a href="{% url 'shop:cart_view' %}?next={% url 'shop:cart_view' %}"
-           class="icon-link cart-link"
-           aria-label="Cart">
+        <a href="{% url 'shop:cart_view' %}" class="icon-link cart-link" aria-label="Cart">
           <i class="fa fa-shopping-cart cart-icon"></i>
-          <span class="cart-badge"
-                aria-hidden="{% if cart_count %}false{% else %}true{% endif %}">
-            {{ cart_count|default:0 }}
-          </span>
+          <span class="cart-badge">{{ cart_count|default:0 }}</span>
         </a>
 
       </li>
-
     </ul>
   </div>
 </nav>
 
-<!-- mobile nav overlay (dimming background) -->
 <div id="mobile-nav-overlay" class="mobile-nav-overlay" tabindex="-1" aria-hidden="true"></div>
 
 {% endwith %}

@@ -1,78 +1,67 @@
 {% load static %}
 
 <footer class="footer">
+
   <div class="footer-main">
+
+     <!-- ===============================
+       BRAND COLUMN
+       =============================== -->
     <div class="footer-column">
       <h2 class="footer-logo">
-        <img src="{% static 'images/ochre_logo_leaf.png' %}" alt="Ochre" class="site-logo footer-site-logo" />
+        <img src="{% static 'images/ochre_logo_leaf.png' %}"
+             alt="Ochre"
+             class="site-logo footer-site-logo" />
       </h2>
+
       <p class="footer-tagline">
-        Redefining craft spirits with innovation and inclusivity. 
-        Celebrating tradition with a modern twist.
+        Ochre is built around people, places, and the moments they choose to celebrate.
       </p>
     </div>
 
+     <!-- ===============================
+       SUPPORT (CLEANED)
+       =============================== -->
     <div class="footer-column">
-      <h3 class="footer-heading">EXPLORE</h3>
+      <h3 class="footer-heading">SUPPORT</h3>
       <ul class="footer-links">
-        <li><a href="{% url 'collections_app:collections_index' %}">Collections</a></li>
-        <li><a href="{% url 'story:story_page' %}">Our Story</a>
-</li>
-        <li><a href="#">The Process</a></li>
-        {% comment %} <li><a href="{% url 'blog_index' %}">Blog</a></li> {% endcomment %}
-<li><a href="{% url 'blog:blog_list' %}">BLOG</a></li>
-
-      </ul>
-    </div>
-
-    <div class="footer-column">
-      <h3 class="footer-heading support">SUPPORT</h3>
-      <ul class="footer-links">
-        <li><a href="{% url 'contact:contact_page' %}
-">Contact</a></li>
-        <li><a href="#">Events</a></li>
+        <li><a href="{% url 'contact:contact_page' %}">Contact</a></li>
         <li><a href="#">Privacy</a></li>
         <li><a href="#">Terms</a></li>
       </ul>
     </div>
 
+     <!-- ===============================
+       CONNECT (SOCIAL ONLY)
+       =============================== -->
     <div class="footer-column">
-      <h3 class="footer-heading connect">CONNECT</h3>
-      <div class="social-connect">
-        <i class="fa-brands fa-instagram"></i>
-        <p>Follow our journey on social media for exclusive content & updates</p>
+      <h3 class="footer-heading">CONNECT</h3>
+
+      <div class="social-connect" style="display:flex;gap:16px;align-items:center;">
+        <a href="#" aria-label="Instagram">
+          <i class="fa-brands fa-instagram" style="font-size:22px;"></i>
+        </a>
+        <a href="#" aria-label="LinkedIn">
+          <i class="fa-brands fa-linkedin" style="font-size:22px;"></i>
+        </a>
       </div>
+
+      <p style="margin-top:12px;">
+        Follow Ochre for culture, craft, and modern celebration.
+      </p>
     </div>
-  </div>
 
-  <div class="footer-divider"></div>
-
-  <div class="footer-experience">
-    <h2 class="experience-footer-title">
-      Experience <span>Excellence</span>
-    </h2>
-    <p class="experience-footer-description">
-      Discover our collection of exceptional spirits crafted with passion and innovation.
-    </p>
-
-    <div class="footer-experience-buttons">
-      <button class="cn collections">
-        <a href="{% url 'collections_app:collections_index' %}">VIEW COLLECTIONS</a>
-      </button>
-      <button class="cn shop-now">
-        <a href="{% url 'shop:shop_index' %}
-">SHOP NOW</a>
-      </button>
-    </div>
   </div>
 
   <div class="footer-divider"></div>
 
   <div class="footer-bottom">
-    <p class="copyright">© Ochre Spirits. All rights reserved.</p>
+    <p class="copyright">
+      © Ochre Spirits. All rights reserved.
+    </p>
     <p class="disclaimer">
-     <span class="footer-dot">•</span>
-    <span class="footer-text">Please drink responsibly</span>
+      • Please drink responsibly
     </p>
   </div>
+
 </footer>
