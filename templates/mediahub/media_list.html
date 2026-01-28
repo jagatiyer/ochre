@@ -31,23 +31,25 @@
 
       {% if featured %}
         {% for article in featured %}
-          <div class="press-card">
+          <div class="press-card collection-card">
 
             {% if article.cover_image and article.cover_image.url %}
               <img src="{{ article.cover_image.url }}" alt="{{ article.title }}" loading="lazy">
             {% endif %}
 
+            <!-- Text block: publication, title, date -->
             <div>
               <p class="collection-card-excerpt">{{ article.publication_name|upper }}</p>
 
               <h3 class="collection-card-title">{{ article.title|truncatechars:90 }}</h3>
 
               <p class="collection-card-excerpt">{{ article.date|date:"F j, Y" }}</p>
+            </div>
 
-              <div class="card-actions">
-                <div class="right-action">
-                  <a href="{% url 'mediahub:press_detail' article.slug %}" class="collection-card-btn">READ ARTICLE</a>
-                </div>
+            <!-- CTA below the text block, subtle link style -->
+            <div class="card-actions">
+              <div class="left-action">
+                <a href="{% url 'mediahub:press_detail' article.slug %}" class="cn">Read article →</a>
               </div>
             </div>
 
