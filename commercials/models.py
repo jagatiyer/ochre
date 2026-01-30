@@ -9,6 +9,8 @@ class CommercialVideo(models.Model):
 	# Optional embed fields: either `embed_url` (direct video URL) or `embed_html` (iframe/embed code)
 	embed_url = models.CharField(max_length=800, blank=True)
 	embed_html = models.TextField(blank=True)
+	# Optional thumbnail image for grid preview
+	thumbnail = models.ImageField(upload_to='commercials/thumbnails/', blank=True, null=True)
 	order = models.PositiveIntegerField(default=0)
 	is_active = models.BooleanField(default=True)
 	created_at = models.DateTimeField(auto_now_add=True)
