@@ -33,3 +33,15 @@ stash-*
 ochre/settings.py.pre-reconciled.bak
 static/images/.DS_Store
 
+# Database (never push)
+*.sqlite3
+db.sqlite3
+
+# Local media files
+media/
+
+# Helper scripts (local only)
+scripts/
+
+# Migration for thumbnail field (apply manually on server)
+commercials/migrations/0002_*
