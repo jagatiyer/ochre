@@ -398,6 +398,94 @@ html, body { overflow-x: hidden; }
 
 /* Keep content vertically centered inside slides */
 .carousel .carousel-slide { display:flex !important; align-items:center !important; justify-content:flex-start !important; }
+  
+/* Commercial thumbnail block rules (surgical) */
+.commercial-thumbnail {
+  width: 100%;
+  height: 280px;
+  background: #1a1a1a;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.commercial-thumbnail img,
+.commercial-thumbnail video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-placeholder {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Modal overlay + content + close button (ensure modal can be closed via overlay and X) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 9999;
+}
+
+.modal-content {
+  max-width: 1000px;
+  margin: 5vh auto;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* Strong reset so CTAs/styles don't leak into modal close */
+.modal-close {
+    all: unset !important;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    color: white;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    z-index: 10001;
+}
+
+/* Prevent modal close from inheriting CTA styles */
+.modal-close,
+.video-modal-close,
+[data-modal-close] {
+    all: unset;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    color: white;
+    font-size: 2rem;
+    line-height: 1;
+    text-align: center;
+    z-index: 10001;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+}
 .carousel .carousel-caption { transform: none !important; }
 
 @media (max-width: 768px) {
@@ -681,6 +769,92 @@ header img.site-logo,
   transition: color 0.25s ease;
 }
 
+  /* Commercials grid - enforce top alignment and fixed media height so titles align */
+  .commercials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    align-items: start; /* ensure all cards align at the top */
+  }
+
+  .commercial-item,
+  .commercial-card {
+    display: flex;
+    flex-direction: column;
+    background: #1a1a1a;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.25s ease;
+    height: 100%;
+  }
+
+  .commercial-item:hover,
+  .commercial-card:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Media element fixed height for alignment */
+  .commercial-item .commercial-media > .collection-card > img,
+  .commercial-item .commercial-media > .collection-card > video,
+  .commercial-card > img,
+  .commercial-card > video,
+  .commercial-card .thumbnail-placeholder {
+    width: 100%;
+    height: 280px; /* fixed height */
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .thumbnail-placeholder {
+    background: #333;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 280px;
+  }
+
+  .commercial-item .commercial-content,
+  .commercial-card .commercial-content {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .commercial-content h3,
+  .commercial-content h4,
+  .collection-card-title {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem 0;
+    color: #fff;
+    line-height: 1.3;
+  }
+
+  .commercial-content p {
+    margin: 0;
+    color: #aaa;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 768px) {
+    .commercials-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Minimal commercial-card interaction rules (surgical) */
+  .commercial-card {
+      cursor: pointer;
+      transition: transform 0.2s;
+  }
+  .commercial-card:hover {
+      transform: translateY(-4px);
+  }
+
 .menu ul li a:hover,
 .menu ul li a.active {
   color: var(--accent-orange);
@@ -736,6 +910,54 @@ header img.site-logo,
   color: #222;
   text-align: center;
   word-break: break-word;
+}
+
+/* Commercial card container and spacing */
+.commercial-item,
+.commercial-card {
+  background: #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.commercial-item:hover,
+.commercial-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Video / thumbnail spacing */
+.commercial-item video,
+.commercial-card video,
+.commercial-item img,
+.commercial-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 1.5rem; /* gap between media and title */
+}
+
+/* Text grouping inside card */
+.commercial-item .commercial-content,
+.commercial-card .commercial-content {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.commercial-item h3,
+.commercial-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem; /* small gap between title and description */
+  color: #fff;
+  line-height: 1.3;
+}
+
+.commercial-item p,
+.commercial-card p {
+  font-size: 0.9rem;
+  color: #aaa;
+  line-height: 1.5;
+  margin: 0;
 }
 
 @media (max-width: 600px) {
@@ -4485,6 +4707,93 @@ footer img.footer-site-logo {
     padding: 40px 20px 30px;
     gap: 20px;
   }
+}
+
+
+
+
+
+/* -------------------------
+   Video modal styles
+   ------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 9998;
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 9999;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow: auto;
+  background: #111;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+
+.modal-content {
+  padding: 1.25rem 1.5rem 2rem;
+  color: #fff;
+}
+
+.modal .close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  color: #fff;
+  font-size: 2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.modal .close:hover { color: #ddd; }
+
+.modal-video-container { width:100%; margin-bottom:1.5rem; }
+.video-ratio { position: relative; width: 100%; aspect-ratio: 16 / 9; background:#000; }
+.video-ratio .modal-video, .video-ratio iframe, .video-ratio video { position: absolute; inset: 0; width:100%; height:100%; border:0; display:block; }
+
+.modal-video { width:100%; height:100%; display:block; }
+
+/* modal text alignment */
+#modal-title, #modal-description, .modal h2, .modal p { text-align: left; }
+
+@media (max-width: 768px) {
+  .modal { width: 95%; }
+  .modal-content { padding: 0.75rem; }
+  .modal .close { font-size: 1.5rem; top: 0.25rem; right: 0.5rem; }
+}
+
+/* Improved Modal title/description spacing */
+#modal-title, .modal-title,
+.video-modal h2, .video-modal h3 {
+    margin: 1.5rem 0 0.5rem 0;
+    font-size: 1.5rem;
+}
+
+#modal-description, .modal-description,
+.video-modal p {
+    margin: 0.5rem 0 0 0;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+/* Universal fallback spacing for modal content children */
+.video-modal-content > * + * {
+    margin-top: 1.5rem;
+}
+
+.video-modal-content h2,
+.video-modal-content h3 {
+    margin-bottom: 0.5rem;
 }
 
 

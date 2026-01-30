@@ -3,8 +3,8 @@ from .models import CommercialVideo
 
 
 def index(request):
-    videos = CommercialVideo.objects.filter(is_active=True).order_by('order')
+    commercials = CommercialVideo.objects.filter(is_active=True).order_by('-created_at')
     return render(request, 'commercials/index.html', {
-        'videos': videos,
+        'commercials': commercials,
         'current': 'commercials',
     })
