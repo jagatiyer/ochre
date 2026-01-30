@@ -14,59 +14,70 @@
       <div class="commercials-grid">
       {% for video in videos %}
         <div class="commercial-item">
-          {% if video.video and video.video.name %}
-            <div class="commercial-media">
-              <div class="collection-card">
-                <video controls preload="metadata" loop muted playsinline>
-                  <source src="{{ video.video.url }}" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-            </div>
-            {% if video.title %}
-              <h4 class="commercial-title">{{ video.title }}</h4>
-            {% endif %}
-
-          {% elif video.embed_html %}
-            {% with emb=video.embed_html|lower %}
-              {% if "example.com" not in emb %}
-                <div class="commercial-media">
-                  <div class="collection-card">
-                    {{ video.embed_html|safe }}
-                  </div>
+          <a href="#" class="commercial-card-link" aria-label="Open commercial: {{ video.title }}">
+            {% if video.video and video.video.name %}
+              <div class="commercial-media">
+                <div class="collection-card">
+                  <video controls preload="metadata" loop muted playsinline>
+                    <source src="{{ video.video.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
-                {% if video.title %}
-                  <h4 class="commercial-title">{{ video.title }}</h4>
-                {% endif %}
-              {% else %}
-                {% if video.embed_url %}
+              </div>
+              {% if video.title %}
+                <h4 class="collection-card-title">{{ video.title }}</h4>
+              {% endif %}
+
+            {% elif video.embed_html %}
+              {% with emb=video.embed_html|lower %}
+                {% if "example.com" not in emb %}
                   <div class="commercial-media">
                     <div class="collection-card">
-                      <div class="video-embed iframe-embed">
-                        <iframe src="{{ video.embed_url }}" allowfullscreen loading="lazy"></iframe>
-                      </div>
+                      {{ video.embed_html|safe }}
                     </div>
                   </div>
                   {% if video.title %}
-                    <h4 class="commercial-title">{{ video.title }}</h4>
+                    <h4 class="collection-card-title">{{ video.title }}</h4>
+                  {% endif %}
+                {% else %}
+                  {% if video.embed_url %}
+                    <div class="commercial-media">
+                      <div class="collection-card">
+                        <div class="video-embed iframe-embed">
+                          <iframe src="{{ video.embed_url }}" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                      </div>
+                    </div>
+                    {% if video.title %}
+                      <h4 class="collection-card-title">{{ video.title }}</h4>
+                    {% endif %}
                   {% endif %}
                 {% endif %}
-              {% endif %}
-            {% endwith %}
+              {% endwith %}
 
-          {% elif video.embed_url %}
-            <div class="commercial-media">
-              <div class="collection-card">
-                <div class="video-embed iframe-embed">
-                  <iframe src="{{ video.embed_url }}" allowfullscreen loading="lazy"></iframe>
+            {% elif video.embed_url %}
+              <div class="commercial-media">
+                <div class="collection-card">
+                  <div class="video-embed iframe-embed">
+                    <iframe src="{{ video.embed_url }}" allowfullscreen loading="lazy"></iframe>
+                  </div>
                 </div>
               </div>
-            </div>
-            {% if video.title %}
-              <h4 class="commercial-title">{{ video.title }}</h4>
+              {% if video.title %}
+                <h4 class="collection-card-title">{{ video.title }}</h4>
+              {% endif %}
             {% endif %}
 
-          {% endif %}
+            {# Description: show truncated text in grid, store full text hidden for modal #}
+            {% if video.description %}
+              {% if video.description|length > 120 %}
+                <p class="collection-card-excerpt">{{ video.description|slice:":120" }}… <span class="more">more…</span></p>
+                <div class="full-desc" hidden>{{ video.description }}</div>
+              {% else %}
+                <p class="collection-card-excerpt">{{ video.description }}</p>
+              {% endif %}
+            {% endif %}
+          </a>
         </div>
       {% endfor %}
       </div>
@@ -74,37 +85,212 @@
         {# Fallback: render at least two local sample videos from repo media. Do not use external URLs. #}
         <div class="commercials-grid">
           <div class="commercial-item">
-            <div class="commercial-item">
+            <a href="#" class="commercial-card-link">
               <div class="commercial-media">
                 <div class="collection-card">
                   <video controls preload="metadata" loop muted playsinline>
-                    <source src="/media/commercials/videos/Blue_Black_and_Green_Minimalist_Modern_Customer_Success_Stories_Video_Message.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
+                      <source src="/media/commercials/videos/Blue_Black_and_Green_Minimalist_Modern_Customer_Success_Stories_Video_Message.mp4" type="video/mp4">
+                      Your browser does not support the video tag.
+                    </video>
                 </div>
               </div>
               {# fallback sample title for local preview #}
-              <h4 class="commercial-title">Sample commercial</h4>
-            </div>
+              <h4 class="collection-card-title">Sample commercial</h4>
+            </a>
           </div>
 
           <div class="commercial-item">
-            <div class="commercial-item">
+            <a href="#" class="commercial-card-link">
               <div class="commercial-media">
                 <div class="collection-card">
                   <video controls preload="metadata" loop muted playsinline>
-                    <source src="/media/commercials/videos/Blue_Black_and_Green_Minimalist_Modern_Customer_Success_Stories_Video_Message.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
+                      <source src="/media/commercials/videos/Blue_Black_and_Green_Minimalist_Modern_Customer_Success_Stories_Video_Message.mp4" type="video/mp4">
+                      Your browser does not support the video tag.
+                    </video>
                 </div>
               </div>
               {# fallback sample title for local preview #}
-              <h4 class="commercial-title">Sample commercial</h4>
-            </div>
+              <h4 class="collection-card-title">Sample commercial</h4>
+            </a>
           </div>
         </div>
       {% endif %}
     </div>
   </section>
 
+{% endblock %}
+
+{% block extra_js %}
+<style>
+/* Scoped modal video containment (local to commercials modal) */
+#ochre-age-modal { max-width: 90vw !important; max-height: 90vh !important; overflow: auto !important; }
+#ochre-age-modal .modal-video-wrap { width:100%; max-width:100%; overflow:hidden; border-radius:12px; }
+#ochre-age-modal .video-ratio { position:relative; width:100%; aspect-ratio:16/9; background:#000; }
+#ochre-age-modal .video-ratio.is-portrait { aspect-ratio:9/16; }
+#ochre-age-modal .video-ratio iframe, #ochre-age-modal .video-ratio video { position:absolute; inset:0; width:100%; height:100%; border:0; display:block; }
+#ochre-age-modal .modal-content { overflow: visible; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function removeExistingModal() {
+    var root = document.getElementById('ochre-age-modal-root');
+    if (!root) return;
+    var oldOverlay = document.getElementById('ochre-age-overlay');
+    var oldModal = document.getElementById('ochre-age-modal');
+    if (oldOverlay && oldOverlay.parentNode) oldOverlay.parentNode.removeChild(oldOverlay);
+    if (oldModal && oldModal.parentNode) oldModal.parentNode.removeChild(oldModal);
+    // remove any globally-registered handlers for this modal
+    try {
+      if (window.__ochre_media_modal_handlers) {
+        if (window.__ochre_media_modal_handlers.esc) document.removeEventListener('keydown', window.__ochre_media_modal_handlers.esc);
+        if (window.__ochre_media_modal_handlers.tab) document.removeEventListener('keydown', window.__ochre_media_modal_handlers.tab);
+        window.__ochre_media_modal_handlers = null;
+      }
+    } catch (e) {}
+  }
+
+  function buildMediaModal(clonedMedia, titleText, fullDescHtml) {
+    var root = document.getElementById('ochre-age-modal-root');
+    if (!root) return null;
+    removeExistingModal();
+
+    var overlay = document.createElement('div');
+    overlay.id = 'ochre-age-overlay';
+
+    var modal = document.createElement('div');
+    modal.id = 'ochre-age-modal';
+    modal.className = 'contact-form';
+    modal.style.pointerEvents = 'auto';
+
+    // create a small, subtle icon close button inside the modal
+    var closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    // reuse existing icon pattern and add a semantic modal-close class
+    closeBtn.className = 'modal-close icon-link';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.title = 'Close';
+    closeBtn.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>';
+
+    // Minimal inline positioning only (isolation against stylesheet overrides)
+    // neutralise CTA styles via inline overrides (isolated to this element only)
+    closeBtn.setAttribute('style', 'position:absolute; top:12px; right:12px; padding:0; font-size:18px; background:transparent !important; border:none !important; cursor:pointer; color:var(--text-main); z-index:10001; line-height:1; width:auto !important; height:auto !important; min-width:unset !important; box-shadow:none !important;');
+
+    closeBtn.addEventListener('click', function(){ removeExistingModal(); });
+
+    var mediaWrapper = document.createElement('div');
+    mediaWrapper.className = 'modal-content';
+    mediaWrapper.style.marginBottom = '14px';
+
+    // Wrap iframe/video in a responsive ratio container to prevent overflow
+    var mediaEl = clonedMedia.querySelector('iframe, video');
+    if (mediaEl) {
+      // create wrappers
+      var modalVideoWrap = document.createElement('div');
+      modalVideoWrap.className = 'modal-video-wrap';
+      var ratio = document.createElement('div');
+      ratio.className = 'video-ratio';
+
+      // default to 16:9; if element has data-portrait attribute, use portrait ratio
+      if (mediaEl.hasAttribute('data-portrait')) {
+        ratio.classList.add('is-portrait');
+      }
+
+      // move mediaEl into ratio
+      var originalParent = mediaEl.parentNode;
+      // detach mediaEl safely
+      mediaEl = mediaEl.cloneNode(true);
+      // ensure the media fills the ratio container
+      mediaEl.style.position = 'absolute';
+      mediaEl.style.inset = '0';
+      mediaEl.style.width = '100%';
+      mediaEl.style.height = '100%';
+      mediaEl.style.border = '0';
+      ratio.appendChild(mediaEl);
+      modalVideoWrap.appendChild(ratio);
+
+      mediaWrapper.appendChild(modalVideoWrap);
+      // append any other cloned content (like captions) after the video
+      // remove original media from cloned to avoid duplicates
+      try { var toRemove = clonedMedia.querySelector('iframe, video'); if (toRemove && toRemove.parentNode) toRemove.parentNode.removeChild(toRemove); } catch (e) {}
+      // append the remaining cloned content (titles/descriptions) inside wrapper
+      // cloned may include title elements; append them after the video wrapper
+      Array.prototype.slice.call(clonedMedia.childNodes).forEach(function(n){
+        // skip empty text nodes
+        if (n && n.nodeType === 1) mediaWrapper.appendChild(n.cloneNode(true));
+      });
+    } else {
+      // fallback: no iframe/video found — append cloned media as-is
+      mediaWrapper.appendChild(clonedMedia);
+    }
+
+    var h = document.createElement('h2');
+    h.textContent = titleText || '';
+
+    var p = document.createElement('p');
+    if (fullDescHtml) p.innerHTML = fullDescHtml;
+
+    overlay.addEventListener('click', function(){ removeExistingModal(); });
+
+    // append close button first so it visually floats above content
+    modal.appendChild(closeBtn);
+    modal.appendChild(mediaWrapper);
+    modal.appendChild(h);
+    modal.appendChild(p);
+
+    root.appendChild(overlay);
+    root.appendChild(modal);
+
+    // focus trap: keep tabbing within modal
+    function focusableElements(root) {
+      return Array.prototype.slice.call(root.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+        .filter(function(el){ return !el.hasAttribute('disabled'); });
+    }
+
+    function escHandler(e){ if (e.key === 'Escape') removeExistingModal(); }
+    document.addEventListener('keydown', escHandler);
+
+    // basic tab trap
+    function tabHandler(e) {
+      if (e.key !== 'Tab') return;
+      var focusables = focusableElements(modal);
+      if (!focusables.length) return;
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+    document.addEventListener('keydown', tabHandler);
+
+    // expose handlers so removeExistingModal can clean up
+    try { window.__ochre_media_modal_handlers = { esc: escHandler, tab: tabHandler }; } catch (e) {}
+
+    // focus first focusable element inside modal
+    try { var f = focusableElements(modal); if (f.length) f[0].focus(); } catch (e) {}
+
+    return {destroy: function(){ document.removeEventListener('keydown', escHandler); document.removeEventListener('keydown', tabHandler); removeExistingModal(); }};
+  }
+
+  document.querySelectorAll('.commercials-grid .commercial-item a.commercial-card-link').forEach(function(el){
+    el.addEventListener('click', function(ev){
+      ev.preventDefault();
+      var media = el.querySelector('.commercial-media .collection-card');
+      if (!media) return;
+      var cloned = media.cloneNode(true);
+      var v = cloned.querySelector('video');
+      if (v) { v.muted = false; v.removeAttribute('muted'); }
+      var titleEl = el.querySelector('.collection-card-title');
+      var titleText = titleEl ? titleEl.textContent.trim() : '';
+      var fullDesc = '';
+      var fullEl = el.querySelector('.full-desc');
+      if (fullEl) fullDesc = fullEl.innerHTML;
+      else { var excerpt = el.querySelector('.collection-card-excerpt'); if (excerpt) fullDesc = excerpt.textContent || ''; }
+      buildMediaModal(cloned, titleText, fullDesc);
+    });
+  });
+});
+</script>
 {% endblock %}
