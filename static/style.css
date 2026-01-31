@@ -772,8 +772,8 @@ header img.site-logo,
   /* Commercials grid - enforce top alignment and fixed media height so titles align */
   .commercials-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
     align-items: start; /* ensure all cards align at the top */
   }
 
@@ -863,8 +863,8 @@ header img.site-logo,
 /* Commercials grid layout: responsive 3 / 2 / 1 columns */
 .commercials-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
 }
 
 .commercial-item video,
@@ -878,7 +878,7 @@ header img.site-logo,
 /* Tablet */
 @media (max-width: 1024px) {
   .commercials-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -893,6 +893,23 @@ header img.site-logo,
 .commercials-grid > .commercial-item {
   grid-column: auto;
   width: 100%;
+}
+
+/* Ensure the commercials grid wrapper expands to full available content width
+   and remove artificial max-width constraints from inline wrappers like
+   `.products-scroll` or generic `.container` on the commercials page. */
+.media-page.commercials-page .products-scroll {
+  width: 100%;
+  max-width: none !important;
+  padding: 0 6vw;
+  margin: 0 auto;
+}
+
+.media-page.commercials-page .container {
+  width: 100%;
+  max-width: none !important;
+  padding: 0 6vw;
+  margin: 0 auto;
 }
 
 /* Neutralise full-width card styles when used inside grid */
