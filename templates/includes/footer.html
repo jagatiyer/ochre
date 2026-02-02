@@ -23,6 +23,18 @@
        SUPPORT (CLEANED)
        =============================== -->
     <div class="footer-column">
+      <h3 class="footer-heading">EXPLORE</h3>
+      <ul class="footer-links">
+        {% for page in footer_static_pages %}
+          <li><a href="{% url 'static_page' page.slug %}">{{ page.title }}</a></li>
+        {% empty %}
+          <li><a href="{% url 'blog:blog_list' %}">Blog</a></li>
+        {% endfor %}
+      </ul>
+
+    </div>
+
+    <div class="footer-column">
       <h3 class="footer-heading">SUPPORT</h3>
       <ul class="footer-links">
         <li><a href="{% url 'contact:contact_page' %}">Contact</a></li>

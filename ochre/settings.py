@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "collections_app",
     "shop.apps.ShopConfig",
     "contact",
+    "pages",
     "story",
     "users",
     # Image thumbnailing
@@ -117,6 +118,8 @@ TEMPLATES = [
                 "ochre.context_processors.contact_email",
                 # Global feature flags for templates
                 "ochre.context_processors.global_feature_flags",
+                # Pages app: footer links
+                "pages.context_processors.footer_static_pages",
             ],
         },
     }

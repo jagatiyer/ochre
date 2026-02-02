@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 
 from home import views as home_views
 from story import views as story_views
+from pages import views as pages_views
 
 # --------------------------------------------------
 # URL PATTERNS (MUST BE DEFINED FIRST)
@@ -25,6 +26,8 @@ urlpatterns = [
     path("contact/", include("contact.urls", namespace="contact")),
     path("shop/", include("shop.urls", namespace="shop")),
     path("payments/", include("payments.urls", namespace="payments")),
+    # Static pages (editable via admin) — explicit isolated route
+    path("pages/<slug:slug>/", pages_views.staticpage_detail, name="static_page"),
 
     # CKEditor5    
     path("ckeditor5/", include("django_ckeditor_5.urls")),

@@ -17,9 +17,11 @@
     <article class="blog-main">
 
       <header class="blog-header">
+        {% if not is_static_page %}
         <p class="craft-spirits">
           <span class="dash">—</span>BLOG<span class="dash">—</span>
         </p>
+        {% endif %}
 
         <h1>{{ post.title }}</h1>
 
@@ -40,11 +42,13 @@
         {{ post.content|safe }}
       </div>
 
+      {% if not is_static_page %}
       <div style="margin-top:40px;">
         <a href="{% url 'blog:blog_list' %}" class="back-to-collections">
           ← Back to Blog
         </a>
       </div>
+      {% endif %}
 
     </article>
 
