@@ -19,18 +19,7 @@
       Craft, clarity and conversations around spirits and culture.
     </p>
     
-    <!-- Categories (filters) -->
-    <div class="article-filters" aria-label="category-filters">
-      <!-- Permanent ALL filter (always visible). Active when no filter or filter=all -->
-      <a
-        href="?filter=all"
-        class="filter-btn {% if active_filter == 'all' %}active{% endif %}">
-        ALL
-      </a>
-      {% for value,label in tags %}
-        <a href="?filter={{ value }}" class="filter-btn {% if active_filter == value %}active{% endif %}">{{ label|upper }}</a>
-      {% endfor %}
-    </div>
+    {# Categories (filters) removed per UI requirement: hide category pills/filters on blog list. #}
   </div>
 
 
