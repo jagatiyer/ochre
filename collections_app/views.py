@@ -47,16 +47,22 @@ def collectionitem_detail(request, pk):
 
 
 def collections_by_category(request, category):
-    # Dedicated category route: use only the authoritative FK relation.
-    items = (
+    # EXEC VIEW: ensure this route only uses the FK relation.
+    print("EXEC VIEW:", request.path)
+    print("CATEGORY SLUG:", category)
+
+    qs = (
         CollectionItem.objects.filter(published=True, category_fk__slug=category)
         .order_by("-created_at")
     )
 
+    # Debug: count of matching items
+    print("COUNT:", qs.count())
+
     categories = CollectionCategory.objects.filter(is_active=True).order_by("order")
 
     context = {
-        "items": items,
+        "items": qs,
         "active_category": category,
         "categories": categories,
     }
