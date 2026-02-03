@@ -18,11 +18,17 @@ def collections_index(request):
     if category == "all":
         items = CollectionItem.objects.filter(published=True).order_by("-created_at")
     else:
-        items = CollectionItem.objects.filter(
-            published=True,
-        ).filter(
-            models.Q(category_fk__slug=category) | models.Q(category=category)
-        ).order_by("-created_at")
+        # Only fall back to the legacy string `category` when the FK is
+        # not populated. This prevents the default value on the legacy
+        # `category` field from matching all rows unintentionally.
+        items = (
+            CollectionItem.objects.filter(published=True)
+            .filter(
+                models.Q(category_fk__slug=category)
+                | (models.Q(category_fk__isnull=True) & models.Q(category__iexact=category))
+            )
+            .order_by("-created_at")
+        )
 
     context = {
         "items": items,
@@ -46,9 +52,14 @@ def collectionitem_detail(request, pk):
 
 
 def collections_by_category(request, category):
-    items = CollectionItem.objects.filter(published=True).filter(
-        models.Q(category_fk__slug=category) | models.Q(category=category)
-    ).order_by("-created_at")
+    items = (
+        CollectionItem.objects.filter(published=True)
+        .filter(
+            models.Q(category_fk__slug=category)
+            | (models.Q(category_fk__isnull=True) & models.Q(category__iexact=category))
+        )
+        .order_by("-created_at")
+    )
 
     categories = CollectionCategory.objects.filter(is_active=True).order_by("order")
 
