@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import CollectionItem, CollectionCategory
 from django.db import models
+from django.urls import reverse
 
 # -----------------------------------------------------------------------------
 # COLLECTIONS LIST PAGE (matches BLOG list layout + filter UI)
@@ -41,7 +42,40 @@ def collections_index(request):
 
 def collectionitem_detail(request, pk):
     item = get_object_or_404(CollectionItem, pk=pk)
-    return render(request, "collections/collectionitem_detail.html", {"item": item})
+
+    # Build ordered list of published items (ascending by created_at)
+    items = list(CollectionItem.objects.filter(published=True).order_by("created_at"))
+
+    # Find current index and compute cyclic previous/next
+    current_index = next(
+        i for i, obj in enumerate(items) if obj.pk == item.pk
+    )
+    previous_item = items[current_index - 1]
+    next_item = items[(current_index + 1) % len(items)]
+
+    # Compute explicit URLs (do not monkey-patch model methods at runtime)
+    previous_url = reverse("collections_app:collectionitem_detail", args=[previous_item.pk])
+    next_url = reverse("collections_app:collectionitem_detail", args=[next_item.pk])
+
+    context = {
+        "item": item,
+        "previous_item": previous_item,
+        "next_item": next_item,
+        "previous_url": previous_url,
+        "next_url": next_url,
+    }
+
+    # Debug instrumentation (temporary)
+    print("COLLECTION DETAIL VIEW HIT")
+    print("TEMPLATE:", "collections/collectionitem_detail.html")
+    print("PREVIOUS URL:", previous_url)
+    print("NEXT URL:", next_url)
+
+    return render(
+        request,
+        "collections/collectionitem_detail.html",
+        context,
+    )
 
 
 

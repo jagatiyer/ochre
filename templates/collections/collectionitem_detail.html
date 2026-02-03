@@ -2,6 +2,11 @@
 {% load static %}
 
 {% block content %}
+<div class="collection-back-link">
+    <a href="{% url 'collections_app:collections_index' %}" class="back-link">
+        ← Back to Collections
+    </a>
+</div>
 <div class="collection-detail-page">
 
     <div class="collection-detail-container">
@@ -35,19 +40,37 @@
                 </p>
             {% endif %}
 
-            <!-- FULL CONTENT -->
-            <div class="collection-detail-content">
-                {{ item.description|safe }}
-            </div>
+                        <!-- FULL CONTENT -->
+                        <div class="collection-detail-content">
+                                {{ item.description|safe }}
+                        </div>
 
-            <!-- BACK BUTTON -->
-            <a href="{% url 'collections_app:collections_index' %}" class="back-to-collections">
-                ← Back to Collections
-            </a>
+                        <div class="collection-nav">
+                            <a href="{{ previous_url }}" class="btn-primary">
+                                ← Previous
+                            </a>
+
+                            <a href="{{ next_url }}" class="btn-primary">
+                                Next →
+                            </a>
+                        </div>
 
         </div>
 
     </div>
 
 </div>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <a href="{{ previous_url }}" class="btn btn-outline-light">
+            ← Previous
+        </a>
+
+        <a href="{{ next_url }}" class="btn btn-outline-light">
+            Next →
+        </a>
+    </div>
+</div>
+
 {% endblock %}

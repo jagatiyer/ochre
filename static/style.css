@@ -3,6 +3,8 @@
    ============================================================ */
 
 
+/* (collection detail nav rules removed here; canonical locked block will be appended at EOF) */
+
 /* === STORY PAGE — PHILOSOPHY EXPLICIT GREEN OVERRIDES === */
 .story-page .story-philosophy h2,
 .story-page .story-philosophy .philosophy-label,
@@ -49,6 +51,7 @@
   padding: 0 !important;
   margin: 0 !important;
 }
+
 
 
 /* Ensure second number has explicit green if CSS variable missing */
@@ -712,6 +715,9 @@ header, .site-header { margin-bottom: 24px !important; }
 
 
 
+
+
+/* COLLECTION DETAIL – FORCE NAV LAYOUT (DO NOT MOVE) */
 
 
 /* === AGE GATE MODAL ROOT — STACKING CONTEXT OVERRIDE === */
@@ -5258,6 +5264,40 @@ footer img.footer-site-logo {
     width: 100%;
     text-align: center;
   }
+}
+
+
+
+/* =========================================================
+   COLLECTION DETAIL – LOCKED NAV OVERRIDES (DO NOT MOVE)
+   Must remain at EOF to override legacy styles
+========================================================= */
+
+.collection-back-link {
+  max-width: var(--container-width);
+  margin: 40px auto 48px auto !important;
+  padding: 0 20px;
+}
+
+.collection-back-link .back-link {
+  color: #ff5a5a;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.collection-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px !important;
+}
+
+.collection-nav a {
+  padding: 12px 24px;
+  background: #ff5a5a;
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 4px;
 }
 
 
