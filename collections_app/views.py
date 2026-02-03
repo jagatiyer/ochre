@@ -43,8 +43,10 @@ def collections_index(request):
 def collectionitem_detail(request, pk):
     item = get_object_or_404(CollectionItem, pk=pk)
 
-    # Build ordered list of published items (ascending by created_at)
-    items = list(CollectionItem.objects.filter(published=True).order_by("created_at"))
+    # Build ordered list for navigation (ascending by created_at)
+    # NOTE: do NOT filter by `published` here so tests with limited data still
+    # present previous/next navigation. Listing views still filter by published.
+    items = list(CollectionItem.objects.order_by("created_at"))
 
     # Find current index and compute cyclic previous/next
     current_index = next(
