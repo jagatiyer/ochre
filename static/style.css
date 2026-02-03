@@ -11,6 +11,46 @@
   color: #2bbecf !important;
 }
 
+
+/* MEDIA LIST — final enforced layout */
+.media-page .press-list-item {
+  display: grid !important;
+  grid-template-columns: 160px 1fr auto !important;
+  column-gap: 16px !important;
+  align-items: center !important;
+  padding: 14px 20px !important; /* reduced height */
+}
+
+/* Image column */
+.media-page .press-list-item > div:first-child {
+  width: 160px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.media-page .press-list-item img {
+  max-width: 140px !important;
+  max-height: 90px !important;
+  object-fit: contain !important;
+}
+
+/* Text block */
+.media-page .item-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+/* Remove bullets */
+.media-page .item-content ul,
+.media-page .item-content li {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+
 /* Ensure second number has explicit green if CSS variable missing */
 .story-page .story-philosophy .philosophy-item:nth-child(2) .philosophy-number {
   background-color: #2bbecf !important;
@@ -136,6 +176,63 @@ img {
 .static-page .blog-content em,
 .static-page .blog-content a {
   color: #eaeaea !important;
+}
+
+/* MEDIA LIST — enforce uniform card layout (override legacy CSS) */
+.mediahub-page .press-card {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* Media logo / image */
+.mediahub-page .press-card img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Text block alignment */
+.mediahub-page .press-card-content,
+.mediahub-page .press-card > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* MEDIA LIST — lock column alignment & reduce card height */
+.mediahub-page .press-card {
+  display: grid !important;
+  grid-template-columns: 120px 1fr auto !important;
+  gap: 20px !important;
+  align-items: center !important;
+  padding: 20px 24px !important;
+  min-height: unset !important;
+}
+
+/* Fixed-width image column */
+.mediahub-page .press-card img {
+  width: 120px !important;
+  height: 80px !important;
+  object-fit: contain !important;
+  flex-shrink: 0 !important;
+  display: block !important;
+}
+
+/* Text column — guaranteed consistent start */
+.mediahub-page .press-card-content,
+.mediahub-page .press-card > div:nth-child(2) {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 6px !important;
+}
+
+/* Button column alignment */
+.mediahub-page .press-card > div:last-child {
+  justify-self: end !important;
 }
 /* ============================================================
    NAVBAR (PRIMARY HEADER)
@@ -4840,6 +4937,330 @@ footer img.footer-site-logo {
 .video-modal-content h3 {
     margin-bottom: 0.5rem;
 }
+
+
+
+
+
+
+/* MEDIA LIST — hard layout lock (override legacy flex rules) */
+.media-page .press-list-item {
+  display: grid !important;
+  /* grid-template-columns: 140px 1fr auto; (removed - authoritative grid appended at EOF) */
+  column-gap: 24px;
+  align-items: center;
+  padding: 16px 22px !important; /* reduce height */
+}
+
+/* Image column — fixed width */
+.media-page .press-list-item > div:first-child {
+  width: 140px;
+  min-width: 140px;
+  max-width: 140px;
+  display: flex;
+  align-items: center;
+}
+
+.media-page .press-list-item > div:first-child img {
+  width: 100%;
+  height: auto;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+/* Text column — fixed start X */
+.media-page .press-list-item .item-content {
+  text-align: left;
+}
+
+/* Kill legacy flex behaviour */
+.media-page .press-list-item {
+  justify-content: unset !important;
+}
+
+
+/* ===============================
+   MEDIA LIST — TABLE HEADERS
+=============================== */
+
+/* (Removed pseudo-header row: using final grid-only layout below) */
+
+/* ===============================
+   MEDIA LIST — ROW GRID
+=============================== */
+
+.media-page .press-list-item {
+  display: grid !important;
+  /* grid-template-columns: 160px 90px 120px 1fr auto; (removed - authoritative grid appended at EOF) */
+  column-gap: 24px;
+  align-items: center;
+  padding: 18px 24px !important;
+}
+
+/* Image column */
+.media-page .press-list-item > div:first-child img {
+  width: 100%;
+  max-height: 96px;
+  object-fit: contain;
+}
+
+/* CTA alignment */
+.media-page .press-list-item > div:last-child {
+  justify-self: end;
+}
+
+/* Kill legacy flex */
+.media-page .press-list-item {
+  justify-content: unset !important;
+}
+
+/* ===============================
+   MOBILE RESPONSIVE
+=============================== */
+
+@media (max-width: 768px) {
+
+  .media-page .press-list-item {
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+  }
+
+  .media-page .press-list-item > div:first-child {
+    width: 100%;
+  }
+
+  .media-page .press-list-item > div:last-child {
+    justify-self: stretch;
+  }
+
+  .media-page .press-list-item a {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
+/* MEDIA LIST — definitive logo column fix */
+.media-page .press-list-item {
+  display: grid !important;
+  grid-template-columns: 160px 1fr auto !important;
+  column-gap: 28px !important; /* space between logo & text */
+  align-items: center !important;
+  padding: 14px 20px !important;
+}
+
+/* Logo column — fixed vertical box */
+.media-page .publication-logo {
+  height: 120px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Inner logo wrapper */
+.media-page .publication-logo-img {
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Image — fully constrained */
+.media-page .publication-logo-img img {
+  max-height: 90px !important;
+  max-width: 140px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+/* Remove bullets & tighten meta spacing */
+.media-page .item-meta ul,
+.media-page .item-meta li {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+/* MEDIA LIST — enforce gap between logo and TOI/meta */
+.media-page .press-list-item {
+  column-gap: 32px !important;
+}
+/* Extra safety: ensure meta column never touches logo */
+.media-page .item-meta {
+  padding-left: 4px !important;
+}
+
+
+
+/* MEDIA LIST — lock image inside column & center it vertically */
+.media-page .press-list-item {
+  display: grid !important;
+  grid-template-columns: 160px 1fr auto !important;
+  column-gap: 24px !important; /* space between image and text */
+  align-items: center !important;
+  padding: 14px 20px !important;
+}
+
+/* Image wrapper — fixed height + vertical centering */
+.media-page .press-list-item > div:first-child {
+  width: 160px !important;
+  height: 120px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+/* Image itself — never exceed wrapper */
+.media-page .press-list-item img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+/* Text block cleanup */
+.media-page .item-content {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 4px !important;
+}
+
+/* Remove bullets / list artifacts */
+.media-page .item-content ul,
+.media-page .item-content li {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+
+/* =====================================
+   MEDIA LIST — FINAL GRID (LOCKED)
+===================================== */
+
+.media-page .press-list-item {
+  display: grid !important;
+  grid-template-columns: 
+    140px   /* Image */
+    140px   /* Publication + Date */
+    1fr     /* Title */
+    auto;   /* CTA */
+  column-gap: 32px !important;
+  align-items: center !important;
+  padding: 16px 28px !important; /* reduced height */
+}
+
+/* IMAGE */
+.media-page .press-list-item > div:nth-child(1) img {
+  width: 140px !important;
+  height: 90px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+/* SOURCE + DATE */
+.media-page .press-list-item > div:nth-child(2) {
+  font-size: 14px;
+  line-height: 1.4;
+  opacity: 0.8;
+}
+
+/* TITLE */
+.media-page .press-list-item > div:nth-child(3) {
+  font-size: 18px;
+}
+
+/* CTA */
+.media-page .press-list-item > div:nth-child(4) {
+  white-space: nowrap;
+}
+
+/* =====================================
+   MOBILE — STACK CLEANLY
+===================================== */
+@media (max-width: 768px) {
+  .media-page .press-list-item {
+    grid-template-columns: 1fr !important;
+    row-gap: 12px;
+  }
+
+  .media-page .press-list-item > div {
+    width: 100% !important;
+  }
+
+  .media-page .press-list-item > div:nth-child(4) {
+    margin-top: 8px;
+  }
+}
+
+
+
+/* ===============================
+   MEDIA LIST — FINAL GRID FIX
+=============================== */
+
+.media-page .press-list-item {
+  display: grid !important;
+  /* grid-template-columns: 120px 90px 120px 1fr auto; (removed - authoritative grid appended at EOF) */
+  column-gap: 24px;
+  align-items: center;
+  padding: 16px 24px !important;
+}
+
+/* Image column */
+.media-page .press-list-item img {
+  width: 120px;
+  height: 80px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Source + date */
+.media-page .press-list-item .item-meta {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* Title */
+.media-page .press-list-item h3,
+.media-page .press-list-item .item-title {
+  font-size: 18px;
+}
+
+/* CTA */
+.media-page .press-list-item a {
+  white-space: nowrap;
+}
+
+/* Kill legacy flex */
+.media-page .press-list-item {
+  justify-content: unset !important;
+}
+
+/* ===============================
+   MOBILE
+=============================== */
+
+@media (max-width: 768px) {
+  .media-page .press-list-item {
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+  }
+
+  .media-page .press-list-item img {
+    width: 100%;
+    height: auto;
+  }
+
+  .media-page .press-list-item a {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
 
 
 
