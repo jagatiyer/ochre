@@ -47,7 +47,7 @@ def collectionitem_detail(request, pk):
 
 
 def collections_by_category(request, category):
-    # Dedicated category route should also only use the FK relation.
+    # Dedicated category route: use only the authoritative FK relation.
     items = (
         CollectionItem.objects.filter(published=True, category_fk__slug=category)
         .order_by("-created_at")
