@@ -1622,6 +1622,13 @@ header img.site-logo,
   margin: 30px 0 16px;
 }
 
+/* Ensure static pages using the blog template inherit the blog text color */
+.blog-detail-page .blog-content,
+.blog-detail-page .blog-content p,
+.blog-detail-page .blog-content li {
+  color: #d6d6d6;
+}
+
 /* =========================
    SIDEBAR
    ========================= */
