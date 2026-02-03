@@ -127,6 +127,16 @@ img {
 
 
 
+/* STATIC PAGES — force blog typography colors (override CKEditor inline styles) */
+.static-page .blog-content,
+.static-page .blog-content p,
+.static-page .blog-content li,
+.static-page .blog-content span,
+.static-page .blog-content strong,
+.static-page .blog-content em,
+.static-page .blog-content a {
+  color: #eaeaea !important;
+}
 /* ============================================================
    NAVBAR (PRIMARY HEADER)
    ============================================================ */
@@ -381,6 +391,17 @@ html, body { overflow-x: hidden; }
 
 /* 7) Safety: avoid touching carousel/hero selectors explicitly
    (carousel uses .carousel-slide img, hero images use other classes) */
+
+/* STATIC PAGES — force blog typography colors (override CKEditor inline styles) */
+.static-page .blog-content,
+.static-page .blog-content p,
+.static-page .blog-content li,
+.static-page .blog-content span,
+.static-page .blog-content strong,
+.static-page .blog-content em,
+.static-page .blog-content a {
+  color: #eaeaea !important;
+}
 
 /* ============================================================
    HOMEPAGE CAROUSEL ADJUSTMENTS (ADD-ONLY)
