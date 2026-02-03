@@ -38,9 +38,17 @@
         >
       {% endif %}
 
+      {% if is_static_page %}
+      <div class="blog-detail-page">
+      {% endif %}
+
       <div class="blog-content">
         {{ post.content|safe }}
       </div>
+
+      {% if is_static_page %}
+      </div>
+      {% endif %}
 
       {% if not is_static_page %}
       <div style="margin-top:40px;">
