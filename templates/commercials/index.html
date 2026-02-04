@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/commercials-overrides.css' %}">
+{% endblock %}
 {% block content %}
 
   <section class="media-page commercials-page">
@@ -29,6 +32,9 @@
               {% else %}
                 <div class="video-placeholder">Video Preview</div>
               {% endif %}
+              <button class="commercial-play-overlay" aria-label="Play video" type="button">
+                <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+              </button>
             </div>
             
             <div style="margin-top: 1.5rem;">
@@ -53,6 +59,9 @@
                       <source src="/media/commercials/videos/Blue_Black_and_Green_Minimalist_Modern_Customer_Success_Stories_Video_Message.mp4" type="video/mp4">
                       Your browser does not support the video tag.
                     </video>
+                  <button class="commercial-play-overlay" aria-label="Play video" type="button">
+                    <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+                  </button>
                 </div>
               </div>
               <div class="commercial-content">
@@ -89,4 +98,5 @@
 
 {% block extra_js %}
   <script src="{% static 'js/commercials-modal.js' %}"></script>
+  <script src="{% static 'js/play-overlay.js' %}"></script>
 {% endblock %}

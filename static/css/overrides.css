@@ -1,0 +1,476 @@
+/* =========================================================
+   OCHRE UI OVERRIDES
+   Purpose: Safe, scoped UI fixes without touching style.css
+   ========================================================= */
+
+/* Commercials overrides moved to static/css/commercials-overrides.css */
+  display: block;
+}
+
+/* =========================================================
+   AUTHORITATIVE: COLLAPSE SECTION AFTER HOME HERO
+   Targets the section/div immediately following the hero and
+   forces it to collapse to its content height.
+   ========================================================= */
+.content.home-content section.home-hero + section,
+.content.home-content section.home-hero + div,
+.content.home-content section.home-hero + .collections-page,
+.content.home-content section.home-hero + .section,
+.content.home-content section.home-hero + .container,
+.content.home-content section.home-hero + .content-section,
+.content.home-content section.home-hero + .home-section {
+  /* HARD OVERRIDE: authoritative spacing owner for first section after hero/CTA */
+  margin-top: 0 !important;
+  padding-top: 48px !important;
+  padding-block-start: 48px !important;
+  padding-block-end: 0 !important;
+  padding-bottom: 0 !important;
+  min-height: auto !important;
+  height: auto !important;
+  display: block !important;
+  align-items: unset !important;
+  justify-content: unset !important;
+  place-items: unset !important;
+}
+
+@media (max-width: 768px) {
+  .content.home-content section.home-hero + section,
+  .content.home-content section.home-hero + div,
+  .content.home-content section.home-hero + .collections-page,
+  .content.home-content section.home-hero + .section,
+  .content.home-content section.home-hero + .container,
+  .content.home-content section.home-hero + .content-section,
+  .content.home-content section.home-hero + .home-section {
+    margin-top: 0 !important;
+    padding-top: 32px !important;
+    padding-block-start: 32px !important;
+    padding-block-end: 0 !important;
+  }
+}
+
+/* ===============================
+   HOME PAGE — CTA SPACING FIX
+   Reduce top spacing above CTA buttons so they feel connected to hero
+   =============================== */
+.content.home-content .buttons.home-cta-buttons {
+  margin-top: 36px !important; /* desktop target: ~32-40px */
+}
+
+@media (max-width: 768px) {
+  .content.home-content .buttons.home-cta-buttons {
+    margin-top: 20px !important; /* mobile target: ~16-24px */
+  }
+}
+
+/* =========================================================
+   IDENTIFIED CTA WRAPPER FIX
+   Exact rendered wrapper immediately after section.home-hero:
+   element classes: "buttons home-cta-buttons"
+   ========================================================= */
+.content.home-content > .buttons.home-cta-buttons {
+  padding-top: 32px !important;
+  padding-bottom: 32px !important;
+  margin-top: 0 !important;
+  min-height: auto !important;
+  height: auto !important;
+  display: block !important;
+  align-items: unset !important;
+  justify-content: unset !important;
+  place-items: unset !important;
+}
+
+/* If a residual gap remains due to legacy flow (header affects layout),
+   apply a small controlled negative nudge to close the band. */
+header ~ .content.home-content > .buttons.home-cta-buttons {
+  margin-top: -32px !important;
+}
+
+/* =========================================================
+   FIRST FOLD — HOUSE FAVOURITES TYPOGRAPHY & SPACING
+   Targets only the first collections-page (HANDPICKED SELECTION)
+   ========================================================= */
+
+.content.home-content .collections-page:first-of-type .collections-header .description {
+  max-width: 640px;
+  text-align: left;
+  margin-top: 16px;
+  margin-bottom: 48px;
+}
+
+/* AUTHORITATIVE OWNER: first content section takes spacing from hero/CTA */
+.content.home-content .collections-page:first-of-type,
+.content.home-content .section:first-of-type,
+.content.home-content .container:first-of-type {
+  padding-top: 48px !important;
+  margin-top: 0 !important;
+  padding-block-start: 48px !important;
+  padding-block-end: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .content.home-content .collections-page:first-of-type,
+  .content.home-content .section:first-of-type,
+  .content.home-content .container:first-of-type {
+    padding-top: 32px !important;
+    padding-block-start: 32px !important;
+  }
+}
+
+/* Ensure CTA container itself does not add spacing above the first section */
+.content.home-content > .buttons.home-cta-buttons {
+  margin-bottom: 0 !important;
+}
+
+/* Mobile / tablet: allow the description to be full width and reduce CTA spacing */
+@media (max-width: 768px) {
+  .content.home-content .collections-page:first-of-type .collections-header .description {
+    max-width: none;
+  }
+  .content.home-content > .buttons.home-cta-buttons {
+    margin-bottom: 24px !important;
+  }
+}
+
+/* FIRST-SECTION-ONLY override: authoritative spacing owner on home page */
+body.home section.collections-page:first-of-type {
+  margin-top: 0 !important;
+  padding-top: 48px !important;
+}
+
+/* Clamp inner header spacing for the first collections-page */
+body.home section.collections-page:first-of-type .collections-header {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+body.home section.collections-page:first-of-type h1 {
+  margin-top: 16px !important;
+}
+
+body.home section.collections-page:first-of-type .subtitle,
+body.home section.collections-page:first-of-type .description {
+  margin-top: 12px !important;
+}
+
+/* Clamp bottom spacing on the content wrapper that contains the CTA
+   so the distance between CTA and first collections-page is controlled */
+body.home .content.home-content {
+  margin-bottom: 48px !important;
+  padding-bottom: 0 !important;
+}
+
+
+/* =========================================================
+   COMMERCIALS PAGE — HEADER + GRID
+   ========================================================= */
+
+body.commercials .page-header {
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+body.commercials .page-header h1 {
+  margin-bottom: 8px;
+}
+
+body.commercials .page-header p {
+  margin-top: 0;
+  max-width: 720px;
+}
+
+/* ---------- GRID LAYOUT ---------- */
+
+body.commercials .commercials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 3vw, 32px);
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  body.commercials .commercials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  body.commercials .commercials-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Ensure grid fills container (no right-side gap) */
+body.commercials .commercials-grid > * {
+  width: 100%;
+}
+
+/* Make cards clearly clickable */
+body.commercials .commercial-card {
+  cursor: pointer;
+}
+
+/* =========================================================
+   COMMERCIALS — VIDEO PREVIEW
+   Handles portrait + landscape cleanly
+   ========================================================= */
+
+body.commercials .commercial-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+body.commercials .commercial-media video,
+body.commercials .commercial-media iframe,
+body.commercials .commercial-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =========================================================
+   COMMERCIALS — MODAL
+   ========================================================= */
+
+#commercials-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#commercials-modal .modal-inner {
+  background: #000;
+  width: min(90vw, 1100px);
+  max-height: 90vh;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Video container inside modal */
+#commercials-modal .modal-media {
+  width: 100%;
+  flex: 0 0 auto;
+  aspect-ratio: 16 / 9;
+}
+
+#commercials-modal video,
+#commercials-modal iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Text spacing */
+#commercials-modal .modal-content h3 {
+  margin: 0;
+}
+
+#commercials-modal .modal-content p {
+  margin: 0;
+  max-width: 720px;
+}
+
+/* ---------- CLOSE BUTTON (SAFE OVERRIDE) ---------- */
+
+#commercials-modal .modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent !important;
+  border: none;
+  width: auto !important;
+  height: auto !important;
+  padding: 6px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* Prevent CTA styles leaking */
+#commercials-modal .modal-close:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* =========================================================
+   TEMP: Outlines to debug spacing ownership (remove after inspect)
+   ========================================================= */
+body.home section.collections-page:first-of-type {
+  outline: 3px solid red !important;
+}
+
+body.home .home-content,
+body.home .content,
+body.home .content.home-content {
+  outline: 3px solid blue !important;
+}
+
+body.home .buttons,
+body.home .home-cta,
+body.home .home-cta-buttons {
+  outline: 3px solid green !important;
+}
+
+/* HOME: Play overlay (scoped to home products-scroll only) */
+.products-scroll .collection-card {
+  position: relative;
+}
+
+.products-scroll .home-play-overlay {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.products-scroll .home-play-overlay i,
+.products-scroll .home-play-overlay svg {
+  color: #ffffff;
+  font-size: 22px;
+  margin-left: 3px; /* optical centering for triangle */
+}
+
+.products-scroll .home-play-overlay:hover {
+  background: rgba(0, 0, 0, 0.75);
+  transform: scale(1.05);
+}
+
+.products-scroll .home-play-overlay:active {
+  transform: scale(0.96);
+}
+
+@media (max-width: 640px) {
+  .products-scroll .home-play-overlay {
+    width: 52px;
+    height: 52px;
+  }
+
+  .products-scroll .home-play-overlay i,
+  .products-scroll .home-play-overlay svg {
+    font-size: 18px;
+  }
+}
+
+/* =========================================================
+   COMMERCIALS — CARD-FLOW OVERRIDES (SCOPED)
+   Purpose: Replace the rigid grid with a card-flow/flex layout
+   scoped only to the Commercials page. Do NOT touch modal/js.
+   ========================================================= */
+
+/* Scope selectors: cover both possible page wrapper conventions */
+.media-page.commercials-page .commercials-grid,
+body.commercials .commercials-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 18px !important; /* reduced horizontal gap for fuller rows */
+  width: 100% !important;
+  align-items: flex-start !important; /* top-align cards */
+}
+
+/* Make each card a flex item with a fixed/flexible base width
+   so rows wrap naturally. Use calc to account for gaps. */
+.media-page.commercials-page .commercial-card,
+body.commercials .commercial-card {
+  box-sizing: border-box !important;
+  /* allow cards to grow/shrink to fill row space while keeping a sensible basis */
+  flex: 1 1 calc((100% - 36px) / 3) !important; /* three per row on desktop, flexible */
+  max-width: none !important;
+  margin: 0 !important;
+  align-self: flex-start !important; /* do not stretch to equal height */
+}
+
+/* Tablet: two columns */
+@media (max-width: 1024px) {
+  .media-page.commercials-page .commercial-card,
+  body.commercials .commercial-card {
+    flex: 0 0 calc((100% - 18px) / 2) !important; /* two per row */
+    max-width: none !important;
+  }
+}
+
+/* Mobile: single column */
+@media (max-width: 640px) {
+  .media-page.commercials-page .commercial-card,
+  body.commercials .commercial-card {
+    flex: 0 0 100% !important;
+    max-width: none !important;
+  }
+}
+
+/* Allow cards to size by content; do not force equal heights */
+.media-page.commercials-page .commercial-card .card-inner,
+body.commercials .commercial-card .card-inner {
+  height: auto !important;
+}
+
+/* MEDIA: remove forced aspect-ratio on Commercials media so portrait
+   videos/images can remain tall. Let intrinsic ratio drive height. */
+.media-page.commercials-page .commercial-media,
+body.commercials .commercial-media {
+  aspect-ratio: unset !important;
+  height: auto !important;
+  overflow: visible !important; /* allow taller media to display fully */
+  border-radius: 8px !important; /* preserve rounded corners */
+}
+
+.media-page.commercials-page .commercial-media video,
+.media-page.commercials-page .commercial-media iframe,
+.media-page.commercials-page .commercial-media img,
+body.commercials .commercial-media video,
+body.commercials .commercial-media iframe,
+body.commercials .commercial-media img {
+  width: 100% !important;
+  height: auto !important; /* let intrinsic/video height determine display */
+  object-fit: cover !important; /* crop where necessary but do not squash */
+  display: block !important;
+}
+
+/* Override direct selectors that previously forced a fixed 280px height */
+.media-page.commercials-page .commercial-item video,
+.media-page.commercials-page .commercial-item img,
+.media-page.commercials-page .commercial-card video,
+.media-page.commercials-page .commercial-card img,
+body.commercials .commercial-item video,
+body.commercials .commercial-item img,
+body.commercials .commercial-card video,
+body.commercials .commercial-card img,
+.media-page.commercials-page .thumbnail-placeholder,
+body.commercials .thumbnail-placeholder {
+  height: auto !important;
+  max-height: none !important;
+  object-fit: cover !important;
+}
+
+/* Ensure grid > * width rule doesn't force full width when switching to flex */
+.media-page.commercials-page .commercials-grid > *,
+body.commercials .commercials-grid > * {
+  width: auto !important;
+}
+
+/* Maintain clickable card behavior and pointer cursor */
+.media-page.commercials-page .commercial-card,
+body.commercials .commercial-card {
+  cursor: pointer !important;
+}
+
+/* Leave modal rules intact; these overrides are page-scoped and
+   do not change modal selectors or markup. */

@@ -1,0 +1,105 @@
+/* commercials-overrides.css
+   Scoped Commercials-only layout overrides.
+   Loaded only on the commercials page via the template's extra_head block.
+*/
+
+/* Card-flow layout: replace grid with flex-based flow (scoped) */
+.media-page.commercials-page .commercials-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 18px !important;
+  width: 100% !important;
+  align-items: flex-start !important;
+}
+
+/* Cards: allow flexible growth so rows fill available width */
+.media-page.commercials-page .commercial-card {
+  box-sizing: border-box !important;
+  flex: 1 1 calc((100% - 36px) / 3) !important; /* three per row on desktop, flexible */
+  max-width: none !important;
+  margin: 0 !important;
+  align-self: flex-start !important;
+  cursor: pointer !important;
+}
+
+@media (max-width: 1024px) {
+  .media-page.commercials-page .commercial-card {
+    flex: 1 1 calc((100% - 18px) / 2) !important; /* two per row on tablet */
+  }
+}
+
+@media (max-width: 640px) {
+  .media-page.commercials-page .commercial-card {
+    flex: 1 1 100% !important; /* single column on mobile */
+  }
+}
+
+/* Allow cards to size by content; do not force equal heights */
+.media-page.commercials-page .commercial-card .card-inner {
+  height: auto !important;
+}
+
+/* Media: remove fixed height / aspect-ratio so portrait reels remain tall */
+.media-page.commercials-page .commercial-media {
+  aspect-ratio: unset !important;
+  height: auto !important;
+  overflow: visible !important;
+  border-radius: 8px !important;
+}
+
+.media-page.commercials-page .commercial-media video,
+.media-page.commercials-page .commercial-media iframe,
+.media-page.commercials-page .commercial-media img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Unset previously-enforced fixed heights on direct media selectors */
+.media-page.commercials-page .commercial-item video,
+.media-page.commercials-page .commercial-item img,
+.media-page.commercials-page .commercial-card video,
+.media-page.commercials-page .commercial-card img,
+.media-page.commercials-page .thumbnail-placeholder {
+  height: auto !important;
+  max-height: none !important;
+  object-fit: cover !important;
+}
+
+/* Ensure grid child width rules do not force full-width when switching to flex */
+.media-page.commercials-page .commercials-grid > *,
+.media-page.commercials-page .commercials-grid .collection-card {
+  width: auto !important;
+  max-width: none !important;
+}
+
+/* Preserve modal click behavior: keep .commercial-card clickable (cursor) */
+.media-page.commercials-page .commercial-card { cursor: pointer !important; }
+
+/* End of commercials-overrides.css */
+
+/* COMMERCIALS: Play overlay (scoped) */
+.media-page.commercials-page .commercial-thumbnail,
+.media-page.commercials-page .commercial-card {
+  position: relative;
+}
+.media-page.commercials-page .commercial-play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 6;
+  border: none;
+  color: #fff;
+  touch-action: manipulation;
+}
+.media-page.commercials-page .commercial-play-overlay svg { width: 28px; height: 28px; }
+

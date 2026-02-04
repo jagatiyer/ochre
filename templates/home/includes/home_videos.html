@@ -1,3 +1,4 @@
+{% load static %}
 {% comment %}Render up to 6 home videos in rows of 3 using existing card classes{% endcomment %}
 
 {% comment %}Render up to 6 home videos in rows of 3 using existing card classes{% endcomment %}
@@ -16,10 +17,14 @@
                         Your browser does not support the video tag.
                     </video>
                 {% endif %}
+                <button class="home-play-overlay" aria-label="Play video" type="button">
+                  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+                </button>
                 {% if video.title %}
                     <p class="collection-card-title">{{ video.title }}</p>
                 {% endif %}
             </div>
         {% endfor %}
+        <script src="{% static 'js/play-overlay.js' %}"></script>
     </div>
 {% endif %}
