@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/ochre-ui-core.css' %}">
+{% endblock %}
+
 {% block content %}
 
 <div class="story-page">
@@ -14,11 +18,9 @@
     <div class="story-content">
         <div class="story-text">
             <h2>Crafting Excellence</h2>
-            <p>From our humble beginnings to becoming a recognized name in craft spirits, our journey has been driven by passion and innovation. We believe in pushing boundaries while respecting the art of distillation.</p>
-
-            <p>Every bottle tells a story of dedication, precision, and creativity. Our master distillers combine traditional techniques with modern innovation to create spirits that stand out in both flavor and character.</p>
-
-            <p>We source the finest ingredients and employ sustainable practices throughout our production process. Quality isn't just a goal—it's our foundation, our promise, and our legacy.</p>
+            <p>From our humble beginnings to becoming a recognized name in craft spirits, our journey has been driven by passion and innovation.</p>
+            <p>Every bottle tells a story of dedication, precision, and creativity. Our master distillers combine traditional techniques with modern innovation.</p>
+            <p>We source the finest ingredients and employ sustainable practices throughout our production process. Quality is our foundation and our promise.</p>
         </div>
 
         <div class="story-image">
@@ -28,63 +30,61 @@
 
 </div>
 
-    <section class="story-philosophy story-journey">
-        <p class="philosophy-label"><span class="dash">—</span>OUR PHILOSOPHY<span class="dash">—</span></p>
-        <h2>Inclusivity Over Exclusivity</h2>
+<div class="gradient-divider"></div>
 
-        <div class="philosophy-grid">
-            <div class="philosophy-item">
-                <div class="philosophy-number red">1</div>
-                <h3>Accessible Excellence</h3>
-                <p>We believe exceptional spirits should be enjoyed by everyone.</p>
-            </div>
+<div class="story-philosophy">
+    <p class="philosophy-label"><span class="dash">—</span>OUR PHILOSOPHY<span class="dash">—</span></p>
+    <h2>Inclusivity Over Exclusivity</h2>
 
-            <div class="philosophy-item">
-                <div class="philosophy-number green">2</div>
-                <h3>Authentic Innovation</h3>
-                <p>We honor tradition while embracing modern techniques.</p>
-            </div>
-
-            <div class="philosophy-item">
-                <div class="philosophy-number orange">3</div>
-                <h3>Community First</h3>
-                <p>Our success is measured by the connections we forge.</p>
-            </div>
+    <div class="philosophy-grid">
+        <div class="philosophy-item">
+            <div class="philosophy-number red">1</div>
+            <h3>Accessible Excellence</h3>
+            <p>Exceptional spirits without pretension.</p>
         </div>
-    </section>
 
-    {# Use existing site container for visual rhythm used on other pages #}
-    <div class="products-scroll">
+        <div class="philosophy-item">
+            <div class="philosophy-number green">2</div>
+            <h3>Authentic Innovation</h3>
+            <p>Respecting tradition while shaping the future.</p>
+        </div>
 
-    <div class="gradient-divider"></div>
+        <div class="philosophy-item">
+            <div class="philosophy-number orange">3</div>
+            <h3>Community First</h3>
+            <p>Built with people, not just products.</p>
+        </div>
+    </div>
+</div>
 
-    <div class="story-journey">
+<div class="story-journey">
     <h2>Our Journey</h2>
+
     <div class="timeline">
         <div class="timeline-item">
-            <span class="timeline-dot red"></span>
+            <div class="timeline-year">2023</div>
+            <div class="timeline-dot red"></div>
             <div class="timeline-content">
-                <div class="timeline-year">2023</div>
                 <h3>The Beginning</h3>
-                <p>Ochre Spirits launches in Goa with our first collection.</p>
+                <p>Ochre Spirits launches in Goa.</p>
             </div>
         </div>
 
         <div class="timeline-item">
-            <span class="timeline-dot green"></span>
+            <div class="timeline-year">2024</div>
+            <div class="timeline-dot green"></div>
             <div class="timeline-content">
-                <div class="timeline-year">2024</div>
                 <h3>Expansion</h3>
-                <p>New flavors & India’s first brand tasting room.</p>
+                <p>New flavours and India's first tasting room.</p>
             </div>
         </div>
 
         <div class="timeline-item">
-            <span class="timeline-dot orange"></span>
+            <div class="timeline-year">2025</div>
+            <div class="timeline-dot orange"></div>
             <div class="timeline-content">
-                <div class="timeline-year">2025</div>
-                <h3>Innovation Continues</h3>
-                <p>Launch of premium Saffron Vodka.</p>
+                <h3>Innovation</h3>
+                <p>Premium releases and national presence.</p>
             </div>
         </div>
     </div>
@@ -92,11 +92,11 @@
 
 <div class="story-experience">
     <h2>Experience Our Story</h2>
-    <p>Visit our tasting room in Goa to immerse yourself in the world of Ochre Spirits</p>
+    <p>Visit our tasting room in Goa.</p>
 
     <div class="experience-buttons">
         <button class="cn visit-btn"><a href="#">VISIT US</a></button>
-        <button class="cn explore-btn"><a href="{% url 'collections_app:collections_index' %}">EXPLORE COLLECTIONS</a></button>
+        <button class="cn explore-btn"><a href="/collections/">EXPLORE COLLECTIONS</a></button>
     </div>
 </div>
 
