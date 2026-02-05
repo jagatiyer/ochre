@@ -103,3 +103,18 @@
 }
 .media-page.commercials-page .commercial-play-overlay svg { width: 28px; height: 28px; }
 
+
+/* EMERGENCY FIX – prevent flex cards from stretching vertically */
+.commercials-grid,
+.commercials-cards,
+.commercials-list {
+  align-items: flex-start;
+}
+
+
+.commercial-card,
+.collection-card {
+  height: auto !important;
+  align-self: flex-start;
+}
+
