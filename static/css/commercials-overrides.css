@@ -118,3 +118,52 @@
   align-self: flex-start;
 }
 
+/* Commercials – 3-tier header system (override, single source) */
+.media-page.commercials-page .commercials-header-override {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px 40px;
+}
+
+.media-page.commercials-page .commercials-eyebrow {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ff5b5f;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.media-page.commercials-page .commercials-eyebrow .dash {
+  position: relative;
+  top: -1px;
+}
+
+.media-page.commercials-page .commercials-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 60px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 20px;
+  line-height: 1.2;
+}
+
+.media-page.commercials-page .commercials-description {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 18px;
+  color: #9ca3af;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+
+/* FINAL SAFETY GUARD – limit extreme portrait videos (Commercials only) */
+.media-page.commercials-page .commercial-media video {
+  max-height: 420px;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
