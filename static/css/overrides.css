@@ -474,3 +474,7 @@ body.commercials .commercial-card {
 
 /* Leave modal rules intact; these overrides are page-scoped and
    do not change modal selectors or markup. */
+/* Home CTA spacing – force spacing between SHOP and OUR STORY */
+.buttons.home-cta-buttons .cn + .cn {
+  margin-left: 24px;
+}
