@@ -137,6 +137,103 @@ body.home section.collections-page:first-of-type {
   padding-top: 48px !important;
 }
 
+/* =========================================================
+   HOME PAGE – VERTICAL SPACING NORMALIZATION
+   Purpose: Normalize stacked/duplicated vertical spacing on Home.
+   Rules are strictly scoped under `body.home`. Add-only and safe.
+   ========================================================= */
+
+/* 1) Navbar → Hero: target ~48px. Ensure hero top spacing is authoritative. */
+body.home .home-hero {
+  padding-top: 48px !important; /* sets navbar → hero */
+  /* Keep internal hero layout intact; only adjust block spacing */
+}
+
+/* 2) Hero → CTA: target ~32px. Remove incoming CTA top padding and
+   make hero control the bottom spacing. */
+body.home .home-hero {
+  padding-bottom: 32px !important; /* sets hero → CTA */
+}
+body.home .content.home-content > .buttons.home-cta-buttons {
+  padding-top: 0 !important; /* remove stacked incoming CTA top padding */
+  margin-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* 3) CTA → First section (Featured Products): target ~56px.
+   Prefer incoming section to take the top offset (clear ownership). */
+body.home .content.home-content .collections-page:first-of-type,
+body.home .content.home-content .section:first-of-type,
+body.home .content.home-content .container:first-of-type {
+  padding-top: 40px !important;
+  margin-top: 0 !important;
+}
+body.home section.collections-page:first-of-type {
+  padding-top: 40px !important;
+  margin-top: 0 !important;
+}
+
+/* 4) Section → Section (between content sections): target ~56px.
+   Normalize incoming section top gaps; do not tamper with inner padding. */
+body.home .products-section {
+  margin-top: 40px !important;
+}
+body.home .collections-page .experience-section {
+  margin-top: 40px !important;
+}
+
+/* Ensure a consistent gap after product grids so the next section
+   (e.g., "Watch our videos") sits clearly separated. */
+  .content.home-content .products-scroll {
+  margin-bottom: 40px !important;
+}
+
+/* Strong override to catch inline-styled products-scroll instances
+   and ensure a visible gap. Use both padding and margin so the
+   layout cannot collapse due to parent overflow or stacking context. */
+.content.home-content .products-scroll,
+.products-scroll,
+div.products-scroll[style] {
+  padding-bottom: 40px !important;
+  margin-bottom: 40px !important;
+}
+
+/* Defensive: if a collections-page follows directly, ensure it
+   takes the incoming top spacing instead of collapsing. */
+.content.home-content .products-scroll + section.collections-page,
+.content.home-content section.collections-page + section.collections-page {
+  padding-top: 40px !important;
+  margin-top: 0 !important;
+}
+
+/* Ensure the entire first collections-page reserves space at its bottom
+   so the following section (Watch our videos) is visually separated. */
+body.home section.collections-page:first-of-type {
+  padding-bottom: 40px !important;
+  margin-bottom: 0 !important;
+}
+
+/* 5) Last section → Footer: target ~64px.
+   Ensure wrapper bottom margin + last-section padding produce ~64px. */
+body.home .content.home-content {
+  margin-bottom: 64px !important;
+  padding-bottom: 0 !important;
+}
+
+/* Notes:
+   - These overrides prefer removing incoming top spacing and centralize
+     spacing under `body.home` for minimal cross-page impact.
+   - Avoid negative margins. If any residual overlap remains (rare),
+     report before further changes.
+*/
+
+/* END HOME PAGE – VERTICAL SPACING NORMALIZATION */
+
+/* HOME – remove artificial space above hero (wrapper padding fix) */
+body.home .content.home-content {
+  padding-top: 0 !important;
+}
+
 /* Clamp inner header spacing for the first collections-page */
 body.home section.collections-page:first-of-type .collections-header {
   padding-top: 0 !important;
@@ -254,8 +351,415 @@ body.commercials .commercial-media img {
   border-radius: 12px;
   display: flex;
   flex-direction: column;
+
+}
+
+/* HOME — hero owns height, carousel + image must fully cover it */
+
+/* 1. Define hero height (single source of truth) */
+.content.home-content > section.home-hero {
+    height: 520px; /* desktop baseline, matches Carlsberg-style hero */
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* 2. Force carousel to stretch to hero */
+  .content.home-content > section.home-hero .carousel {
+    height: 100% !important;
+  }
+
+  /* 3. Force slide to stretch */
+  .content.home-content > section.home-hero .carousel-slide {
+    height: 100% !important;
+  }
+
+  /* 4. Force image to fully cover hero */
+  .content.home-content > section.home-hero .carousel-slide img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block;
+  }
+
+  /* HOME — remove navbar → hero gap completely */
+  .content.home-content {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+
+  .content.home-content > section.home-hero {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  /* HOME — authoritative hero height */
+  .content.home-content > section.home-hero {
+    height: calc(100vh - 72px) !important; /* navbar height */
+    max-height: 820px;
+    min-height: 640px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* HOME — force carousel + slides to fully fill hero */
+  .content.home-content > section.home-hero .carousel,
+  .content.home-content > section.home-hero .carousel-track,
+  .content.home-content > section.home-hero .carousel-slide {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  /* HOME — force image to cover ALL available space */
+  .content.home-content > section.home-hero img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    display: block;
+  }
+
+  /* HOME — CTA belongs to hero, not next scroll */
+  .content.home-content > section.home-hero {
+    margin-bottom: 0 !important;
+  }
+
+
+  .content.home-content > .buttons.home-cta-buttons {
+    margin-top: 24px !important;
+    padding: 0 !important;
+  }
+
+  /* HOME — allow hero to sit directly under navbar */
+  body .content.home-content {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  section.home-hero {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* HOME — hero fills viewport under navbar */
+  section.home-hero {
+    height: calc(100vh - var(--navbar-height, 96px)) !important;
+    min-height: calc(100vh - var(--navbar-height, 96px)) !important;
+    overflow: hidden;
+  }
+
+  /* HOME — carousel fills hero */
+  section.home-hero .carousel,
+  section.home-hero .carousel-track,
+  section.home-hero .carousel-slide {
+    height: 100% !important;
+    min-height: 100% !important;
+  }
+
+  /* HOME — images always cover hero regardless of upload size */
+  section.home-hero img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block;
+  }
+
+  /* Neutralize legacy fixed heights */
+  .carousel,
+  .carousel-slide,
+  .carousel-slide img {
+    max-height: none !important;
+  }
+
+  /* HOME — remove carousel offset and fixed height */
+  section.home-hero #home-carousel.carousel {
+    margin: 0 !important;
+    height: 100% !important;
+    min-height: 100% !important;
+  }
+
+  /* HOME — carousel internals must stretch */
+  section.home-hero .carousel-track,
+  section.home-hero .carousel-slide {
+    height: 100% !important;
+  }
+
+  /* HOME — image must cover available space */
+  section.home-hero .carousel-slide img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block;
+  }
+
+  /* HOME — hero defines the height */
+  section.home-hero {
+    height: calc(100vh - 96px) !important;
+    overflow: hidden;
+  }
+
+  /* REMOVE DEBUG OUTLINES AND FORCE CAROUSEL TO FILL HERO */
+  body.home section.collections-page:first-of-type,
+  body.home .home-content,
+  body.home .content,
+  body.home .content.home-content,
+  body.home .buttons,
+  body.home .home-cta,
+  body.home .home-cta-buttons {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Neutralize any remaining fixed margin/height on the home carousel */
+  #home-carousel.carousel,
+  section.home-hero #home-carousel.carousel,
+  .content.home-content section.home-hero #home-carousel.carousel {
+    margin: 0 !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: none !important;
+  }
+
+  /* Ensure carousel internals stretch */
+  section.home-hero .carousel,
+  section.home-hero .carousel-track,
+  section.home-hero .carousel-slide {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Images must fully cover hero */
+  section.home-hero .carousel-slide img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  /* Ensure hero container has zero top spacing */
+  section.home-hero,
+  .content.home-content > section.home-hero {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Specific, high-specificity overrides to beat legacy rules */
+  /* Target the exact selector that forces 420px in static/style.css */
+  #home-carousel.carousel {
+    margin: 0 !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: none !important;
+  }
+
+  #home-carousel.carousel .carousel-slide img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  /* TEMP: reduce hero height so CTA fits fully in first viewport */
+  /* Hero = viewport minus navbar (72px) minus CTA area (~120px) */
+  .content.home-content > section.home-hero {
+    height: calc(100vh - 192px) !important;
+    max-height: 680px !important;
+    min-height: 420px !important;
+    overflow: hidden !important;
+  }
+
+  /* keep carousel and images filling the (now reduced) hero */
+  .content.home-content > section.home-hero .carousel,
+  .content.home-content > section.home-hero .carousel-track,
+  .content.home-content > section.home-hero .carousel-slide {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  .content.home-content > section.home-hero img,
+  section.home-hero .carousel-slide img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* HOME — remove navbar to hero gap */
+  .content.home-content {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+
+  .content.home-content > section.home-hero {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* HOME — authoritative viewport hero */
+  .content.home-content > section.home-hero {
+    height: calc(100vh - 72px) !important; /* navbar height */
+    min-height: 640px;
+    max-height: 820px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* HOME — carousel fills hero */
+  .content.home-content > section.home-hero .carousel,
+  .content.home-content > section.home-hero .carousel-track,
+  .content.home-content > section.home-hero .carousel-slide {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+
+  /* HOME — image covers entire hero */
+  .content.home-content > section.home-hero img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    display: block;
+  }
+
+  /* HOME — CTA belongs to first fold */
+  .content.home-content > section.home-hero {
+    margin-bottom: 0 !important;
+  }
+
+
+  .content.home-content > .buttons.home-cta-buttons {
+    margin-top: 24px !important;
+    padding: 0 !important;
+  }
   gap: 16px;
 }
+
+/* FINAL OVERRIDE: ensure hero is reduced so CTAs appear without scrolling
+   Keep this low enough for typical desktop viewports while preserving
+   responsive behavior on smaller screens. This rule is intentionally
+   placed last to beat earlier repeats in this file. */
+.content.home-content > section.home-hero,
+section.home-hero.content.home-content {
+  height: calc(100vh - 140px) !important; /* viewport minus navbar + CTA */
+  max-height: 640px !important;
+  min-height: 420px !important;
+  overflow: hidden !important;
+}
+
+/* Ensure carousel and images respect the reduced hero height */
+.content.home-content > section.home-hero .carousel,
+.content.home-content > section.home-hero .carousel-track,
+.content.home-content > section.home-hero .carousel-slide,
+section.home-hero .carousel,
+section.home-hero .carousel-track,
+section.home-hero .carousel-slide {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+section.home-hero img,
+.content.home-content > section.home-hero img,
+.content.home-content > section.home-hero .carousel-slide img {
+  height: 100% !important;
+  width: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Replace clip-path cropping with a safer visual crop:
+   make the source image slightly taller and shift it up so the
+   visible bottom is trimmed by the container. This preserves
+   rounded corners when the carousel has overflow:hidden. */
+section.home-hero .carousel-slide img,
+.content.home-content > section.home-hero img,
+.content.home-content > section.home-hero .carousel-slide img,
+#home-carousel.carousel .carousel-slide img {
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+  height: 115% !important; /* slightly larger than container */
+  width: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important; /* anchor crop from the top */
+  transform: translateY(-8%) !important; /* nudge image upward */
+  display: block !important;
+}
+
+/* Ensure carousel container shows rounded corners and hides overflow */
+.content.home-content > section.home-hero .carousel,
+section.home-hero .carousel,
+#home-carousel.carousel {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+/* Pull the dots slightly closer to the visible image and place them
+   a little below the visible image area but above the CTAs. Use a
+   centered layout so the dot is visually aligned with the slide. */
+#home-carousel.carousel .carousel-dots,
+section.home-hero .carousel-dots {
+  bottom: 56px !important; /* move the dot up from the bottom edge into space above CTAs */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 40 !important;
+}
+
+/* FINAL TUNE: reduce hero height slightly and ensure minimum gap to CTAs */
+.content.home-content > section.home-hero,
+section.home-hero.content.home-content {
+  height: calc(100vh - 160px) !important; /* a bit shorter to bring buttons up */
+  max-height: 600px !important;
+  min-height: 380px !important;
+  overflow: hidden !important;
+}
+
+.content.home-content > .buttons.home-cta-buttons {
+  margin-top: 0 !important; /* remove gap between carousel and CTAs */
+  padding: 0 !important;
+  position: relative !important;
+  z-index: 30 !important; /* ensure CTAs sit above decorative elements */
+  top: 0 !important; /* reset any negative offset */
+  display: flex !important;
+  justify-content: center !important;
+  gap: 16px !important;
+}
+
+/* Mobile: stack CTAs and make buttons full-width for touch devices */
+@media (max-width: 768px) {
+  .content.home-content > .buttons.home-cta-buttons {
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin-top: 0 !important;
+    padding: 0 !important; /* remove container padding so buttons align exactly */
+    top: 0 !important;
+    width: 100% !important;
+    align-items: center !important;
+  }
+
+  /* Target CTA buttons inside the container: make them true full-width blocks
+     so the second button sits exactly below the first with identical width */
+  .content.home-content > .buttons.home-cta-buttons .cn {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    height: 46px !important;
+    font-size: 16px !important;
+  }
+
+  /* Remove any extra offset for the secondary CTA variant */
+  .content.home-content > .buttons.home-cta-buttons .cn.stories {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Ensure the carousel dots don't overlap CTAs on narrow screens */
+  #home-carousel.carousel .carousel-dots,
+  section.home-hero .carousel-dots {
+    bottom: 88px !important;
+  }
+}
+
 
 /* Video container inside modal */
 #commercials-modal .modal-media {
@@ -269,6 +773,30 @@ body.commercials .commercial-media img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/* Remove horizontal gutters on core content containers so there are
+   no orange/brown side gaps on desktop or mobile. This targets the
+   primary content wrappers used site-wide and is intentionally
+   high-specificity and last in file to override legacy rules. */
+.content,
+.content.home-content,
+.content > .products-scroll,
+.content.home-content > section,
+.products-scroll,
+.collections-header,
+.main {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Remove vertical padding on the collections header so there's no
+   green padding band between the hero and the collections section. */
+.content.home-content .collections-page:first-of-type .collections-header,
+.collections-header {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
 }
 
 /* Text spacing */
@@ -478,3 +1006,6 @@ body.commercials .commercial-card {
 .buttons.home-cta-buttons .cn + .cn {
   margin-left: 24px;
 }
+
+
+/* (Removed previous hero/carousel sizing rules to allow single authoritative block) */
