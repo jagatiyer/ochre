@@ -2222,3 +2222,209 @@ ul li a.active{
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
+/* ===== SOCIETY OVERRIDES =====
+     Scoped overrides for templates/story/society.html
+     Purpose: remove cyan, refine typography, tighten layout, and ensure responsive grids.
+     These rules intentionally use existing primitives from the core stylesheet.
+*/
+
+.story-page h1,
+.story-page h2,
+.story-page h3 {
+    color: var(--text-primary);
+}
+
+.story-page p {
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.75;
+}
+
+.philosophy-label {
+    color: var(--text-faint);
+    letter-spacing: 0.14em;
+    font-size: 12px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+}
+
+/* Hero & first-fold tightening */
+.story-header{
+    padding-top: 120px;
+    padding-bottom: 90px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.story-header h1{
+    font-size: clamp(48px, 6vw, 82px);
+    line-height: 1.05;
+}
+
+.story-header p{
+    max-width: 520px;
+    margin-top: 16px;
+}
+
+/* Statement blocks (Yes it's real / No apps .. / This is not ..) */
+.story-content .story-text > p:first-child,
+.story-content .story-text > p:last-child,
+.story-philosophy p {
+    font-size: clamp(22px, 3.2vw, 36px);
+    line-height: 1.35;
+    color: var(--text-primary);
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Content wrapping & alignment */
+.story-content{
+    max-width: 1100px;
+    margin: 0 auto;
+    gap: 60px;
+    display: grid; /* ensure two-column layout persists */
+    grid-template-columns: 1fr 1fr;
+}
+
+.story-text{
+    max-width: 520px;
+}
+
+.story-image .image-placeholder{
+    width: 100%;
+    height: 320px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #222, #111);
+}
+
+/* Philosophy grid: 4 cols desktop, 2 cols tablet, 1 col mobile */
+.philosophy-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 48px;
+    max-width: 1100px;
+    margin: 60px auto 0;
+    align-items: start;
+}
+
+.philosophy-item{
+    text-align: center;
+}
+
+.philosophy-item h3{
+    margin-top: 16px;
+    font-size: 18px;
+}
+
+.philosophy-item p{
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* Numbers: calmer, smaller */
+.philosophy-number{
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+    margin: 0 auto 10px;
+    opacity: 0.85;
+}
+
+/* Membership includes reuse same grid rules */
+.story-philosophy .philosophy-grid{
+    margin-top: 40px;
+}
+
+.story-philosophy .philosophy-item p{
+    font-size: 14px;
+}
+
+/* CTA polish */
+.story-experience{
+    text-align: center;
+    padding: 120px 20px 140px;
+}
+
+.story-experience h2{
+    font-size: clamp(32px, 4vw, 52px);
+    margin-bottom: 28px;
+}
+
+.visit-btn{
+    background: var(--accent-primary);
+    padding: 14px 28px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.visit-btn a{
+    color: #000;
+    text-decoration: none;
+}
+
+.visit-btn:hover{
+    opacity: 0.9;
+}
+
+/* Spacing cleanup */
+.gradient-divider{
+    margin: 90px 0;
+}
+
+.gradient-divider.lighter{
+    margin: 70px 0;
+}
+
+/* Responsive grid behavior */
+@media (max-width: 1024px){
+    .philosophy-grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px){
+    .philosophy-grid{
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    .story-header{
+        padding-top: 90px;
+        padding-bottom: 70px;
+    }
+
+    .story-header h1{
+        font-size: 44px;
+    }
+
+    .story-philosophy p{
+        font-size: 22px;
+    }
+
+    /* CTA full-width on mobile */
+    .visit-btn{
+        display: block;
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+}
+
+/* End SOCIETY OVERRIDES */
+
+/* Society manifesto: center and span the story-content grid row */
+.society-manifesto{
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    display: block;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* When manifesto is inside the two-column .story-content, span both columns */
+.story-content.society-manifesto-section > .society-manifesto{
+    grid-column: 1 / -1;
+}
