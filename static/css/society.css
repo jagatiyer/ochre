@@ -1,38 +1,278 @@
 /* Society page scoped styles - do NOT use global selectors */
 .society-page {
-  padding: 2rem 1rem;
   box-sizing: border-box;
 }
 
-.society-page .story-content.society-how {
-  max-width: 1200px;
-  margin: 0 auto;
+.society-page .society-how {
+  max-width: 100%;
+  margin: 80px auto;
+  padding: 0 24px;
+  display: block;
 }
 
-.society-page .philosophy-grid {
+.society-page .society-how .philosophy-label {
+  margin-bottom: 12px;
+  font-variant: small-caps;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  display: block;
+}
+
+.society-page .society-how h2 {
+  margin-bottom: 40px;
+  margin-top: 0;
+  display: block;
+  font-family: var(--font-display, 'Playfair Display'), serif;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1.05;
+  color: var(--text-main);
+  text-align: left;
+}
+
+.society-page .society-how .society-heading,
+.society-page .society-how h2 {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+/* SOCIETY — How it Works grid */
+.society-page .society-how .philosophy-grid {
   display: grid;
-  gap: 1.5rem;
   grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  align-items: stretch;
   width: 100%;
 }
 
-.society-page .philosophy-item {
-  background: #fff;
-  padding: 1rem;
-  border: 1px solid rgba(0,0,0,0.06);
-  border-radius: 4px;
-}
-
-/* Tablet: 2 columns */
 @media (max-width: 1024px) {
   .society-page .philosophy-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Mobile: 1 column */
 @media (max-width: 640px) {
   .society-page .philosophy-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.society-page .society-how .philosophy-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 28px 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.society-page .philosophy-item h3 {
+  margin-bottom: 12px;
+  color: var(--text-main);
+}
+
+.society-page .philosophy-item p {
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* SOCIETY — Membership layout and alignment (scoped) */
+.society-page .society-membership-grid {
+  max-width: 1100px;
+  margin: 120px auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 80px;
+  align-items: center; /* vertical centering */
+  padding: 0 24px;
+}
+
+.society-page .society-membership-left {
+  max-width: 520px;
+  text-align: left;
+}
+
+.society-page .society-membership-right {
+  display: flex;
+  justify-content: center; /* center list within right half */
+}
+
+.society-page .society-list {
+  max-width: 420px;
+  margin: 0 auto; /* center the list block inside the right column */
+  padding-left: 1.25em; /* keep bullet indentation */
+}
+
+@media (max-width: 768px) {
+  .society-page .society-membership-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .society-page .society-membership-right {
+    justify-content: flex-start;
+  }
+}
+
+/* SOCIETY — Final CTA centering (scoped) */
+
+.society-page .story-experience .experience-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+/* OVERRIDE: ensure membership bullets sit to the right half visually */
+.society-page .society-membership-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.society-page .society-membership-right .society-list {
+  width: 420px;
+  margin: 0;
+  padding-left: 1.25em;
+}
+
+/* SOCIETY — HOW section alignment scoped to Society only */
+.society-page .story-content.society-how {
+  max-width: 1100px;
+  margin: 0 auto 80px;
+  padding: 0 24px;
+}
+
+/* SOCIETY — Membership two-column grid (scoped) */
+.society-page .society-membership-grid {
+  max-width: 1100px;
+  margin: 120px auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 80px;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.society-page .society-membership-left {
+  text-align: left;
+}
+
+.society-page .society-membership-right {
+  display: flex;
+  justify-content: center;
+}
+
+.society-page .society-list {
+  max-width: 420px;
+  margin: 0 auto;
+  padding-left: 1.25em;
+}
+
+@media (max-width: 768px) {
+  .society-page .society-membership-grid {
+    grid-template-columns: 1fr;
+    row-gap: 40px;
+  }
+
+  .society-page .society-membership-right {
+    justify-content: flex-start;
+  }
+}
+
+/* Ensure HOW grid items stretch to equal height (already scoped) */
+.society-page .society-how .philosophy-grid {
+  align-items: stretch;
+}
+
+.society-page .society-how .philosophy-item {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* SOCIETY — lock HOW section width and alignment (scoped) */
+.society-page .story-content.society-how {
+  max-width: 1100px;
+  margin: 0 auto 80px;
+  padding: 0 24px;
+}
+
+.society-page .society-how {
+  text-align: left;
+}
+
+.society-page .society-how .philosophy-label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.society-page .society-how h2 {
+  margin-top: 0;
+}
+
+/* Ensure equal-height grid for philosophy items (fills grid cell) */
+.society-page .society-how .philosophy-grid {
+  align-items: stretch;
+}
+
+.society-page .society-how .philosophy-item {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+@media (max-width: 768px) {
+  .society-page .society-membership-grid {
+    grid-template-columns: 1fr;
+    row-gap: 40px;
+  }
+
+  .society-page .society-membership-right {
+    justify-content: flex-start;
+  }
+}
+
+
+
+/* SOCIETY — Membership layout */
+.society-page .society-membership-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.society-page .society-membership-left {
+  max-width: 520px;
+}
+
+.society-page .society-membership-right {
+  display: flex;
+  justify-content: center;
+}
+
+.society-page .society-membership-right .society-list {
+  margin: 0 auto;
+  padding-left: 1.25em;
+}
+
+@media (max-width: 768px) {
+  .society-page .society-membership-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .society-page .society-membership-right {
+    justify-content: flex-start;
+  }
+}
+
+/* SOCIETY — Final CTA centering */
+.society-page .story-experience .experience-buttons {
+  display: flex;
+  justify-content: center;
 }
