@@ -1,6 +1,42 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/society.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="story-page society-page">
+  <div class="story-content society-how">
+    <div class="society-intro">
+      <p class="philosophy-label">— HOW THE OCHRE SOCIETY WORKS —</p>
+      <h2>Luxury, distilled to simplicity.</h2>
+    </div>
+
+    <div class="philosophy-grid">
+      <div class="philosophy-item">
+        <h3>Curate</h3>
+        <p>Thoughtfully selected works and experiences.</p>
+      </div>
+      <div class="philosophy-item">
+        <h3>Cultivate</h3>
+        <p>Support for artists and makers we believe in.</p>
+      </div>
+      <div class="philosophy-item">
+        <h3>Collect</h3>
+        <p>Membership access to rare pieces and events.</p>
+      </div>
+      <div class="philosophy-item">
+        <h3>Connect</h3>
+        <p>A small, considered community of patrons.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% extends "base.html" %}
+{% load static %}
+
 {% block extra_head %}
 <style>
   /* Scoped society page adjustments */

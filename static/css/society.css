@@ -1,0 +1,38 @@
+/* Society page scoped styles - do NOT use global selectors */
+.society-page {
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+.society-page .story-content.society-how {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.society-page .philosophy-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+}
+
+.society-page .philosophy-item {
+  background: #fff;
+  padding: 1rem;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 4px;
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1024px) {
+  .society-page .philosophy-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 640px) {
+  .society-page .philosophy-grid {
+    grid-template-columns: 1fr;
+  }
+}
