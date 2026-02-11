@@ -21,8 +21,8 @@
 .content.home-content section.home-hero + .home-section {
   /* HARD OVERRIDE: authoritative spacing owner for first section after hero/CTA */
   margin-top: 0 !important;
-  padding-top: 48px !important;
-  padding-block-start: 48px !important;
+  padding-top: 32px !important;
+  padding-block-start: 32px !important;
   padding-block-end: 0 !important;
   padding-bottom: 0 !important;
   min-height: auto !important;
@@ -42,8 +42,8 @@
   .content.home-content section.home-hero + .content-section,
   .content.home-content section.home-hero + .home-section {
     margin-top: 0 !important;
-    padding-top: 32px !important;
-    padding-block-start: 32px !important;
+    padding-top: 24px !important;
+    padding-block-start: 24px !important;
     padding-block-end: 0 !important;
   }
 }
@@ -53,12 +53,12 @@
    Reduce top spacing above CTA buttons so they feel connected to hero
    =============================== */
 .content.home-content .buttons.home-cta-buttons {
-  margin-top: 36px !important; /* desktop target: ~32-40px */
+  margin-top: 24px !important; /* reduced spacing */
 }
 
 @media (max-width: 768px) {
   .content.home-content .buttons.home-cta-buttons {
-    margin-top: 20px !important; /* mobile target: ~16-24px */
+    margin-top: 12px !important; /* reduced mobile spacing */
   }
 }
 
@@ -68,8 +68,8 @@
    element classes: "buttons home-cta-buttons"
    ========================================================= */
 .content.home-content > .buttons.home-cta-buttons {
-  padding-top: 32px !important;
-  padding-bottom: 32px !important;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
   margin-top: 0 !important;
   min-height: auto !important;
   height: auto !important;
@@ -82,7 +82,7 @@
 /* If a residual gap remains due to legacy flow (header affects layout),
    apply a small controlled negative nudge to close the band. */
 header ~ .content.home-content > .buttons.home-cta-buttons {
-  margin-top: -32px !important;
+  margin-top: -24px !important;
 }
 
 /* =========================================================
@@ -93,17 +93,17 @@ header ~ .content.home-content > .buttons.home-cta-buttons {
 .content.home-content .collections-page:first-of-type .collections-header .description {
   max-width: 640px;
   text-align: left;
-  margin-top: 16px;
-  margin-bottom: 48px;
+  margin-top: 12px;
+  margin-bottom: 32px;
 }
 
 /* AUTHORITATIVE OWNER: first content section takes spacing from hero/CTA */
 .content.home-content .collections-page:first-of-type,
 .content.home-content .section:first-of-type,
 .content.home-content .container:first-of-type {
-  padding-top: 48px !important;
+  padding-top: 32px !important;
   margin-top: 0 !important;
-  padding-block-start: 48px !important;
+  padding-block-start: 32px !important;
   padding-block-end: 0 !important;
 }
 
@@ -111,8 +111,8 @@ header ~ .content.home-content > .buttons.home-cta-buttons {
   .content.home-content .collections-page:first-of-type,
   .content.home-content .section:first-of-type,
   .content.home-content .container:first-of-type {
-    padding-top: 32px !important;
-    padding-block-start: 32px !important;
+    padding-top: 24px !important;
+    padding-block-start: 24px !important;
   }
 }
 
@@ -134,7 +134,7 @@ header ~ .content.home-content > .buttons.home-cta-buttons {
 /* FIRST-SECTION-ONLY override: authoritative spacing owner on home page */
 body.home section.collections-page:first-of-type {
   margin-top: 0 !important;
-  padding-top: 48px !important;
+  padding-top: 32px !important;
 }
 
 /* =========================================================
@@ -152,7 +152,7 @@ body.home .home-hero {
 /* 2) Hero → CTA: target ~32px. Remove incoming CTA top padding and
    make hero control the bottom spacing. */
 body.home .home-hero {
-  padding-bottom: 32px !important; /* sets hero → CTA */
+  padding-bottom: 24px !important; /* sets hero → CTA (reduced) */
 }
 body.home .content.home-content > .buttons.home-cta-buttons {
   padding-top: 0 !important; /* remove stacked incoming CTA top padding */
@@ -165,27 +165,27 @@ body.home .content.home-content > .buttons.home-cta-buttons {
 body.home .content.home-content .collections-page:first-of-type,
 body.home .content.home-content .section:first-of-type,
 body.home .content.home-content .container:first-of-type {
-  padding-top: 40px !important;
+  padding-top: 28px !important;
   margin-top: 0 !important;
 }
 body.home section.collections-page:first-of-type {
-  padding-top: 40px !important;
+  padding-top: 28px !important;
   margin-top: 0 !important;
 }
 
 /* 4) Section → Section (between content sections): target ~56px.
    Normalize incoming section top gaps; do not tamper with inner padding. */
 body.home .products-section {
-  margin-top: 40px !important;
+  margin-top: 24px !important;
 }
 body.home .collections-page .experience-section {
-  margin-top: 40px !important;
+  margin-top: 24px !important;
 }
 
 /* Ensure a consistent gap after product grids so the next section
    (e.g., "Watch our videos") sits clearly separated. */
   .content.home-content .products-scroll {
-  margin-bottom: 40px !important;
+  margin-bottom: 24px !important;
 }
 
 /* Strong override to catch inline-styled products-scroll instances
@@ -194,8 +194,8 @@ body.home .collections-page .experience-section {
 .content.home-content .products-scroll,
 .products-scroll,
 div.products-scroll[style] {
-  padding-bottom: 40px !important;
-  margin-bottom: 40px !important;
+  padding-bottom: 24px !important;
+  margin-bottom: 24px !important;
 }
 
 /* Footer: equal-width three-column layout across all pages */
@@ -244,6 +244,44 @@ body.home .content.home-content {
 */
 
 /* END HOME PAGE – VERTICAL SPACING NORMALIZATION */
+
+/* =========================================================
+   TIGHTEN: internal gaps between entries inside `.content.home-content`
+   Purpose: Reduce green whitespace between stacked sections that live
+   inside the home content wrapper only. Strictly scoped to avoid
+   changing global collections/shop/story layouts.
+   ========================================================= */
+/* Reduce vertical gap between adjacent children of home content */
+.content.home-content > * + * {
+  margin-top: 18px !important;
+}
+
+/* Reduce heavy incoming top margins inside collections and products sections */
+.content.home-content .collections-page,
+.content.home-content .products-section,
+.content.home-content .story-content {
+  margin-top: 0 !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+/* Reduce gap specifically for product grids inside home content */
+.content.home-content .collections-page .products-section {
+  margin: 12px auto 0 !important;
+}
+
+/* Tighten story-content internal grid gap when used inside home content */
+.content.home-content .story-content {
+  gap: 18px !important;
+}
+
+/* Clamp heading spacing inside home content sections */
+.content.home-content section h1,
+.content.home-content section h2 {
+  margin-top: 8px !important;
+  margin-bottom: 12px !important;
+}
+
 
 /* HOME – remove artificial space above hero (wrapper padding fix) */
 body.home .content.home-content {
