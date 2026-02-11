@@ -10,6 +10,7 @@
     if(!btn) return;
     var page = parseInt(btn.getAttribute('data-page') || '1', 10);
     var url = btn.getAttribute('data-url');
+    var PAGE_SIZE = parseInt(btn.getAttribute('data-page-size') || '10', 10);
     var loading = false;
 
     btn.addEventListener('click', function(){
@@ -24,7 +25,9 @@
         .then(function(resp){ if(!resp.ok) throw new Error('Network error'); return resp.json(); })
         .then(function(data){
           var container = document.querySelector('.press-list');
-          if(!container) return;
+          if(!container){
+            console.warn('press-list container not found');
+          }
           data.articles.forEach(function(a){
             var item = document.createElement('div');
             item.className = 'press-list-item';
@@ -51,13 +54,20 @@
             container.appendChild(item);
           });
 
+          // update page state
           page = next;
+          btn.setAttribute('data-page', String(page));
+
+          // Determine whether there are more items.
+          var has_more = typeof data.has_more !== 'undefined' ? !!data.has_more : (data.articles.length >= PAGE_SIZE);
+
           loading = false;
           btn.disabled = false;
-          if(data.has_more){
+          if(has_more){
             btn.textContent = 'SEE MORE';
           } else {
-            btn.style.display = 'none';
+            btn.textContent = 'No more entries...';
+            btn.disabled = true;
           }
         })
         .catch(function(err){

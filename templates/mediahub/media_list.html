@@ -116,9 +116,10 @@
 
     </div>
     <div class="text-center" style="margin-top:28px;">
-      <button id="load-more-press"
+            <button id="load-more-press"
               class="cn"
               data-page="1"
+              data-page-size="{{ press_page_size|default:10 }}"
               data-url="{% url 'mediahub:load_more_press' %}">
         SEE MORE
       </button>
@@ -160,7 +161,7 @@
 
   <div class="gradient-divider"></div>
 
+  <script src="{% static 'js/mediahub-load-more.js' %}"></script>
 </div>
 
 {% endblock %}
-  <script src="{% static 'js/mediahub-load-more.js' %}"></script>
