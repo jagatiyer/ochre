@@ -33,9 +33,13 @@
         {% for article in featured %}
           <div class="press-card collection-card">
 
-            {% if article.cover_image and article.cover_image.url %}
-              <img src="{{ article.cover_image.url }}" alt="{{ article.title }}" loading="lazy">
-            {% endif %}
+            <div class="press-card-media">
+              {% if article.cover_image and article.cover_image.url %}
+                <img src="{{ article.cover_image.url }}" alt="{{ article.title }}" loading="lazy">
+              {% else %}
+                <div class="press-card-placeholder" aria-hidden="true"></div>
+              {% endif %}
+            </div>
 
             <!-- Text block: publication, title, date -->
             <div>

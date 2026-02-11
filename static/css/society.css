@@ -351,10 +351,11 @@
 /* Override inline template sizing to align hero with site content width
    (scoped to Society page only) */
 .society-page .story-header.society-hero {
-  max-width: 1200px !important;
+  /* match the site's main container so hero aligns with logo/content */
+  max-width: var(--container-width) !important;
   margin: 60px auto 20px !important;
-  padding-left: 40px !important;
-  padding-right: 40px !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
   text-align: left !important;
 }
 
