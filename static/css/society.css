@@ -3,82 +3,7 @@
   box-sizing: border-box;
 }
 
-.society-page .society-how {
-  max-width: 100%;
-  margin: 80px auto;
-  padding: 0 24px;
-  display: block;
-}
 
-.society-page .society-how .philosophy-label {
-  margin-bottom: 12px;
-  font-variant: small-caps;
-  color: var(--text-muted);
-  letter-spacing: 0.08em;
-  display: block;
-}
-
-.society-page .society-how h2 {
-  margin-bottom: 40px;
-  margin-top: 0;
-  display: block;
-  font-family: var(--font-display, 'Playfair Display'), serif;
-  font-size: 40px;
-  font-weight: 400;
-  line-height: 1.05;
-  color: var(--text-main);
-  text-align: left;
-}
-
-.society-page .society-how .society-heading,
-.society-page .society-how h2 {
-  display: block;
-  margin-top: 0;
-  margin-bottom: 40px;
-  text-align: left;
-}
-
-/* SOCIETY — How it Works grid */
-.society-page .society-how .philosophy-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
-  align-items: stretch;
-  width: 100%;
-}
-
-@media (max-width: 1024px) {
-  .society-page .philosophy-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .society-page .philosophy-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.society-page .society-how .philosophy-item {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 28px 24px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.society-page .philosophy-item h3 {
-  margin-bottom: 12px;
-  color: var(--text-main);
-}
-
-.society-page .philosophy-item p {
-  color: var(--text-muted);
-  line-height: 1.7;
-}
 
 /* SOCIETY — Membership layout and alignment (scoped) */
 .society-page .society-membership-grid {
@@ -101,11 +26,7 @@
   justify-content: center; /* center list within right half */
 }
 
-.society-page .society-list {
-  max-width: 420px;
-  margin: 0 auto; /* center the list block inside the right column */
-  padding-left: 1.25em; /* keep bullet indentation */
-}
+
 
 @media (max-width: 768px) {
   .society-page .society-membership-grid {
@@ -275,4 +196,170 @@
 .society-page .story-experience .experience-buttons {
   display: flex;
   justify-content: center;
+}
+
+
+/* Align society intro block to site content width */
+.society-how,
+.story-header.society-hero,
+.society-content {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+
+/* Ensure heading alignment */
+.society-intro,
+.story-header.society-hero {
+  text-align: left;
+}
+
+
+/* 4-column grid desktop */
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin-top: 48px;
+}
+
+
+/* Clean card styling */
+.philosophy-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+
+.philosophy-item h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+
+.philosophy-item p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+
+/* Tablet → 2 columns */
+@media (max-width: 1024px) {
+  .philosophy-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+/* Mobile → 1 column */
+@media (max-width: 640px) {
+  .philosophy-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Membership two-column layout */
+.society-section.membership-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 60px;
+  align-items: start;
+  margin-top: 100px;
+}
+
+
+.society-section.membership-layout ul {
+  margin-top: 12px;
+}
+
+
+@media (max-width: 900px) {
+  .society-section.membership-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.society-closer {
+  margin-top: 80px;
+}
+
+
+.society-closer h2,
+.society-closer h1 {
+  margin-top: 40px;
+}
+
+/* Add breathing space between main society heading and grid */
+.society-intro h2 {
+  margin-bottom: 24px; /* adjust to 32px if more spacing needed */
+}
+
+/* If .society-intro doesn't wrap the heading, apply to section headings */
+.story-header.society-hero h1,
+.society-section h2 {
+  margin-bottom: 24px;
+}
+
+/* End society refinements */
+
+
+/* ================================
+   Society Hero Header System
+   ================================ */
+
+
+.society-eyebrow {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+
+.society-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 56px;
+  line-height: 1.1;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+
+.society-description {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--text-muted);
+  max-width: 760px;
+  text-align: left;
+}
+
+
+/* Override inline template sizing to align hero with site content width
+   (scoped to Society page only) */
+.society-page .story-header.society-hero {
+  max-width: 1200px !important;
+  margin: 60px auto 20px !important;
+  padding-left: 40px !important;
+  padding-right: 40px !important;
+  text-align: left !important;
+}
+
+/* Ensure the hero title itself is forcibly left-aligned within the hero */
+.society-page .story-header.society-hero .society-title {
+  text-align: left !important;
+  margin-left: 0 !important;
 }
