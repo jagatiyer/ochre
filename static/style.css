@@ -336,6 +336,31 @@ img {
   padding: 10px 18px !important;
 }
 
+/* Center the SEE MORE button in the All Press section */
+.all-press-section .text-center {
+  text-align: center !important;
+}
+
+.all-press-section #load-more-press {
+  display: inline-block !important;
+  margin: 0 auto !important;
+}
+
+/* Dark button variant for SEE MORE (scoped) */
+.all-press-section #load-more-press {
+  background: #0f1112 !important;
+  color: #ffffff !important;
+  border: 1px solid var(--text-soft) !important;
+  padding: 10px 24px !important;
+  width: auto !important;
+  height: 40px !important;
+}
+
+.all-press-section #load-more-press:hover {
+  background: #16191a !important;
+  color: #ffffff !important;
+}
+
 /* Text column — guaranteed consistent start */
 .mediahub-page .press-card-content,
 .mediahub-page .press-card > div:nth-child(2) {

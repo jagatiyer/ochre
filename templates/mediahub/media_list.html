@@ -115,6 +115,14 @@
       {% endif %}
 
     </div>
+    <div class="text-center" style="margin-top:28px;">
+      <button id="load-more-press"
+              class="cn"
+              data-page="1"
+              data-url="{% url 'mediahub:load_more_press' %}">
+        SEE MORE
+      </button>
+    </div>
   </section>
 
   <!-- ================= PRESS KIT ================= -->
@@ -155,3 +163,4 @@
 </div>
 
 {% endblock %}
+  <script src="{% static 'js/mediahub-load-more.js' %}"></script>

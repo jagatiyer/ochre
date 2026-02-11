@@ -5,5 +5,6 @@ app_name = "mediahub"
 
 urlpatterns = [
     path("", views.media_index, name="media_index"),
+    path("press/load_more/", views.load_more_press, name="load_more_press"),
     path("press/<slug:slug>/", views.press_detail, name="press_detail"),
 ]
