@@ -99,48 +99,49 @@
 <!-- =========================================================
   MAIN CONTENT
   ========================================================= -->
+{% block body_class %}home{% endblock %}
 {% block content %}
+
+<!-- ===============================
+  HERO CAROUSEL (images / videos) — moved outside fixed-width `.main`
+  =============================== -->
+{% if carousel_slides %}
+<section class="home-hero">
+  <div class="carousel" id="home-carousel" data-autoplay-seconds="{{ carousel_slides.0.auto_slide_seconds|default:5 }}">
+    <div class="carousel-track">
+      {% for slide in carousel_slides %}
+      <div class="carousel-slide" data-index="{{ forloop.counter0 }}">
+        <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}">
+        {% if slide.title or slide.cta_text %}
+        <div class="carousel-caption">
+          {% if slide.title %}<h3>{{ slide.title }}</h3>{% endif %}
+          {% if slide.cta_text %}
+            <a class="cn carousel-cta" href="{{ slide.cta_url|default:'#' }}">{{ slide.cta_text }}</a>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <button class="carousel-arrow left">‹</button>
+    <button class="carousel-arrow right">›</button>
+
+    <div class="carousel-dots">
+      {% for slide in carousel_slides %}
+        <button class="dot" data-index="{{ forloop.counter0 }}"></button>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
 
 <div class="main">
   <div class="content home-content">
 
-     <!-- ===============================
-       HERO CAROUSEL (images / videos)
-       =============================== -->
-    {% if carousel_slides %}
-    <section class="home-hero">
-      <div class="carousel" id="home-carousel" data-autoplay-seconds="{{ carousel_slides.0.auto_slide_seconds|default:5 }}">
-        <div class="carousel-track">
-          {% for slide in carousel_slides %}
-          <div class="carousel-slide" data-index="{{ forloop.counter0 }}">
-            <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}">
-            {% if slide.title or slide.cta_text %}
-            <div class="carousel-caption">
-              {% if slide.title %}<h3>{{ slide.title }}</h3>{% endif %}
-              {% if slide.cta_text %}
-                <a class="cn carousel-cta" href="{{ slide.cta_url|default:'#' }}">{{ slide.cta_text }}</a>
-              {% endif %}
-            </div>
-            {% endif %}
-          </div>
-          {% endfor %}
-        </div>
-
-        <button class="carousel-arrow left">‹</button>
-        <button class="carousel-arrow right">›</button>
-
-        <div class="carousel-dots">
-          {% for slide in carousel_slides %}
-            <button class="dot" data-index="{{ forloop.counter0 }}"></button>
-          {% endfor %}
-        </div>
-      </div>
-    </section>
-    {% endif %}
-
-     <!-- ===============================
-       CTA BUTTONS
-       =============================== -->
+    <!-- ===============================
+      CTA BUTTONS
+      =============================== -->
     <div class="buttons home-cta-buttons">
       <button class="cn shop">
         <a href="{% url 'shop:shop_index' %}">SHOP</a>
@@ -149,8 +150,6 @@
         <a href="{% url 'story:story_page' %}">OUR STORY</a>
       </button>
     </div>
-
-  </div>
 
     <!-- ===============================
       HANDPICKED SELECTION
@@ -161,10 +160,10 @@
         <span class="dash">—</span> HANDPICKED SELECTION <span class="dash">—</span>
       </div>
 
-      <h1>The House Favourites</h1>
-      <p class="subtitle"><em>Bar-quality, without compromise.</em></p>
+      <h1 style="text-align: left;">The House Favourites</h1>
+      <p class="subtitle" style="text-align: left;"><em>Bar-quality, without compromise.</em></p>
 
-      <p class="description">
+      <p class="description" style="white-space: normal; overflow-wrap: normal; word-break: keep-all; hyphens: none;">
         Our most poured cocktail premixes are crafted with precision, balanced for clarity,
         and designed to deliver a consistent, refined serve every time.
         No excess. No shortcuts. Just the cocktail, as it should be.
@@ -183,10 +182,10 @@
         <span class="dash">—</span> WATCH OUR VIDEOS <span class="dash">—</span>
       </div>
 
-      <h1>Ochre Digital Video Commercials</h1>
-      <p class="subtitle"><em>We document culture. The pours are incidental.</em></p>
+      <h1 style="text-align: left;">Ochre Digital Video Commercials</h1>
+      <p class="subtitle" style="text-align: left;"><em>We document culture. The pours are incidental.</em></p>
 
-      <p class="description">
+      <p class="description" style="text-align: left; white-space: normal; overflow-wrap: normal; word-break: keep-all; hyphens: none;">
         Ochre doesn’t make ads. We make films which are observations of how modern
         celebration actually looks, sounds, and feels.
       </p>

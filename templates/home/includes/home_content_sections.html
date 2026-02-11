@@ -11,11 +11,11 @@
     {% endif %}
 
     {% if home_section_header.title %}
-      <h1>{{ home_section_header.title }}</h1>
+      <h1 style="text-align: left; margin-left: 0; margin-right: 0;">{{ home_section_header.title }}</h1>
     {% endif %}
 
     {% if home_section_header.description %}
-      <p class="description">
+      <p class="description" style="text-align: left; margin-left: 0; margin-right: 0;">
         {{ home_section_header.description }}
       </p>
     {% endif %}
@@ -33,13 +33,13 @@
                 <img src="{{ section.image.url }}" alt="{{ section.title }}">
               {% endif %}
             </div>
-            <div class="story-text">
-              <h2>{{ section.title }}</h2>
+            <div class="story-text" style="text-align: left;">
+              <h2 style="text-align: left; margin-left: 0; margin-right: 0;">{{ section.title }}</h2>
               {{ section.body|linebreaks }}
             </div>
           {% else %}
-            <div class="story-text">
-              <h2>{{ section.title }}</h2>
+            <div class="story-text" style="text-align: left;">
+              <h2 style="text-align: left; margin-left: 0; margin-right: 0;">{{ section.title }}</h2>
               {{ section.body|linebreaks }}
             </div>
             <div class="story-image">

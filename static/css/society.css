@@ -125,6 +125,108 @@
   justify-content: center;
 }
 
+/* AUTHORITATIVE: cancel any homepage-style breakout positioning
+   that may have leaked into non-home pages. Keep this scoped to
+   the Society page only. */
+.society-page .story-header.society-hero {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100% !important;
+  max-width: 900px !important;
+  box-sizing: border-box !important;
+}
+
+.society-page .story-header.society-hero h1,
+.society-page .story-header.society-hero h2.society-sub,
+.society-page .story-header.society-hero p.society-copy {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  text-align: left !important;
+}
+
+/* Ensure the society page uses the same centered header container
+   as other pages (override page-level safe padding that shifts it).
+   This keeps full-bleed only on the homepage. */
+/* Keep page-level padding as the site default so header aligns with navbar */
+body.society .story-page .story-header.society-hero {
+  max-width: var(--container-width) !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Align hero left edge with site header/logo start by matching
+   the page-safe padding used elsewhere. This nudges the hero right
+   to visually align with the logo. */
+body.society .story-page .story-header.society-hero {
+  padding-left: clamp(16px, 5vw, 72px) !important;
+  padding-right: clamp(16px, 5vw, 72px) !important;
+}
+
+
+/* -------------------------
+   SOCIETY — HERO HEADER SYSTEM
+   Match the canonical header system used elsewhere:
+   - small red em-dash eyebrow
+   - left-aligned Playfair H2 subtitle
+   - Satoshi paragraph copy
+   ------------------------- */
+.society-page .story-header.society-hero .craft-spirits {
+  text-align: left;
+  font-size: 13px;
+  color: var(--accent-red);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 400; /* reduced weight */
+  transform: translateY(2px); /* nudge down slightly */
+}
+.society-page .story-header.society-hero .craft-spirits .dash {
+  color: var(--accent-red);
+  font-size: 18px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.society-page .story-header.society-hero h1 {
+  text-align: left;
+  font-family: 'Playfair Display', serif;
+  font-weight: 300;
+  margin-bottom: 8px;
+}
+
+/* Match commercials header vertical rhythm: 60px top, 20px side padding, 40px bottom */
+.society-page .story-header.society-hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px 40px !important;
+}
+
+.society-page .story-header.society-hero h2.society-sub {
+  text-align: left;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--text-soft);
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.society-page .story-header.society-hero p.society-copy {
+  text-align: left;
+  font-family: 'Satoshi', sans-serif;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
 /* OVERRIDE: ensure membership bullets sit to the right half visually */
 .society-page .society-membership-right {
   display: flex;
@@ -142,6 +244,13 @@
   max-width: 1100px;
   margin: 0 auto 80px;
   padding: 0 24px;
+}
+
+/* Tighten spacing for story-content on society page to remove large gaps */
+.society-page .story-content,
+.society-page .story-content.society-how {
+  margin: 12px auto 24px !important;
+  padding-bottom: 24px !important;
 }
 
 /* SOCIETY — Membership two-column grid (scoped) */
@@ -181,6 +290,32 @@
   }
 }
 
+/* SOCIETY: keep hero constrained to site container (no full-bleed) */
+@media (min-width: 1280px) {
+  .society-page .story-header.society-hero {
+    position: relative;
+    left: 0;
+    width: 100%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0;
+    overflow: visible;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+
+  .society-page .story-header.society-hero img,
+  .society-page .story-header.society-hero video,
+  .society-page .story-header.society-hero .hero-media {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    border-radius: inherit;
+  }
+}
+
 /* Ensure HOW grid items stretch to equal height (already scoped) */
 .society-page .society-how .philosophy-grid {
   align-items: stretch;
@@ -211,6 +346,19 @@
 
 .society-page .society-how h2 {
   margin-top: 0;
+}
+
+/* Remove excessive top/bottom gap around the society hero
+   — keep adjustments scoped to .society-page only */
+.society-page {
+  /* reduce page-level top padding so hero sits closer to header */
+  padding-top: 0 !important;
+}
+
+.society-page .story-header.society-hero {
+  margin-top: 0 !important;
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
 }
 
 /* Ensure equal-height grid for philosophy items (fills grid cell) */

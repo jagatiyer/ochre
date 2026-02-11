@@ -14,29 +14,29 @@
           <div style="height:220px; background:#111; border-radius:8px;"></div>
         {% endif %}
 
-        <p class="collection-card-category">
+        <p class="collection-card-category" style="text-align: left; margin-left:0; margin-right:0;">
           {{ product.category.name }}
         </p>
 
-        <h3 class="collection-card-title">
+        <h3 class="collection-card-title" style="text-align: left; margin-left:0; margin-right:0;">
           {{ product.title }}
         </h3>
 
-        <p class="collection-card-excerpt">
+        <p class="collection-card-excerpt" style="text-align: left; margin-left:0; margin-right:0;">
           {{ product.description|striptags|truncatewords:20 }}
         </p>
 
         {% if not product.is_experience %}
           {% if product.has_units %}
-            <p class="product-price" data-product-id="{{ product.id }}" style="color:#fff; font-size:16px; margin-bottom:6px;">
+            <p class="product-price" data-product-id="{{ product.id }}" style="color:#fff; font-size:16px; margin-bottom:6px; text-align: left; margin-left:0; margin-right:0;">
               ₹ {% with d=product.default_unit %}
                   {% if d %}{{ d.price }}{% else %}{{ product.price }}{% endif %}
                 {% endwith %}
             </p>
-            <p style="color:#fff; font-size:14px; margin:6px 0 4px;">Unit:</p>
+            <p style="color:#fff; font-size:14px; margin:6px 0 4px; text-align: left; margin-left: 0;">Unit:</p>
 
             <select class="product-unit-selector"
-                    data-product-id="{{ product.id }}" style="margin-bottom:8px; width:100%;">
+                    data-product-id="{{ product.id }}" style="margin-bottom:8px; width:100%; text-align: left;">
               {% for u in product.active_units %}
                 <option value="{{ u.id }}"
                         data-price="{{ u.price }}"

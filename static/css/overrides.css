@@ -143,9 +143,9 @@ body.home section.collections-page:first-of-type {
    Rules are strictly scoped under `body.home`. Add-only and safe.
    ========================================================= */
 
-/* 1) Navbar → Hero: target ~48px. Ensure hero top spacing is authoritative. */
+/* 1) Navbar → Hero: reduce gap so hero sits directly under navbar. */
 body.home .home-hero {
-  padding-top: 48px !important; /* sets navbar → hero */
+  padding-top: 0 !important; /* remove green gap between navbar and carousel */
   /* Keep internal hero layout intact; only adjust block spacing */
 }
 
@@ -196,6 +196,22 @@ body.home .collections-page .experience-section {
 div.products-scroll[style] {
   padding-bottom: 40px !important;
   margin-bottom: 40px !important;
+}
+
+/* Footer: equal-width three-column layout across all pages */
+.footer .footer-main {
+  display: flex !important;
+  gap: 32px !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important; /* allow wrapping on very narrow screens */
+}
+.footer .footer-column {
+  flex: 1 1 0 !important; /* equal width */
+  min-width: 0 !important; /* prevents overflow in flex children */
+}
+@media (max-width: 720px) {
+  .footer .footer-main { flex-direction: column !important; gap: 16px !important; }
 }
 
 /* Defensive: if a collections-page follows directly, ensure it
@@ -519,6 +535,96 @@ body.commercials .commercial-media img {
     max-height: none !important;
   }
 
+  /* HOME — break the carousel out of any centered/max-width wrapper so
+     background media (images/videos) bleed edge-to-edge on desktop.
+     Uses the safe page-scoped selector `section.home-hero` so only the
+     home hero is affected. */
+  section.home-hero #home-carousel.carousel,
+  section.home-hero .carousel-track {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+    position: relative !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  /* Ensure slides/media fill the breakout container and cover without
+     changing textual/content layout (content may remain centered). */
+  section.home-hero .carousel-slide,
+  section.home-hero .carousel-slide img,
+  section.home-hero .carousel-slide video {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  /* Prevent horizontal scroll only on the homepage while allowing normal
+     behavior elsewhere. */
+  body.home {
+    overflow-x: hidden !important;
+  }
+
+  /* STRONGER BREAKOUT: centering via left/transform is more robust when the
+     parent uses padding or contains a centering wrapper. This ensures the
+     carousel truly spans the viewport on large screens without touching
+     other pages. */
+  /* Use calc breakout to overcome parent padding/centering wrappers */
+  body.home section.home-hero > .carousel {
+    position: relative !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    box-sizing: border-box !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  /* Stronger fallback breakout: use left + negative margin so the
+     carousel aligns to the viewport even if ancestor transforms/padding
+     interfere with calc-based margins. This is safe because it's
+     homepage-scoped and uses !important only here. */
+  body.home section.home-hero > .carousel.breakout-fallback,
+  body.home section.home-hero > .carousel {
+    left: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+  }
+
+  /* Allow the carousel to visibly extend outside the hero container so
+     its right edge isn't clipped by `section.home-hero` which previously
+     had `overflow:hidden`. Scoped to homepage only. */
+  body.home section.home-hero {
+    overflow: visible !important;
+  }
+
+  /* Extra safety: remove any lingering max-width on the carousel and
+     ensure the track and slides use viewport widths so media can't be
+     constrained by ancestor wrappers. */
+  body.home .carousel {
+    max-width: none !important;
+    width: 100vw !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+  }
+
+  body.home section.home-hero .carousel-track {
+    width: 100vw !important;
+    min-width: 100vw !important;
+  }
+
+  body.home section.home-hero .carousel-slide {
+    min-width: 100vw !important;
+  }
+
   /* Ensure carousel internals stretch */
   section.home-hero .carousel,
   section.home-hero .carousel-track,
@@ -528,6 +634,44 @@ body.commercials .commercial-media img {
   }
 
   /* Images must fully cover hero */
+
+  /* =========================================================
+     FULL-BLEED HOME HERO (homepage only)
+     Scope: `body.home` only — does not affect story/society pages.
+     ========================================================= */
+  body.home section.home-hero {
+    position: relative;
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    overflow: hidden;
+  }
+
+  /* Remove width constraints inside the carousel (homepage only) */
+  body.home #home-carousel,
+  body.home #home-carousel .carousel-track,
+  body.home #home-carousel .carousel-slide {
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Ensure hero media fills the breakout (homepage only) */
+  body.home #home-carousel img,
+  body.home #home-carousel video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  /* Prevent horizontal scroll on homepage only */
+  body.home {
+    overflow-x: hidden;
+  }
+
   section.home-hero .carousel-slide img {
     width: 100% !important;
     height: 100% !important;
@@ -829,24 +973,32 @@ section.home-hero.content.home-content {
   background: rgba(255,255,255,0.1);
 }
 
-/* =========================================================
-   TEMP: Outlines to debug spacing ownership (remove after inspect)
-   ========================================================= */
-body.home section.collections-page:first-of-type {
-  outline: 3px solid red !important;
+/* Debug outlines removed - production styling only */
+
+/* HOMEPAGE: reduce gap between navbar and carousel; keep CTAs above fold */
+body.home main { margin-top: 8px; }
+
+/* make the homepage hero slightly less tall so CTA buttons sit in first fold
+   - reduce carousel top/bottom margins and cap max-height for large viewports
+   - scoped to body.home to avoid affecting other pages */
+body.home .carousel {
+  margin: 8px auto !important;
+  max-height: 70vh !important;
 }
 
-body.home .home-content,
-body.home .content,
-body.home .content.home-content {
-  outline: 3px solid blue !important;
+body.home .carousel-slide img {
+  height: clamp(320px, 55vh, 720px) !important;
+  object-fit: cover !important;
 }
 
-body.home .buttons,
-body.home .home-cta,
-body.home .home-cta-buttons {
-  outline: 3px solid green !important;
+/* stronger desktop cap so CTA appears without scroll on wide screens */
+@media (min-width: 1200px) {
+  body.home .carousel { max-height: 60vh !important; }
+  body.home .carousel-slide img { height: clamp(360px, 50vh, 720px) !important; }
 }
+
+/* ensure CTA buttons area has no extra top margin */
+body.home .home-cta-buttons { margin-top: 8px !important; margin-bottom: 12px !important; }
 
 /* HOME: Play overlay (scoped to home products-scroll only) */
 .products-scroll .collection-card {
@@ -1007,5 +1159,434 @@ body.commercials .commercial-card {
   margin-left: 24px;
 }
 
+/* =========================================================
+   HOME — Full-bleed hero (final, minimal, homepage-scoped)
+   - Break the hero out of the centered `.content.home-content` container
+   - Keep all rules strictly scoped under `body.home` so story/society
+     and other pages are unaffected
+   ========================================================= */
+body.home section.home-hero {
+  width: 100vw !important;
+  position: relative !important;
+  left: 50% !important;
+  right: 50% !important;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
+  overflow: hidden !important; /* clip internally but allow carousel to fill */
+  box-sizing: border-box !important;
+}
+
+/* Ensure the carousel and its internals fully fill the hero container */
+body.home #home-carousel,
+body.home #home-carousel .carousel-track,
+body.home #home-carousel .carousel-slide {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Images/videos must cover the hero without distortion */
+body.home #home-carousel img,
+body.home #home-carousel video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  display: block !important;
+}
+
+/* Remove any rounded corner on the full-bleed visual so edges meet viewport */
+body.home section.home-hero > .carousel {
+  border-radius: 0 !important;
+}
+
+/* Prevent horizontal scroll but scope to homepage only */
+body.home {
+  overflow-x: hidden !important;
+}
+
+/* ==============================
+   HOME HERO – FULL BLEED FIX
+   ============================== */
+
+/* Allow hero to escape constrained home-content wrapper */
+body.home .content.home-content {
+  overflow: visible;
+}
+
+
+body.home section.home-hero {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  max-width: none;
+  overflow: hidden;
+}
+
+/* Stronger homepage-only override to force escape from centered wrapper.
+   Use high specificity and !important to beat earlier layout rules. */
+body.home .content.home-content > section.home-hero {
+  position: relative !important;
+  width: 100vw !important;
+  max-width: none !important;
+  left: 50% !important;
+  right: 50% !important;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* Force the carousel itself to be full-viewport and offset from the
+   centered container. This is more robust when other rules affect the
+   section element. */
+body.home .content.home-content > section.home-hero > #home-carousel {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  left: 0 !important;
+  right: 0 !important;
+  position: relative !important;
+}
+
+
+/* Ensure carousel fully fills the hero */
+body.home #home-carousel,
+body.home #home-carousel .carousel-track,
+body.home #home-carousel .carousel-slide {
+  width: 100%;
+  max-width: none;
+}
+
+
+/* Ensure images/videos cover edge-to-edge */
+body.home #home-carousel img,
+body.home #home-carousel video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+
+/* Prevent horizontal scroll (homepage only) */
+body.home {
+  overflow-x: hidden;
+}
+
+
+/* Keep carousel controls and dots centered as before (they are absolute
+   positioned inside the carousel which now spans the viewport). */
+
 
 /* (Removed previous hero/carousel sizing rules to allow single authoritative block) */
+
+/* ---------------------------------------------------------
+   AUTHORITATIVE: Minimal, homepage-scoped alignment + carousel
+   - Restores left-aligned flow for page wrappers on home
+   - Applies exact full-bleed carousel breakout and internals
+   - Prevents horizontal scroll (home only)
+   --------------------------------------------------------- */
+body.home .main,
+body.home .content,
+body.home section,
+body.home .content.home-content,
+body.home .home-content {
+  text-align: left !important;
+}
+
+/* Keep CTA buttons and carousel captions centered where they
+   intentionally use flex/center alignment — scoped to home only */
+body.home .content.home-content > .buttons.home-cta-buttons,
+body.home section.home-hero .carousel-caption,
+body.home section.home-hero .carousel-cta {
+  text-align: center !important;
+}
+
+/* STEP 2 — Isolate full-bleed logic to carousel ONLY (homepage-scoped) */
+body.home .home-hero {
+  position: relative !important;
+  left: 50% !important;
+  right: 50% !important;
+  width: 100vw !important;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* STEP 3 — Ensure carousel internals fully stretch (homepage-only) */
+body.home #home-carousel,
+body.home #home-carousel .carousel-track,
+body.home #home-carousel .carousel-slide {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+body.home #home-carousel img,
+body.home #home-carousel video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+}
+
+/* STEP 5 — Prevent horizontal scroll (HOME ONLY) */
+body.home {
+  overflow-x: hidden !important;
+}
+
+/* Safety: ensure .content.home-content remains constrained and left-aligned */
+body.home .content.home-content {
+  max-width: var(--container-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* End authoritative home-scoped fixes */
+
+/* ---------------------------------------------------------
+   HOME PAGE — reset layout after hero (do NOT affect carousel)
+   - Scope: `body.home` only
+   - Purpose: restore left-aligned flow for all home sections
+     except the hero carousel which must remain centered/full-bleed
+   --------------------------------------------------------- */
+body.home .content.home-content {
+  text-align: left !important;
+}
+
+body.home .content.home-content section:not(.home-hero),
+body.home .content.home-content .section,
+body.home .content.home-content .collections-page,
+body.home .content.home-content .video-commercials,
+body.home .content.home-content .buttons,
+body.home .content.home-content .home-cta-buttons {
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Reset flex/grid centering where present so content is left-aligned */
+body.home .content.home-content section:not(.home-hero) {
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+}
+
+/* Protect hero carousel from the reset — keep it centered */
+body.home section.home-hero {
+  text-align: center !important;
+}
+
+/* End: HOME PAGE alignment reset */
+
+/* ---------------------------------------------------------
+   HOME PAGE — left-align Handpicked header & subtitle
+   Scope: `body.home` only. Keeps hero centered and full-bleed.
+   Targets: .collections-header h1 and emphasized subtitle text
+   --------------------------------------------------------- */
+body.home .collections-header {
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+}
+
+body.home .collections-header h1 {
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+body.home .collections-header .subtitle,
+body.home .collections-header .description,
+body.home .collections-header em,
+body.home .collections-header .subtitle em {
+  text-align: left !important;
+  display: block !important;
+}
+
+
+/* Extra high-specificity fix for the 'The House Favourites' header and
+   its subtitle to override any residual centering rules. Homepage only. */
+body.home .content.home-content .collections-header h1,
+body.home .content.home-content .collections-header h1 span,
+body.home .content.home-content .collections-header .subtitle,
+body.home .content.home-content .collections-header em {
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Stronger: ensure the collections-header anchors to the left of the
+   page content container on the homepage. This prevents the large
+   Playfair H1 from visually centering in the viewport. */
+body.home .content.home-content .collections-header {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  display: block !important;
+  text-align: left !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+}
+
+body.home .content.home-content .collections-header h1 {
+  display: block !important;
+  text-align: left !important;
+  margin: 0 0 20px 0 !important;
+}
+
+body.home .content.home-content .collections-header .subtitle,
+body.home .content.home-content .collections-header .description,
+body.home .content.home-content .collections-header em {
+  text-align: left !important;
+  margin-left: 0 !important;
+}
+
+/* No typographic size overrides here — preserve core styles */
+
+/* Highest-specificity anchor: force left align for the exact DOM path
+   shown in DevTools to ensure the large Playfair H1 and its subtitle
+   are aligned to the left of the content container on the homepage. */
+body.home > .main > .content.home-content > section.collections-page > .collections-header > h1 {
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  display: block !important;
+}
+
+body.home > .main > .content.home-content > section.collections-page > .collections-header > p.subtitle,
+body.home > .main > .content.home-content > section.collections-page > .collections-header > p.subtitle > em {
+  text-align: left !important;
+  margin-left: 0 !important;
+  display: block !important;
+}
+
+/* Exact DOM-path overrides (from DevTools) to force left alignment
+   for the 'The House Favourites' H1 and its subtitle on the homepage.
+   These are intentionally very specific and homepage-scoped so they
+   won't affect other pages. */
+body.home main div.main div.content.home-content section.collections-page div.collections-header h1 {
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+body.home main div.main div.content.home-content section.collections-page div.collections-header p.subtitle,
+body.home main div.main div.content.home-content section.collections-page div.collections-header p.subtitle em {
+  text-align: left !important;
+  margin-left: 0 !important;
+  display: block !important;
+}
+
+/* HOME — left-align collection card content in Handpicked Selection only */
+body.home .products-scroll .collection-card .collection-card-title,
+body.home .products-scroll .collection-card .collection-card-excerpt,
+body.home .products-scroll .collection-card .product-price,
+body.home .products-scroll .collection-card .product-unit-selector,
+body.home .products-scroll .collection-card .collection-card-category {
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Ensure buttons / actions remain as-is but keep card inner flow left-aligned */
+body.home .products-scroll .collection-card .card-actions {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+/* HOME — ensure product containers are left-aligned (handpicked selection) */
+body.home .content.home-content section.collections-page,
+body.home .content.home-content .products-scroll,
+body.home .content.home-content .products-scroll .collection-card,
+body.home .content.home-content .collection-card {
+  text-align: left !important;
+}
+
+/* Also ensure immediate children use left flow */
+body.home .content.home-content .products-scroll .collection-card > * {
+  text-align: left !important;
+}
+
+/* HOME — allow descriptive paragraphs to flow naturally (no premature wrapping)
+   Remove tight max-widths and ensure normal word-wrapping so sentences
+   continue on the same line where space permits. Scoped to homepage only. */
+body.home .collections-header .description,
+body.home .content.home-content .collections-header .description,
+body.home .content.home-content .description,
+body.home .story-text,
+body.home .story-text p,
+body.home .content.home-content p.description {
+  max-width: var(--container-width) !important;
+  width: auto !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  hyphens: none !important;
+}
+
+/* Make the collections-page description span the available content width
+   on the homepage and avoid premature/forced internal breaks. This
+   forces the paragraph to use the container width and keeps normal
+   wrapping rules (no injected <br/>s). */
+body.home .content.home-content section.collections-page .description {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  white-space: normal !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  hyphens: none !important;
+}
+
+/* Prevent any mid-word breaks on homepage description paragraphs */
+body.home .content.home-content section.collections-page .description,
+body.home .collections-header .description {
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  hyphens: none !important;
+}
+
+
+
+/* =========================================================
+   SOCIETY PAGE — AUTHORITATIVE GAP REMOVALS
+   Scope: body.society (added in templates/story/society.html)
+   Purpose: remove residual top/bottom gaps and ensure dark bg
+   ========================================================= */
+body.society main {
+  margin-top: 0 !important; /* remove helper gap applied in base.html */
+  min-height: auto !important;
+}
+
+body.society .story-page.society-page {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin: 0 !important;
+  background: var(--bg-main) !important; /* ensure dark background, not orange */
+}
+
+/* Tighten header spacing inside the society page */
+body.society .story-page.society-page .story-header.society-hero {
+  margin: 0 !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  text-align: left !important;
+}
+
+/* Reduce incoming gap before the first story-content block */
+body.society .story-page.society-page .story-content {
+  margin-top: 12px !important;
+  padding-top: 0 !important;
+}
+
+
