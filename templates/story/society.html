@@ -17,16 +17,237 @@
     margin-bottom: 12px;
   }
 
+  /* Society title: keep single-line on desktop, allow 2-3 lines on mobile */
+  .society-page .society-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 300;
+    margin: 0 0 14px;
+    /* further reduce so the headline fits on one line at typical desktop widths */
+    font-size: clamp(16px, 1.8vw, 30px);
+    line-height: 1.04;
+    max-width: 100%;
+    white-space: normal; /* allow wrapping to respect container width */
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  @media (max-width: 720px) {
+    .society-page .society-title {
+      font-size: clamp(22px, 6.8vw, 38px);
+      line-height: 1.12;
+      white-space: normal; /* allow wrapping on mobile */
+      word-break: break-word;
+    }
+  }
+
+  /* Eyebrow (section label) styled to match other pages (red, uppercase, spaced) */
+  .society-page .society-eyebrow {
+    color: #cc484c;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+  }
+
   .society-page .society-sub {
+    /* Match the small description style: Satoshi, 18px, muted color */
+    font-family: 'Satoshi', sans-serif !important;
+    color: var(--text-muted) !important;
+    text-align: left !important;
+    font-style: italic !important;
+    font-size: 18px !important;
+    margin: 12px 0 36px !important;
+    line-height: 1.7;
+  }
+
+  .society-page .society-description {
     color: var(--text-muted);
     font-size: 18px;
-    margin-bottom: 18px;
     line-height: 1.7;
+    margin-bottom: 28px; /* increased gap before the next paragraph */
+  }
+
+
+
+  /* Match the 'Redefining Craft Spirits' heading style (desktop) for
+     the small closing line so it visually matches story page H2 */
+  .society-page .society-noapps {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 36px !important;
+    color: var(--text-muted) !important;
+    line-height: 1.1 !important;
+    margin-top: 24px !important; /* slightly larger gap above this line */
+  }
+
+  /* Ensure the 'No apps...' block is not italic (override .society-sub) */
+  .society-page .society-noapps,
+  .society-page .society-noapps .society-break {
+    font-style: normal !important;
+  }
+
+  /* Force the trailing phrase onto its own line */
+  .society-page .society-break {
+    display: block;
+    margin-top: 8px;
+  }
+
+  /* Center the 'No apps...' line and make the trailing sentence match
+     paragraph typography (Satoshi 18px, muted) */
+  .society-page .society-noapps {
+    text-align: center !important;
+  }
+
+  .society-page .society-noapps .society-break {
+    display: block !important;
+    margin-top: 6px !important;
+    font-family: 'Satoshi', sans-serif !important;
+    font-size: 18px !important;
+    color: var(--text-muted) !important;
+    line-height: 1.7 !important;
+  }
+
+  /* Helper to keep the trailing phrase together on desktop but allow
+     wrapping on small screens */
+  .society-page .no-break {
+    white-space: nowrap;
+  }
+  @media (max-width: 720px) {
+    .society-page .no-break { white-space: normal; }
   }
 
   @media (max-width: 720px) {
     .society-page .story-header.society-hero h1 {
       font-size: 40px;
+    }
+  }
+
+  /* Authoritative override to guarantee the headline fits one line on desktop */
+  .society-page .society-title {
+    font-size: 53px !important;
+  }
+
+  /* Society philosophy/grid: 4 columns desktop, 2 tablet, 1 mobile */
+  .society-page .philosophy-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 28px !important;
+    margin-top: 28px !important;
+  }
+
+  /* Match story page 'Visit our tasting room...' paragraph styles
+     for the HOW label and the 'Luxury, distilled to simplicity' H2 */
+  .society-page .philosophy-label {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 53px !important;
+    color: #ffffff !important;
+    font-weight: 300 !important;
+    line-height: 1.04 !important;
+    margin-bottom: 12px !important;
+  }
+
+  .society-page .society-section h2 {
+    font-family: 'Satoshi', sans-serif !important;
+    font-size: 18px !important;
+    color: #9ca3af !important;
+    line-height: 1.8 !important;
+    font-weight: 400 !important;
+    margin-top: 0 !important;
+    margin-bottom: 16px !important;
+  }
+
+  .society-page .philosophy-item {
+    background: #0f1112 !important;
+    border-radius: 12px !important;
+    padding: 28px !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25) !important;
+    min-height: 180px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+
+  .society-page .philosophy-item h3 {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 20px !important;
+    margin-bottom: 12px !important;
+    color: #fff !important;
+  }
+
+  .society-page .philosophy-item p {
+    font-family: 'Satoshi', sans-serif !important;
+    font-size: 15px !important;
+    color: var(--text-muted) !important;
+    margin: 0 !important;
+    line-height: 1.6 !important;
+  }
+
+  @media (max-width: 1024px) {
+    .society-page .philosophy-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+
+  @media (max-width: 720px) {
+    .society-page .philosophy-grid { grid-template-columns: 1fr !important; }
+    .society-page .philosophy-item { padding: 22px !important; min-height: auto !important; }
+  }
+  /* Match the membership heading size for visual parity */
+  .society-page .membership-left h2 {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 56px !important;
+    line-height: 1.04 !important;
+    margin: 0 0 18px !important;
+    text-align: left !important;
+    color: #ffffff !important;
+  }
+
+  .society-page .story-experience.society-closer h2 {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 56px !important;
+    line-height: 1.04 !important;
+    margin: 0 0 18px !important;
+    text-align: center !important; /* center the CTA heading */
+  }
+
+  /* Add extra breathing room between membership section and CTA */
+  .society-page .story-experience.society-closer {
+    margin-top: 120px !important;
+  }
+
+  @media (max-width: 720px) {
+    .society-page .story-experience.society-closer {
+      margin-top: 60px !important;
+    }
+  }
+
+  /* Bring membership bullets vertically in line with the left column and match description color */
+  .society-page .society-section.membership-layout {
+    align-items: center !important; /* vertically center left and right halves */
+  }
+
+  .society-page .society-list {
+    color: var(--text-muted) !important; /* match description color */
+    font-family: 'Satoshi', sans-serif !important;
+    font-size: 18px !important;
+    line-height: 1.7 !important;
+    margin-top: 0 !important; /* remove extra top offset */
+  }
+
+  /* Slightly reduce the list container width so it visually centers with the left column on wide screens */
+  .society-page .society-membership-right .society-list {
+    width: 360px !important;
+  }
+
+  @media (max-width: 900px) {
+    .society-page .society-section.membership-layout { align-items: start !important; }
+    .society-page .society-membership-right .society-list { width: 100% !important; }
+  }
+  @media (max-width: 720px) {
+    .society-page .story-experience.society-closer h2 {
+      white-space: normal !important;
+      font-size: 1.05em !important;
+      line-height: 1.2 !important;
     }
   }
 </style>
@@ -41,12 +262,12 @@
 
 
     <h1 class="society-title">
-      An invite-only dining membership with a waitlist.
+      Invite-only dining membership with a waitlist
     </h1>
 
 
     <p class="society-description">
-      A private dining circle where you walk into the city’s most exceptional restaurants — and Ochre pays for your meal.
+      <span class="no-break">A private dining circle where you walk into the city’s most exceptional restaurants — and Ochre pays for your meal.</span>
     </p>
 
     <p class="society-sub">
@@ -56,17 +277,17 @@
       required from you.
     </p>
 
-    <p class="society-sub">
+    <p class="society-sub society-noapps">
       No apps. No coupons. No presentations.
-      Only pure, beautifully engineered privilege.
+      <span class="society-break">Only pure, beautifully engineered privilege.</span>
     </p>
   </div>
 
   <div class="society-content">
 
     <section class="society-section">
-      <p class="philosophy-label">— HOW THE OCHRE SOCIETY WORKS —</p>
-      <h2>Luxury, distilled to simplicity.</h2>
+      <p class="philosophy-label">How The Ochre Society works</p>
+      <h2>Luxury, distilled to simplicity</h2>
 
       <div class="philosophy-grid">
         <div class="philosophy-item">
