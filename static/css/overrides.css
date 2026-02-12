@@ -319,6 +319,37 @@ body.home section.collections-page:first-of-type .description {
   margin-top: 12px !important;
 }
 
+/* =========================================================
+   FORCE: Remove top gaps for ALL collections-page instances
+   Applies only on the homepage inside the `.content.home-content` wrapper.
+   This ensures additional sections added via admin inherit no extra
+   incoming top spacing that produces the green band.
+   ========================================================= */
+body.home .content.home-content .collections-page,
+body.home .content.home-content .collections-page .collections-header,
+body.home .content.home-content .collections-page .products-section,
+body.home .content.home-content .story-content,
+body.home .content.home-content .story-text {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  min-height: auto !important;
+}
+
+/* Tighten product-section default top margin inside home wrapper */
+body.home .content.home-content .collections-page .products-section {
+  margin-top: 0 !important;
+}
+
+/* Aggressive but scoped: remove all vertical padding inside any collections-page
+   that lives under the homepage content wrapper. This removes the 40px top/bottom
+   bands introduced by various base rules while keeping other pages intact. */
+body.home .content.home-content .collections-page,
+body.home .content.home-content .collections-page * {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+
 /* Strong zeroing for the small band that can appear between
    the collections section and inner story text on the homepage.
    Scoped to `body.home .content.home-content` to avoid affecting
