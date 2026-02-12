@@ -35,6 +35,23 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!root) return;
     var oldOverlay = document.getElementById('video-overlay');
     var oldModal = document.getElementById('videoModal');
+    // Stop any playing media inside modal (safe cleanup)
+    var modalEl = document.getElementById('videoModal');
+    if (modalEl) {
+      var videoEls = modalEl.querySelectorAll('video');
+      videoEls.forEach(function(v) {
+        try {
+          v.pause();
+        } catch (e) {}
+      });
+
+      var iframeEls = modalEl.querySelectorAll('iframe');
+      iframeEls.forEach(function(f) {
+        try {
+          f.src = f.src; // triggers reload and stops playback safely
+        } catch (e) {}
+      });
+    }
     if (oldOverlay && oldOverlay.parentNode) oldOverlay.parentNode.removeChild(oldOverlay);
     if (oldModal && oldModal.parentNode) oldModal.parentNode.removeChild(oldModal);
     try {
@@ -44,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
         window.__ochre_video_modal_handlers = null;
       }
     } catch (e) {}
+    // Reset modalObj reference so a new skeleton is built on next open
+    try { modalObj = null; } catch (e) {}
   }
   // Build modal skeleton (only creates structure). Media/content will be loaded
   // via `loadIntoModal` so we can reuse the modal DOM and swap content.
