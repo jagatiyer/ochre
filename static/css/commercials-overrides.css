@@ -167,3 +167,113 @@
   height: auto;
   object-fit: cover;
 }
+
+/* Modal arrows for commercials modal (scoped) */
+#videoModal {
+  position: relative;
+  z-index: 10002;
+}
+
+#videoModal .commercials-prev,
+#videoModal .commercials-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  font-size: 32px;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+#videoModal .commercials-prev { left: -60px; }
+#videoModal .commercials-next { right: -60px; }
+
+@media (max-width: 720px) {
+  #videoModal .commercials-prev,
+  #videoModal .commercials-next {
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    font-size: 28px;
+  }
+
+
+  #videoModal .commercials-prev {
+    left: 12px;
+  }
+
+
+  #videoModal .commercials-next {
+    right: 12px;
+  }
+}
+
+/* Force fixed centering for the commercials modal only */
+#videoModal {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 10002;
+}
+
+/* Ensure arrows render above modal content */
+#videoModal {
+  position: fixed !important;
+}
+
+#videoModal .modal-content {
+  position: relative;
+  z-index: 1;
+}
+
+#videoModal .commercials-prev,
+#videoModal .commercials-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.7);
+  border: none;
+  color: #fff;
+  font-size: 32px;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+#videoModal .commercials-prev {
+  left: 16px;
+}
+
+#videoModal .commercials-next {
+  right: 16px;
+}
+
+/* Ensure video layer does not cover arrows */
+#videoModal .video-ratio {
+  position: relative;
+  z-index: 1;
+}
+
+#videoModal .commercials-prev,
+#videoModal .commercials-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20; /* higher than video layer */
+}
