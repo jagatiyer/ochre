@@ -236,6 +236,22 @@ body.home .content.home-content {
   padding-bottom: 0 !important;
 }
 
+/* =========================================================
+   REMOVE GREEN GAP — Home only
+   Ensure the `home-content` wrapper and its immediate children
+   don't create a visible colored band between hero and sections.
+   Scoped tightly to `body.home` so other pages are unaffected.
+   ========================================================= */
+body.home .content.home-content,
+body.home .content.home-content > section,
+body.home .content.home-content > .collections-page,
+body.home .content.home-content > .products-section,
+body.home .content.home-content > div {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  background: transparent !important;
+}
+
 /* Notes:
    - These overrides prefer removing incoming top spacing and centralize
      spacing under `body.home` for minimal cross-page impact.
@@ -301,6 +317,24 @@ body.home section.collections-page:first-of-type h1 {
 body.home section.collections-page:first-of-type .subtitle,
 body.home section.collections-page:first-of-type .description {
   margin-top: 12px !important;
+}
+
+/* Strong zeroing for the small band that can appear between
+   the collections section and inner story text on the homepage.
+   Scoped to `body.home .content.home-content` to avoid affecting
+   other pages (collections/story/shop). */
+body.home .content.home-content .collections-page,
+body.home .content.home-content .collections-page .products-section,
+body.home .content.home-content .collections-page .products-section .story-content,
+body.home .content.home-content .collections-page .products-section .story-content .story-text {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* If any inner elements add a small top padding, remove it here too. */
+body.home .content.home-content .story-text {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 /* Clamp bottom spacing on the content wrapper that contains the CTA
