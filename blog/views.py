@@ -30,7 +30,7 @@ def blog_list(request):
         qs = BlogPost.objects.filter(published=True).order_by("-created_at").filter(tag=filter_value)
         active_filter = filter_value
 
-    posts = qs[:2]
+    posts = qs[:6]
     total_count = qs.count()
 
     return render(request, "blog/blog_list.html", {
@@ -52,7 +52,7 @@ def blog_list_more(request):
     """
 
     offset = int(request.GET.get("offset", 0))
-    limit = 2  # one row = 2 posts
+    limit = 6  # load 6 posts per request
 
     qs = BlogPost.objects.filter(published=True).order_by("-created_at")
 
