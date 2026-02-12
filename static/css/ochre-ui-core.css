@@ -909,6 +909,18 @@ ul li a.active{
     content: none;
 }
 
+/* When a gradient-divider immediately follows the story page, remove
+   the large pseudo-element spacers which create visible gaps. This
+   targets only the divider directly after `.story-page`. */
+.story-page + .gradient-divider,
+.story-page + .gradient-divider::before,
+.story-page + .gradient-divider::after {
+    margin: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+    content: "" !important;
+}
+
 /* Footer */
 .footer{
     background: #0a0c0d;

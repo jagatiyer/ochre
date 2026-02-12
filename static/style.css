@@ -2524,6 +2524,33 @@ header img.site-logo,
   min-height: 100vh;
 }
 
+/* Tighten vertical spacing for story page: remove excessive gaps
+   - reduce top padding in header
+   - tighten story-content vertical margins
+   - neutralise the adjacent gradient-divider pseudo-elements which
+     create large 60px spacer blocks above/below the divider */
+.story-page .story-header {
+  padding-top: 20px !important;
+}
+
+.story-page .story-content {
+  margin-top: 20px !important;
+  margin-bottom: 40px !important;
+  padding: 0 20px;
+}
+
+/* Target the gradient divider that immediately follows the story page
+   and remove its pseudo-element spacers (before/after) to eliminate
+   the extra colored blocks / gaps shown in inspector. */
+.story-page + .gradient-divider,
+.story-page + .gradient-divider::before,
+.story-page + .gradient-divider::after {
+  margin: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  content: "" !important;
+}
+
 .story-header {
   max-width: var(--container-width);
   margin: 0 auto;
@@ -4384,12 +4411,11 @@ footer,
   margin-top: 72px !important;
 }
 
-/* Force the spacing after the Crafting Excellence intro to be larger
-   by increasing the bottom margin of the intro container and
-   neutralising the philosophy top margin to avoid double-spacing. */
+/* Reduce vertical spacing between story content and philosophy section
+   to tighten the flow between sections. */
 .story-page .story-content {
-  margin-top: 72px !important;
-  margin-bottom: 120px !important;
+  margin-top: 24px !important;
+  margin-bottom: 32px !important;
 }
 
 .story-page .story-philosophy {
@@ -5416,6 +5442,42 @@ footer img.footer-site-logo {
   margin: 40px auto 48px auto !important;
   padding: 0 20px;
 }
+
+/* === STORY PAGE: FORCE-RESET PHILOSOPHY PADDING/MARGINS (AUTHORITATIVE) ===
+   Some legacy rules add large padding to `.story-philosophy`. Add a final
+   high-specificity override to remove those gaps for the Story page only. */
+.story-page .story-philosophy,
+.story-page .story-philosophy > * {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  background: transparent !important;
+}
+
+/* Global override: the `.story-philosophy` element in this template is
+   rendered as a sibling of `.story-page`, so neutralise its base padding
+   as well (authoritative, site-wide for safety). */
+.story-philosophy {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Ensure any gradient-divider directly adjacent doesn't inject extra
+   vertical space via pseudo-elements. */
+.story-page + .gradient-divider,
+.story-page + .gradient-divider,
+.story-page + .gradient-divider::before,
+.story-page + .gradient-divider::after {
+  margin: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  content: none !important;
+}
+
+/* Ensure the divider itself doesn't add vertical margin between story
+   and philosophy when it's placed between them. */
+.story-page + .gradient-divider { margin: 0 !important; height: 2px !important; }
 
 .collection-back-link .back-link {
   color: #ff5a5a;
