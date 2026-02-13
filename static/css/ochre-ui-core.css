@@ -909,16 +909,29 @@ ul li a.active{
     content: none;
 }
 
-/* When a gradient-divider immediately follows the story page, remove
-   the large pseudo-element spacers which create visible gaps. This
-   targets only the divider directly after `.story-page`. */
-.story-page + .gradient-divider,
-.story-page + .gradient-divider::before,
-.story-page + .gradient-divider::after {
-    margin: 0 !important;
+/* Remove the extra bottom padding on the story page which creates a
+   visible gap between the hero image and the divider. This override is
+   intentionally specific and uses !important to win over earlier rules. */
+.story-page:not(.society-page) {
+    padding-bottom: 0 !important;
+}
+
+/* When a gradient-divider immediately follows the story page (but not
+   the Society page), remove the large pseudo-element spacers which
+   create visible gaps while keeping a single, thin gradient rule
+   between sections. */
+.story-page:not(.society-page) + .gradient-divider {
+    margin: -38px 0 12px 0 !important;
+    height: 2px !important;
+    background: linear-gradient(to right, #ff5b5f, #00d2c7, #ff5b5f) !important;
+    position: relative !important;
+    transform: translateY(0) !important;
+}
+.story-page:not(.society-page) + .gradient-divider::before,
+.story-page:not(.society-page) + .gradient-divider::after {
+    content: none !important;
     height: 0 !important;
     background: transparent !important;
-    content: "" !important;
 }
 
 /* Footer */
@@ -1245,7 +1258,7 @@ ul li a.active{
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     align-items: center;
-    padding-bottom: 80px;
+    padding-bottom: 18px !important;
 }
 
 .story-text h2{
@@ -1349,10 +1362,10 @@ ul li a.active{
 }
 
 /* Journey Timeline */
-.story-journey{
+.story-page:not(.society-page) .story-journey{
     width: 100%;
     background: #101315;
-    padding: 60px 20px 100px;
+    padding: 60px 20px 24px !important;
     text-align: center;
 }
 
@@ -1425,10 +1438,10 @@ ul li a.active{
 }
 
 /* Story Experience Section */
-.story-experience{
+.story-page:not(.society-page) .story-experience{
     width: 100%;
     background: #101315;
-    padding: 80px 20px 100px;
+    padding: 24px 20px 100px !important;
     text-align: center;
     position: relative;
     z-index: 1;
@@ -1447,6 +1460,20 @@ ul li a.active{
     font-size: 18px;
     color: #9ca3af;
     margin-bottom: 40px;
+}
+
+/* Ensure the Experience block that sits after the story page is centered
+   (story_page.html places .story-experience outside .story-page) */
+.story-page:not(.society-page) ~ .story-experience{
+    margin: -10px 0 48px 0;
+    text-align: center;
+}
+
+.story-page:not(.society-page) ~ .story-experience h2,
+.story-page:not(.society-page) ~ .story-experience p{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 .experience-buttons{
