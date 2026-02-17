@@ -4221,6 +4221,15 @@ footer,
   border-radius: 8px;
 }
 
+/* Responsive image that fills the story image placeholder */
+.story-page .story-image .story-side-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
 .story-page .story-philosophy,
 .story-page .story-journey,
 .story-page .story-experience {
