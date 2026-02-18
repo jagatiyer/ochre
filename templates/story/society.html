@@ -42,7 +42,7 @@
 
   /* Eyebrow (section label) styled to match other pages (red, uppercase, spaced) */
   .society-page .society-eyebrow {
-    color: #cc484c;
+    color: var(--accent-red) !important;
     font-family: 'Satoshi', sans-serif;
     font-size: 16px;
     letter-spacing: 1.2px;
@@ -62,11 +62,68 @@
     line-height: 1.7;
   }
 
+  /* Utility: render small bits of copy in main (white) text color */
+  .society-page .society-white {
+    color: var(--text-main) !important;
+  }
+
+  /* Match story page paragraph typography for single-line/inline fragments */
+  .society-page .society-story-paragraph {
+    font-family: 'Satoshi', sans-serif !important;
+    font-size: 16px !important;
+    color: var(--text-muted) !important;
+    line-height: 1.7 !important;
+    font-style: normal !important;
+  }
+
+  /* Compact variant: force the membership blurb to occupy approximately two lines on desktop
+     while remaining fully responsive on smaller screens. Adjust `max-width` if needed. */
+  .society-page .society-sub-compact {
+    display: inline-block;
+    max-width: 64ch; /* roughly two lines for the target sentence on desktop */
+    white-space: normal;
+    vertical-align: top;
+    color: var(--text-muted) !important; /* match story page paragraph color */
+    font-style: normal !important; /* ensure not italic */
+    font-family: inherit !important;
+    font-weight: 400 !important;
+  }
+
+  @media (max-width: 768px) {
+    .society-page .society-sub-compact { max-width: 100% !important; display: block; }
+  }
+
+  /* Swap helper classes: allow swapping full typography between elements */
+  .society-page .membership-as-paragraph {
+    font-family: 'Satoshi', sans-serif !important;
+    font-size: 16px !important;
+    color: var(--text-muted) !important;
+    line-height: 1.7 !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .society-page .everytime-as-h2 {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 28px !important;
+    font-weight: 300 !important;
+    color: var(--text-main) !important;
+    margin: 0 0 12px 0 !important;
+    line-height: 1.05 !important;
+  }
+
+  /* (removed .society-sub-lines override to preserve original typography) */
+
   .society-page .society-description {
-    color: var(--text-muted);
-    font-size: 18px;
-    line-height: 1.7;
-    margin-bottom: 28px; /* increased gap before the next paragraph */
+    font-family: 'Satoshi', sans-serif !important;
+    color: var(--text-muted) !important;
+    font-size: 18px !important;
+    line-height: 1.6 !important; /* match .story-tagline */
+    font-style: normal !important;
+    margin-top: 28px !important;
+    margin-bottom: 28px !important;
+    max-width: 700px; /* same readable measure as story tagline */
   }
 
 
@@ -221,6 +278,16 @@
     }
   }
 
+  /* Add extra vertical spacing after the membership H2 and the following sentence */
+  .society-page .story-text h2 {
+    margin-bottom: 28px !important;
+  }
+
+  .society-page .story-text .society-sub {
+    margin-top: 12px !important;
+    margin-bottom: 36px !important;
+  }
+
   /* Bring membership bullets vertically in line with the left column and match description color */
   .society-page .society-section.membership-layout {
     align-items: center !important; /* vertically center left and right halves */
@@ -243,13 +310,6 @@
     .society-page .society-section.membership-layout { align-items: start !important; }
     .society-page .society-membership-right .society-list { width: 100% !important; }
   }
-  @media (max-width: 720px) {
-    .society-page .story-experience.society-closer h2 {
-      white-space: normal !important;
-      font-size: 1.05em !important;
-      line-height: 1.2 !important;
-    }
-  }
 </style>
 {% endblock %}
 
@@ -270,18 +330,25 @@
       <span class="no-break">A private dining circle where you walk into the city’s most exceptional restaurants — and Ochre pays for your meal.</span>
     </p>
 
-    <p class="society-sub">
-      The Ochre Society is an invitation-only dining membership that unlocks seamless access
-      to the city’s finest bars and restaurants. Every time you dine, your bill (up to your
-      visit limit) is settled by Ochre discreetly, elegantly, and without a single step
-      required from you.
-    </p>
-
-    <p class="society-sub society-noapps">
-      No apps. No coupons. No presentations.
-      <span class="society-break">Only pure, beautifully engineered privilege.</span>
-    </p>
   </div>
+
+  <div class="story-content">
+    <div class="story-text">
+      <h2 class="membership-as-paragraph">The Ochre Society is an invitation-only dining membership that unlocks seamless access to the city’s finest bars and restaurants.</h2>
+        <h2 class="everytime-as-h2">Every time you dine, your bill (up to your visit limit) is settled by Ochre discreetly, elegantly, and without a single step required from you.</h2>
+    </div>
+
+    <div class="story-image">
+      <div class="image-placeholder">
+        <img src="{% static 'images/society-side.jpg' %}" alt="Ochre dining" class="story-side-image">
+      </div>
+    </div>
+  </div>
+
+  <p class="society-sub society-noapps">
+    No apps. No coupons. No presentations.
+    <span class="society-break">Only pure, beautifully engineered privilege.</span>
+  </p>
 
   <div class="society-content">
 
@@ -323,6 +390,7 @@
 
       <div class="membership-left">
         <h2>Your Membership Includes</h2>
+        <p class="society-sub">
         <p class="society-sub">
           Membership is intentionally limited to preserve intimacy, privilege, and quality.
         </p>
