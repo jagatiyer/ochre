@@ -1757,4 +1757,29 @@ body.society .story-page.society-page .story-content {
   padding-top: 0 !important;
 }
 
+/* ============================================================
+   MOBILE: Always Image First in Home Content Sections
+   Scoped to homepage collections sections only
+   Reversible
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+  body.home section.collections-page .products-section .story-content {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  body.home section.collections-page .products-section .story-image {
+    order: 1 !important;
+  }
+
+  body.home section.collections-page .products-section .story-text {
+    order: 2 !important;
+  }
+
+}
+
+
 
