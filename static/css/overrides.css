@@ -957,6 +957,58 @@ section.home-hero.content.home-content {
   overflow: hidden !important;
 }
 
+@media (max-width: 480px) {
+  .content.home-content > section.home-hero,
+  section.home-hero.content.home-content {
+    height: calc(100vh - var(--navbar-height) - 67px) !important;
+    min-height: auto !important;
+    max-height: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Improve mobile cinematic framing */
+  section.home-hero .carousel-slide video,
+  section.home-hero .carousel-slide img {
+    object-position: center center !important;
+    transform: scale(1.02) !important;
+  }
+
+  /* Portrait-Optimized Mobile Scroll Cards */
+
+  .products-scroll {
+    display: flex !important;
+    overflow-x: auto !important;
+    gap: 16px !important;
+    padding-left: 16px !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .products-scroll::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .collection-card {
+    flex: 0 0 75% !important;
+    max-width: 75% !important;
+    margin-right: 16px !important;
+    scroll-snap-align: start !important;
+  }
+
+  .collection-card video {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    max-height: 65vh !important;
+  }
+
+  /* Reduce vertical spacing between homepage sections */
+  .content.home-content > section {
+    margin-bottom: 16px !important;
+  }
+}
+
 .content.home-content > .buttons.home-cta-buttons {
   margin-top: 0 !important; /* remove gap between carousel and CTAs */
   padding: 0 !important;
@@ -1612,6 +1664,20 @@ body.home .content.home-content .products-scroll,
 body.home .content.home-content .products-scroll .collection-card,
 body.home .content.home-content .collection-card {
   text-align: left !important;
+}
+
+/* ============================================================
+  TEMP MOBILE HERO HEIGHT OVERRIDE (REVERSIBLE)
+  Purpose: Prevent hero from consuming entire viewport on small screens
+  Safe to remove entirely if needed
+  ============================================================ */
+
+@media (max-width: 480px) {
+  body.home section.home-hero {
+    height: 70vh !important;
+    min-height: 420px !important;
+    max-height: 520px !important;
+  }
 }
 
 /* Also ensure immediate children use left flow */
