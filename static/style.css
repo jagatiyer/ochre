@@ -102,6 +102,19 @@ body {
   --accent-cyan: #00d2c7;
 
   --container-width: 1200px;
+  --navbar-height: 93px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --navbar-height: 76px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --navbar-height: 70px;
+  }
 }
 
 /* ============================================================

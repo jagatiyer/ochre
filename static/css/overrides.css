@@ -514,7 +514,7 @@ body.commercials .commercial-media img {
 
   /* HOME — authoritative hero height */
   .content.home-content > section.home-hero {
-    height: calc(100vh - 72px) !important; /* navbar height */
+    height: calc(100vh - var(--navbar-height)) !important; /* navbar height */
     max-height: 820px;
     min-height: 640px;
     overflow: hidden;
@@ -843,7 +843,6 @@ body.commercials .commercial-media img {
 
   /* HOME — authoritative viewport hero */
   .content.home-content > section.home-hero {
-    height: calc(100vh - 72px) !important; /* navbar height */
     min-height: 640px;
     max-height: 820px;
     overflow: hidden;
@@ -952,7 +951,7 @@ section.home-hero .carousel-dots {
 /* FINAL TUNE: reduce hero height slightly and ensure minimum gap to CTAs */
 .content.home-content > section.home-hero,
 section.home-hero.content.home-content {
-  height: calc(100vh - 160px) !important; /* a bit shorter to bring buttons up */
+  height: calc(100vh - var(--navbar-height) - 67px) !important; /* a bit shorter to bring buttons up */
   max-height: 600px !important;
   min-height: 380px !important;
   overflow: hidden !important;
