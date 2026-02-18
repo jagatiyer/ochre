@@ -7,6 +7,34 @@
   display: block;
 }
 
+/* ============================================================
+   HOMEPAGE CONTENT HEADER GUTTER RESTORE
+   Align homepage admin content headers with canonical spacing
+   Scoped to homepage only
+   Safe and fully reversible
+   ============================================================ */
+
+@media (min-width: 0px) {
+  body.home section.collections-page > .collections-header {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+
+/* ============================================================
+   MOBILE: restore homepage content wrapper gutters
+   Scoped: homepage only, reversible
+   ============================================================ */
+
+@media (max-width: 768px) {
+  body.home .content.home-content {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+
 /* =========================================================
    AUTHORITATIVE: COLLAPSE SECTION AFTER HOME HERO
    Targets the section/div immediately following the hero and
@@ -1082,7 +1110,6 @@ section.home-hero.content.home-content {
 .content > .products-scroll,
 .content.home-content > section,
 .products-scroll,
-.collections-header,
 .main {
   padding-left: 0 !important;
   padding-right: 0 !important;
@@ -1551,8 +1578,6 @@ body.home .collections-header {
 
 body.home .collections-header h1 {
   text-align: left !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
 }
 
 body.home .collections-header .subtitle,
@@ -1571,18 +1596,13 @@ body.home .content.home-content .collections-header h1 span,
 body.home .content.home-content .collections-header .subtitle,
 body.home .content.home-content .collections-header em {
   text-align: left !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
 }
 
 /* Stronger: ensure the collections-header anchors to the left of the
    page content container on the homepage. This prevents the large
    Playfair H1 from visually centering in the viewport. */
 body.home .content.home-content .collections-header {
-  width: 100% !important;
-  max-width: none !important;
-  margin-left: 0 !important;
-  margin-right: auto !important;
+  /* full-bleed width/margin removed to allow centering via aligner */
   padding-left: 0 !important;
   padding-right: 0 !important;
   display: block !important;
@@ -1601,7 +1621,6 @@ body.home .content.home-content .collections-header .subtitle,
 body.home .content.home-content .collections-header .description,
 body.home .content.home-content .collections-header em {
   text-align: left !important;
-  margin-left: 0 !important;
 }
 
 /* No typographic size overrides here — preserve core styles */
@@ -1611,15 +1630,12 @@ body.home .content.home-content .collections-header em {
    are aligned to the left of the content container on the homepage. */
 body.home > .main > .content.home-content > section.collections-page > .collections-header > h1 {
   text-align: left !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
   display: block !important;
 }
 
 body.home > .main > .content.home-content > section.collections-page > .collections-header > p.subtitle,
 body.home > .main > .content.home-content > section.collections-page > .collections-header > p.subtitle > em {
   text-align: left !important;
-  margin-left: 0 !important;
   display: block !important;
 }
 
@@ -1629,14 +1645,11 @@ body.home > .main > .content.home-content > section.collections-page > .collecti
    won't affect other pages. */
 body.home main div.main div.content.home-content section.collections-page div.collections-header h1 {
   text-align: left !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
 }
 
 body.home main div.main div.content.home-content section.collections-page div.collections-header p.subtitle,
 body.home main div.main div.content.home-content section.collections-page div.collections-header p.subtitle em {
   text-align: left !important;
-  margin-left: 0 !important;
   display: block !important;
 }
 
@@ -1757,6 +1770,15 @@ body.society .story-page.society-page .story-content {
   padding-top: 0 !important;
 }
 
+@media (min-width: 0px) {
+  body.home section.collections-page > .collections-header {
+    max-width: var(--container-width) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+
 /* ============================================================
    MOBILE: Always Image First in Home Content Sections
    Scoped to homepage collections sections only
@@ -1780,6 +1802,28 @@ body.society .story-page.society-page .story-content {
   }
 
 }
+
+/* ============================================================
+   HOMEPAGE HEADER ALIGNMENT FIX (REVERSIBLE)
+   Restores canonical container spacing to match .story-content
+   Scoped to homepage only
+   ============================================================ */
+
+body.home .content.home-content .collections-page > .collections-header {
+  max-width: var(--container-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+@media (min-width: 0px) {
+  body.home section.collections-page > .collections-header {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
 
 
 
