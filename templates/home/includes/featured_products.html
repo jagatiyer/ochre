@@ -80,8 +80,8 @@
                        name="product_unit_id"
                        value="{% if product.default_unit %}{{ product.default_unit.id }}{% endif %}">
                 <button type="submit"
-                  class="cn shop index-add-btn"
-                  {% if product.has_units and not product.default_unit %}disabled{% endif %}>
+                        class="cn shop index-add-btn"
+                        {% if product.has_units and not product.default_unit %}disabled{% endif %}>
                   Add to Cart
                 </button>
               </form>

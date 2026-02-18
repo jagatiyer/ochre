@@ -14,6 +14,8 @@
 }
 
 
+
+
 /* MEDIA LIST — final enforced layout */
 .media-page .press-list-item {
   display: grid !important;
@@ -720,6 +722,8 @@ html, body { overflow-x: hidden; }
     color: white;
     font-size: 2rem;
     background: none;
+
+
     border: none;
     z-index: 10001;
 }

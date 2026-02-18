@@ -73,11 +73,14 @@
         </a>
       </li>
 
+      {% if False %}
       <li>
         <a href="{% url 'shop:shop_index' %}" class="{% if current == 'shop_index' %}active{% endif %}">
           SHOP
         </a>
       </li>
+      {% endif %}
+
 
       <li class="nav-icons">
 
