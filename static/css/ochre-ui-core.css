@@ -1422,6 +1422,19 @@ ul li a.active{
     background: #ff7200;
 }
 
+.timeline-dot.cyan{
+    background: #2bbecf;
+}
+
+.timeline-dot.soft{
+    background: var(--text-soft);
+}
+
+.timeline-dot.plum{
+    background: #5b2a6d;
+    box-shadow: 0 0 0 3px rgba(91, 42, 109, 0.18);
+}
+
 .timeline-content h3{
     font-family: 'Playfair Display', serif;
     font-size: 28px;
