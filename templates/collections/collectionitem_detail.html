@@ -25,7 +25,11 @@
 
             <!-- CATEGORY -->
             <div class="collection-detail-category">
-                {{ item.get_category_display }}
+                {% if item.category_fk %}
+                    {{ item.category_fk.name }}
+                {% else %}
+                    {{ item.get_category_display }}
+                {% endif %}
             </div>
 
             <!-- TITLE -->
@@ -59,18 +63,6 @@
 
     </div>
 
-</div>
-
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center">
-        <a href="{{ previous_url }}" class="btn btn-outline-light">
-            ← Previous
-        </a>
-
-        <a href="{{ next_url }}" class="btn btn-outline-light">
-            Next →
-        </a>
-    </div>
 </div>
 
 {% endblock %}
