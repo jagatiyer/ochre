@@ -404,17 +404,20 @@ header,
 
 .navbar {
   width: 100%;
-  max-width: 1200px;
+  background: #0c1116;
   /* increased top spacing to reduce cramped header appearance */
-  padding-top: 18px;
-  height: calc(75px + 18px);
+  padding: 18px 0 6px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-inner {
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
 }
 
 /* ============================================================
