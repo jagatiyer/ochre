@@ -393,9 +393,18 @@ img {
    NAVBAR (PRIMARY HEADER)
    ============================================================ */
 
+/* Ensure header spans viewport and carries background for visual continuity
+   while `.navbar` remains an inner centered container. Sticky logic is
+   intentionally preserved on the `.navbar` selector. */
+header,
+.site-header {
+  width: 100%;
+  background-color: var(--bg-main);
+}
+
 .navbar {
   width: 100%;
-  max-width: var(--container-width);
+  max-width: 1200px;
   /* increased top spacing to reduce cramped header appearance */
   padding-top: 18px;
   height: calc(75px + 18px);
@@ -403,7 +412,6 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--bg-main);
   position: sticky;
   top: 0;
   z-index: 1000;
