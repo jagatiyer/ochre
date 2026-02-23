@@ -908,6 +908,10 @@ body > #ochre-age-modal-root {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding: 28px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .menu.open { transform: translateX(0); }
@@ -1029,6 +1033,33 @@ header img.site-logo,
 .menu {
   display: flex;
   align-items: center;
+}
+
+/* ============================
+   DESKTOP NAVBAR FIX
+   ============================ */
+
+.navbar .menu {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .mobile-menu-inner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navbar .nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navbar .mobile-nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .menu ul {
@@ -3056,6 +3087,78 @@ header img.site-logo,
   align-items: center;
   gap: 16px;
 }
+
+
+  /* ============================================================
+     MOBILE NAV REFACTOR (scoped)
+     Added: mobile layout for .menu, close button, and icon separation
+     ============================================================ */
+  @media (max-width: 768px) {
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      padding: 40px 24px;
+    }
+
+    .mobile-close-btn {
+      align-self: flex-end;
+      background: none;
+      border: none;
+      font-size: 22px;
+      font-weight: 400;
+      cursor: pointer;
+      color: var(--text-main);
+      margin-bottom: 30px;
+    }
+
+    .menu .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Ensure any legacy rule that treats .nav-icons as a list-item does not
+       force mobile presentation. We prefer the dedicated .mobile-nav-icons
+       container for icon layout on small screens. */
+    .menu .nav-menu .nav-icons {
+      display: block;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar .mobile-nav-icons {
+      width: 100%;
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 28px;
+    }
+
+    /* Mobile: structure and alignment for inner menu */
+    .navbar .mobile-menu-inner {
+      width: 100%;
+      max-width: none;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .navbar .nav-menu {
+      width: 100%;
+      align-items: center;
+    }
+
+    .navbar .mobile-nav-icons {
+      width: 100%;
+      justify-content: center;
+    }
+
+  }
+
 
 .item-thumb img {
   width: 64px;
