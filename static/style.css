@@ -959,11 +959,12 @@ body > #ochre-age-modal-root {
 
 
 
-/* ------------------------------------------------------------
-   LOGO
-   ------------------------------------------------------------ */
+/* ==========================================
+   Logo alignment — reset to container grid
+   ========================================== */
 
 .navbar .icon {
+  margin-left: 0 !important;
   display: flex;
   align-items: center;
   height: 100%;
