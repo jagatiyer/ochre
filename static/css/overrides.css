@@ -3,46 +3,360 @@
    Purpose: Safe, scoped UI fixes without touching style.css
    ========================================================= */
 
+
 /* ============================================================
-   COLLECTION DETAIL — MOBILE FIX
-   Clean mobile stacking, spacing, and navigation alignment.
+   HOME — Allow Sticky Header
+   Ensures body does not block sticky behavior.
    ============================================================ */
-@media (max-width: 768px) {
-
-  /* Reduce excessive page padding */
-  .collection-detail-page {
-    padding-top: 0 !important;
-    padding-bottom: 40px !important;
-  }
-
-  /* Remove extra container top padding */
-  .collection-detail-container {
-    padding-top: 0 !important;
-  }
-
-  /* Allow image to scale naturally */
-  .collection-detail-image img {
-    max-height: none !important;
-    height: auto !important;
-  }
-
-  /* Stack Previous / Next vertically */
-  .collection-nav {
-    flex-direction: column !important;
-    gap: 12px !important;
-  }
-
-  /* Make nav buttons full-width */
-  .collection-nav a {
-    width: 100% !important;
-    text-align: center !important;
-    box-sizing: border-box !important;
-  }
-
+body.home {
+  overflow-x: visible !important;
 }
 
-/* (collection-detail mobile block moved to EOF) */
 
+/* ============================================================
+  HOME — Allow Sticky Header
+  Ensures body does not block sticky behavior.
+  ============================================================ */
+
+/* ============================================================
+   STICKY HEADER — HOME SCROLL CONTEXT FIX
+   Ensures body does not block sticky behavior on Home page.
+   Must be last in file to override earlier body.home rule.
+   ============================================================ */
+
+body.home {
+}
+
+
+/* ============================================================
+   STICKY HEADER FIX (AUTHORITATIVE)
+   ============================================================ */
+
+/* 1️⃣ Fix scroll context */
+html {
+  overflow-x: hidden !important;
+}
+
+body,
+body.home {
+  overflow-y: visible !important;
+}
+
+/* 2️⃣ Sticky header */
+header,
+.site-header {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0 !important;
+  width: 100% !important;
+  z-index: 1100 !important;
+  background-color: var(--bg-main) !important;
+  height: auto !important;
+  left: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 3️⃣ Prevent nested sticky conflicts */
+/* ============================================================
+   GLOBAL STICKY NAVBAR (FINAL)
+   ============================================================ */
+
+.navbar {
+  position: sticky !important;
+  top: 0;
+  z-index: 1100;
+  background-color: var(--bg-main);
+}
+
+/* 4️⃣ Remove fixed-era compensation */
+body > .main {
+  padding-top: 0 !important;
+}
+
+
+/* ============================================================
+   GLOBAL FIXED HEADER (Overflow-Safe)
+   Replaces sticky implementation.
+   Works with overflow-x: hidden on html/body.
+   ============================================================ */
+
+header,
+.site-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 1100 !important;
+  background-color: var(--bg-main) !important;
+}
+
+/* Offset main layout to prevent content jump */
+body > .main {
+  padding-top: var(--navbar-height) !important;
+}
+
+/* Commercials overrides moved to static/css/commercials-overrides.css */
+  display: block;
+}
+
+
+/* ============================================================
+   GLOBAL STICKY HEADER
+   Applies to all pages including Home.
+   Keeps document flow intact.
+   ============================================================ */
+
+header,
+.site-header {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1100 !important;
+  width: 100% !important;
+  background-color: var(--bg-main) !important;
+}
+
+/* Ensure inner navbar remains centered */
+.navbar {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   HOMEPAGE CONTENT HEADER GUTTER RESTORE
+   Align homepage admin content headers with canonical spacing
+   Scoped to homepage only
+   Safe and fully reversible
+   ============================================================ */
+
+@media (min-width: 0px) {
+  body.home section.collections-page > .collections-header {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+
+/* ============================================================
+   MOBILE: restore homepage content wrapper gutters
+   Scoped: homepage only, reversible
+   ============================================================ */
+
+@media (max-width: 768px) {
+  body.home .content.home-content {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+
+
+/* =========================================================
+   AUTHORITATIVE: COLLAPSE SECTION AFTER HOME HERO
+   Targets the section/div immediately following the hero and
+   forces it to collapse to its content height.
+   ========================================================= */
+.content.home-content section.home-hero + section,
+.content.home-content section.home-hero + div,
+.content.home-content section.home-hero + .collections-page,
+.content.home-content section.home-hero + .section,
+.content.home-content section.home-hero + .container,
+.content.home-content section.home-hero + .content-section,
+.content.home-content section.home-hero + .home-section {
+  /* HARD OVERRIDE: authoritative spacing owner for first section after hero/CTA */
+  margin-top: 0 !important;
+  padding-top: 32px !important;
+  padding-block-start: 32px !important;
+  padding-block-end: 0 !important;
+  padding-bottom: 0 !important;
+  min-height: auto !important;
+  height: auto !important;
+  display: block !important;
+  align-items: unset !important;
+  justify-content: unset !important;
+  place-items: unset !important;
+}
+
+@media (max-width: 768px) {
+  .content.home-content section.home-hero + section,
+  .content.home-content section.home-hero + div,
+  .content.home-content section.home-hero + .collections-page,
+  .content.home-content section.home-hero + .section,
+  .content.home-content section.home-hero + .container,
+  .content.home-content section.home-hero + .content-section,
+  .content.home-content section.home-hero + .home-section {
+    margin-top: 0 !important;
+    padding-top: 24px !important;
+    padding-block-start: 24px !important;
+    padding-block-end: 0 !important;
+  }
+}
+
+/* ===============================
+   HOME PAGE — CTA SPACING FIX
+   Reduce top spacing above CTA buttons so they feel connected to hero
+   =============================== */
+.content.home-content .buttons.home-cta-buttons {
+  margin-top: 24px !important; /* reduced spacing */
+}
+
+@media (max-width: 768px) {
+  .content.home-content .buttons.home-cta-buttons {
+    margin-top: 12px !important; /* reduced mobile spacing */
+  }
+}
+
+/* =========================================================
+   IDENTIFIED CTA WRAPPER FIX
+   Exact rendered wrapper immediately after section.home-hero:
+   element classes: "buttons home-cta-buttons"
+   ========================================================= */
+.content.home-content > .buttons.home-cta-buttons {
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+  margin-top: 0 !important;
+  min-height: auto !important;
+  height: auto !important;
+  display: block !important;
+  align-items: unset !important;
+  justify-content: unset !important;
+  place-items: unset !important;
+}
+
+/* If a residual gap remains due to legacy flow (header affects layout),
+   apply a small controlled negative nudge to close the band. */
+header ~ .content.home-content > .buttons.home-cta-buttons {
+  margin-top: -24px !important;
+}
+
+/* =========================================================
+   FIRST FOLD — HOUSE FAVOURITES TYPOGRAPHY & SPACING
+   Targets only the first collections-page (HANDPICKED SELECTION)
+   ========================================================= */
+
+.content.home-content .collections-page:first-of-type .collections-header .description {
+  max-width: 640px;
+  text-align: left;
+  margin-top: 12px;
+  margin-bottom: 32px;
+}
+
+/* AUTHORITATIVE OWNER: first content section takes spacing from hero/CTA */
+.content.home-content .collections-page:first-of-type,
+.content.home-content .section:first-of-type,
+.content.home-content .container:first-of-type {
+  padding-top: 32px !important;
+  margin-top: 0 !important;
+  padding-block-start: 32px !important;
+  padding-block-end: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .content.home-content .collections-page:first-of-type,
+  .content.home-content .section:first-of-type,
+  .content.home-content .container:first-of-type {
+    padding-top: 24px !important;
+    padding-block-start: 24px !important;
+  }
+}
+
+/* Ensure CTA container itself does not add spacing above the first section */
+.content.home-content > .buttons.home-cta-buttons {
+  margin-bottom: 0 !important;
+}
+
+/* Mobile / tablet: allow the description to be full width and reduce CTA spacing */
+@media (max-width: 768px) {
+  .content.home-content .collections-page:first-of-type .collections-header .description {
+    max-width: none;
+  }
+  .content.home-content > .buttons.home-cta-buttons {
+    margin-bottom: 24px !important;
+  }
+}
+
+/* FIRST-SECTION-ONLY override: authoritative spacing owner on home page */
+body.home section.collections-page:first-of-type {
+  margin-top: 0 !important;
+  padding-top: 32px !important;
+}
+
+/* =========================================================
+   HOME PAGE – VERTICAL SPACING NORMALIZATION
+   Purpose: Normalize stacked/duplicated vertical spacing on Home.
+   Rules are strictly scoped under `body.home`. Add-only and safe.
+   ========================================================= */
+
+/* 1) Navbar → Hero: reduce gap so hero sits directly under navbar. */
+body.home .home-hero {
+  padding-top: 0 !important; /* remove green gap between navbar and carousel */
+  /* Keep internal hero layout intact; only adjust block spacing */
+}
+
+/* 2) Hero → CTA: target ~32px. Remove incoming CTA top padding and
+   make hero control the bottom spacing. */
+body.home .home-hero {
+  padding-bottom: 24px !important; /* sets hero → CTA (reduced) */
+}
+body.home .content.home-content > .buttons.home-cta-buttons {
+  padding-top: 0 !important; /* remove stacked incoming CTA top padding */
+  margin-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* 3) CTA → First section (Featured Products): target ~56px.
+   Prefer incoming section to take the top offset (clear ownership). */
+body.home .content.home-content .collections-page:first-of-type,
+body.home .content.home-content .section:first-of-type,
+body.home .content.home-content .container:first-of-type {
+  padding-top: 28px !important;
+  margin-top: 0 !important;
+}
+body.home section.collections-page:first-of-type {
+  padding-top: 28px !important;
+  margin-top: 0 !important;
+}
+
+/* 4) Section → Section (between content sections): target ~56px.
+   Normalize incoming section top gaps; do not tamper with inner padding. */
+body.home .products-section {
+  margin-top: 24px !important;
+}
+body.home .collections-page .experience-section {
+  margin-top: 24px !important;
+}
+
+/* Ensure a consistent gap after product grids so the next section
+   (e.g., "Watch our videos") sits clearly separated. */
+  .content.home-content .products-scroll {
+  margin-bottom: 24px !important;
+}
+
+/* Strong override to catch inline-styled products-scroll instances
+   and ensure a visible gap. Use both padding and margin so the
+   layout cannot collapse due to parent overflow or stacking context. */
+.content.home-content .products-scroll,
+.products-scroll,
+div.products-scroll[style] {
+  padding-bottom: 24px !important;
+  margin-bottom: 24px !important;
+}
+
+/* Footer: equal-width three-column layout across all pages */
+.footer .footer-main {
+  display: flex !important;
+  gap: 32px !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important; /* allow wrapping on very narrow screens */
+}
+.footer .footer-column {
+  flex: 1 1 0 !important; /* equal width */
+  min-width: 0 !important; /* prevents overflow in flex children */
+}
+@media (max-width: 720px) {
+  .footer .footer-main { flex-direction: column !important; gap: 16px !important; }
+}
 
 /* Defensive: if a collections-page follows directly, ensure it
    takes the incoming top spacing instead of collapsing. */
@@ -360,9 +674,43 @@ body.commercials .commercial-media img {
   }
 
   /* HOME — force image to cover ALL available space */
-  .content.home-content section.home-hero + .container,
-  .content.home-content section.home-hero + .content-section,
-  .content.home-content section.home-hero + .home-section {
+  .content.home-content > section.home-hero img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    display: block;
+  }
+
+  /* HOME — CTA belongs to hero, not next scroll */
+  .content.home-content > section.home-hero {
+    margin-bottom: 0 !important;
+  }
+
+
+  .content.home-content > .buttons.home-cta-buttons {
+    margin-top: 24px !important;
+    padding: 0 !important;
+  }
+
+  /* HOME — allow hero to sit directly under navbar */
+  body .content.home-content {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  section.home-hero {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* HOME — hero fills viewport under navbar */
+  section.home-hero {
+    height: calc(100vh - var(--navbar-height, 96px)) !important;
+    min-height: calc(100vh - var(--navbar-height, 96px)) !important;
+    overflow: hidden;
+  }
+
+  /* HOME — carousel fills hero */
   section.home-hero .carousel,
   section.home-hero .carousel-track,
   section.home-hero .carousel-slide {
@@ -464,7 +812,6 @@ body.commercials .commercial-media img {
   /* Prevent horizontal scroll only on the homepage while allowing normal
      behavior elsewhere. */
   body.home {
-    overflow-x: hidden !important;
   }
 
   /* STRONGER BREAKOUT: centering via left/transform is more robust when the
@@ -568,7 +915,6 @@ body.commercials .commercial-media img {
 
   /* Prevent horizontal scroll on homepage only */
   body.home {
-    overflow-x: hidden;
   }
 
   section.home-hero .carousel-slide img {
@@ -1150,7 +1496,6 @@ body.home section.home-hero > .carousel {
 
 /* Prevent horizontal scroll but scope to homepage only */
 body.home {
-  overflow-x: hidden !important;
 }
 
 /* ==============================
@@ -1224,7 +1569,6 @@ body.home #home-carousel video {
 
 /* Prevent horizontal scroll (homepage only) */
 body.home {
-  overflow-x: hidden;
 }
 
 
@@ -1287,7 +1631,6 @@ body.home #home-carousel video {
 
 /* STEP 5 — Prevent horizontal scroll (HOME ONLY) */
 body.home {
-  overflow-x: hidden !important;
 }
 
 /* Safety: ensure .content.home-content remains constrained and left-aligned */
@@ -1506,46 +1849,6 @@ body.home .collections-header .description {
 }
 
 
-/* =========================================================
-   COLLECTION DETAIL — MOBILE FIX
-   Scope: .collection-detail-page
-   Purpose: remove excessive top/bottom gap and stack nav on mobile
-   ========================================================= */
-@media (max-width: 768px) {
-
-  .collection-back-link {
-    display: block !important;
-    margin-bottom: 0 !important;
-  }
-
-  .collection-detail-page {
-    padding-top: 0 !important;
-    padding-bottom: 40px !important;
-  }
-
-  .collection-detail-container {
-    padding-top: 0 !important;
-  }
-
-  .collection-detail-image img {
-    max-height: 56vh !important;
-    height: auto !important;
-    object-fit: contain !important;
-  }
-
-  .collection-nav {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 12px !important;
-  }
-
-  .collection-nav a {
-    width: 100% !important;
-    text-align: center !important;
-    box-sizing: border-box !important;
-  }
-
-}
 
 /* =========================================================
    SOCIETY PAGE — AUTHORITATIVE GAP REMOVALS
@@ -1631,6 +1934,50 @@ body.home .content.home-content .collections-page > .collections-header {
     padding-right: 20px !important;
   }
 }
+
+
+
+/* ============================================================
+   COLLECTION DETAIL — MOBILE GAP FIX
+   Removes vertical gap between back link and image on mobile.
+   Scoped to mobile only.
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* Authoritative mobile spacing below back link */
+  .collection-back-link {
+    margin-bottom: 24px !important;
+  }
+
+  /* Remove legacy top padding on detail page wrapper */
+  .collection-detail-page {
+    padding-top: 0 !important;
+  }
+
+  /* Remove extra mobile padding inside grid container */
+  .collection-detail-container {
+    padding-top: 0 !important;
+  }
+}
+
+
+
+
+
+/* ============================================================
+   GLOBAL SCROLL CONTEXT CORRECTION
+   Ensures body does not become scroll container.
+   Required for sticky navbar to function on all pages.
+   ============================================================ */
+
+body {
+  overflow-x: visible !important;
+}
+
+
+
+
+
 
 
 
