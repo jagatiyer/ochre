@@ -3,6 +3,16 @@
    Purpose: Safe, scoped UI fixes without touching style.css
    ========================================================= */
 
+/* Homepage video overlay state */
+.collection-card.is-playing .home-play-overlay {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Optical centering correction for play icon */
+/* removed icon-specific transform corrections; rely on flex centering and inline SVGs */
+
 
 /* ============================================================
    HOME — Allow Sticky Header
@@ -1321,7 +1331,6 @@ body.home .home-cta-buttons { margin-top: 8px !important; margin-bottom: 12px !i
 .products-scroll .home-play-overlay svg {
   color: #ffffff;
   font-size: 22px;
-  margin-left: 3px; /* optical centering for triangle */
 }
 
 .products-scroll .home-play-overlay:hover {
@@ -1972,6 +1981,23 @@ body.home .content.home-content .collections-page > .collections-header {
 
 body {
   overflow-x: visible !important;
+}
+
+/* ============================================================
+   AUTH PAGES — Restore Header After Core Reset
+   ============================================================ */
+
+header,
+header * {
+  all: revert;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+  width: 100%;
+  background: #0c1116;
 }
 
 

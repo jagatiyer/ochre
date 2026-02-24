@@ -17,9 +17,11 @@
                         Your browser does not support the video tag.
                     </video>
                 {% endif %}
-                <button class="home-play-overlay" aria-label="Play video" type="button">
-                  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
-                </button>
+                                <button class="home-play-overlay" aria-label="Play video">
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                                                <polygon points="8,5 19,12 8,19" />
+                                        </svg>
+                                </button>
                 {% if video.title %}
                     <p class="collection-card-title">{{ video.title }}</p>
                 {% endif %}

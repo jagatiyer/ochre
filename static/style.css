@@ -396,7 +396,7 @@ img {
 /* Ensure header spans viewport and carries background for visual continuity
    while `.navbar` remains an inner centered container. Sticky logic is
    intentionally preserved on the `.navbar` selector. */
-header,
+.header,
 .site-header {
   width: 100%;
   background-color: var(--bg-main);
@@ -405,8 +405,15 @@ header,
 .navbar {
   width: 100%;
   background: #0c1116;
-  /* increased top spacing to reduce cramped header appearance */
+
+  box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+
+  /* vertical breathing */
   padding: 18px 0 6px;
+
+  /* lock consistent height across pages */
+  min-height: 93px;
+
   position: sticky;
   top: 0;
   z-index: 1000;
