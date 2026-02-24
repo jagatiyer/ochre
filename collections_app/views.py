@@ -17,14 +17,11 @@ def collections_index(request):
     # Filtering logic: prefer the FK relation when present, otherwise fall
     # back to the legacy string `category` for older rows.
     if category == "all":
-        items = CollectionItem.objects.filter(published=True).order_by("-created_at")
+        items = CollectionItem.objects.filter(published=True)
     else:
         # Only filter by the authoritative FK relation. Ignore the legacy
         # `category` CharField entirely to avoid accidental matches.
-        items = (
-            CollectionItem.objects.filter(published=True, category_fk__slug=category)
-            .order_by("-created_at")
-        )
+        items = CollectionItem.objects.filter(published=True, category_fk__slug=category)
 
     context = {
         "items": items,

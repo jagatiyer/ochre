@@ -1141,7 +1141,8 @@ section.home-hero.content.home-content {
     display: none !important;
   }
 
-  .collection-card {
+  .products-scroll .collection-card {
+    /* Scope card sizing rules to the horizontal scroll container only */
     flex: 0 0 75% !important;
     max-width: 75% !important;
     margin-right: 16px !important;
@@ -1362,7 +1363,8 @@ body.home .home-cta-buttons { margin-top: 8px !important; margin-bottom: 12px !i
 
 /* Scope selectors: cover both possible page wrapper conventions */
 .media-page.commercials-page .commercials-grid,
-body.commercials .commercials-grid {
+body.commercials .commercials-grid,
+.collections-page .commercials-grid {
   display: flex !important;
   flex-wrap: wrap !important;
   gap: 18px !important; /* reduced horizontal gap for fuller rows */

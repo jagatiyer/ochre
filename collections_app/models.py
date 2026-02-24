@@ -67,6 +67,10 @@ class CollectionItem(models.Model):
 
     published = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    display_order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['display_order', '-id']
 
     def save(self, *args, **kwargs):
         if not self.slug:

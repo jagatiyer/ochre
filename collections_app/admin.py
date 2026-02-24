@@ -20,16 +20,27 @@ class CollectionItemForm(forms.ModelForm):
             "cover_image",
             "category_fk",
             "published",
+            "display_order",
         ]
 
 
 @admin.register(CollectionItem)
 class CollectionItemAdmin(admin.ModelAdmin):
     form = CollectionItemForm
-    list_display = ("title", "category_fk", "published", "created_at")
+    list_display = ("title", "display_order", "category_fk", "published", "created_at")
+    list_editable = ("display_order",)
     list_filter = ("category_fk", "published")
     search_fields = ("title", "excerpt", "description")
     prepopulated_fields = {"slug": ("title",)}
+    ordering = ("display_order",)
+    fieldsets = (
+        (None, {
+            'fields': (
+                'title', 'slug', 'excerpt', 'description', 'cover_image',
+                'category_fk', 'published', 'display_order'
+            )
+        }),
+    )
 
 
 @admin.register(CollectionCategory)
