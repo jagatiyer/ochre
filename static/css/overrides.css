@@ -1119,47 +1119,24 @@ section.home-hero.content.home-content {
 }
 
 @media (max-width: 480px) {
-  /* Improve mobile cinematic framing */
-  section.home-hero .carousel-slide video,
-  section.home-hero .carousel-slide img {
-    object-position: center center !important;
-    transform: scale(1.02) !important;
+
+  /* FORCE collections to stay vertical on mobile */
+  .collections-page .products-scroll {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    overflow-x: visible !important;
+    padding-left: 0 !important;
+    scroll-snap-type: none !important;
   }
 
-  /* Portrait-Optimized Mobile Scroll Cards */
-
-  .products-scroll {
-    display: flex !important;
-    overflow-x: auto !important;
-    gap: 16px !important;
-    padding-left: 16px !important;
-    scroll-snap-type: x mandatory !important;
-    -webkit-overflow-scrolling: touch !important;
+  .collections-page .products-scroll .collection-card {
+    flex: none !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
   }
 
-  .products-scroll::-webkit-scrollbar {
-    display: none !important;
-  }
 
-  .products-scroll .collection-card {
-    /* Scope card sizing rules to the horizontal scroll container only */
-    flex: 0 0 75% !important;
-    max-width: 75% !important;
-    margin-right: 16px !important;
-    scroll-snap-align: start !important;
-  }
-
-  .collection-card video {
-    width: 100% !important;
-    height: auto !important;
-    display: block !important;
-    max-height: 65vh !important;
-  }
-
-  /* Reduce vertical spacing between homepage sections */
-  .content.home-content > section {
-    margin-bottom: 16px !important;
-  }
 }
 
 .content.home-content > .buttons.home-cta-buttons {
@@ -1307,10 +1284,6 @@ body.home .carousel-slide img {
 body.home .home-cta-buttons { margin-top: 8px !important; margin-bottom: 12px !important; }
 
 /* HOME: Play overlay (scoped to home products-scroll only) */
-.products-scroll .collection-card {
-  position: relative;
-}
-
 .products-scroll .home-play-overlay {
   position: absolute;
   inset: 0;

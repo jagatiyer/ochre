@@ -39,6 +39,42 @@
   object-fit: contain !important;
 }
 
+
+/* Unified page header styles (layered safely atop existing wrappers) */
+.page-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 60px;
+  font-weight: 400;
+}
+
+.page-header .description,
+.page-header .story-tagline,
+.page-header .society-description,
+.page-header .commercials-description {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 18px;
+}
+
+.page-header--hero h1 {
+  font-size: clamp(95px, 10vw, 129px);
+}
+
+.page-header .craft-spirits,
+.page-header .blog-stories,
+.page-header .story-year,
+.page-header .society-eyebrow,
+.page-header .commercials-eyebrow {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #cc484c;
+}
+
+.page-header .dash {
+  margin: 0 8px;
+}
+
 /* Text block */
 .media-page .item-content {
   display: flex !important;
@@ -5622,6 +5658,87 @@ footer img.footer-site-logo {
   background: transparent !important;
   content: none !important;
 }
+
+
+/* ============================= */
+/* UNIFIED HEADER SPACING FIX    */
+/* ============================= */
+
+.page-header {
+  padding-top: 80px !important;
+}
+
+/* Neutralize legacy padding rules */
+.collections-header,
+.blog-header,
+.commercials-header-override,
+.story-header.society-hero {
+  padding-top: 0 !important;
+}
+
+/* Story page special spacing */
+.page-header--hero {
+  padding-top: 80px !important;
+}
+
+
+/* ============================= */
+/* UNIFIED HEADER TYPOGRAPHY FIX */
+/* ============================= */
+
+.page-header h1 {
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.page-header .description,
+.page-header .story-tagline,
+.page-header .society-description,
+.page-header .commercials-description {
+  margin-top: 12px;
+}
+
+
+/* ============================= */
+/* FINAL HEADER NORMALIZATION    */
+/* ============================= */
+
+/* Reset legacy header spacing */
+.collections-header,
+.blog-header,
+.commercials-header-override,
+.story-header,
+.story-header.society-hero {
+  padding-top: 0 !important;
+}
+
+/* Enforce uniform spacing */
+.page-header {
+  padding-top: 80px !important;
+}
+
+/* Force uniform eyebrow typography */
+.page-header .craft-spirits,
+.page-header .blog-stories,
+.page-header .story-year,
+.page-header .society-eyebrow,
+.page-header .commercials-eyebrow {
+  font-family: 'Satoshi', sans-serif !important;
+  font-size: 14px !important;
+  letter-spacing: 2px !important;
+  text-transform: uppercase !important;
+  color: #cc484c !important;
+}
+
+/* Remove page-specific overrides */
+.blog-header .blog-stories,
+.collections-header .craft-spirits,
+.society-page .society-eyebrow {
+  font-size: inherit !important;
+}
+
+
+
 
 /* Ensure the divider itself doesn't add vertical margin between story
    and philosophy when it's placed between them. */
