@@ -1911,6 +1911,50 @@ header {
 }
 
 
+@media (max-width: 480px) {
+  /* Improve mobile cinematic framing */
+  section.home-hero .carousel-slide video,
+  section.home-hero .carousel-slide img {
+    object-position: center center !important;
+    transform: scale(1.02) !important;
+  }
+
+  /* Portrait-Optimized Mobile Scroll Cards */
+
+  body.home .products-scroll {
+    display: flex !important;
+    overflow-x: auto !important;
+    gap: 16px !important;
+    padding-left: 16px !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  body.home .products-scroll::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  body.home .products-scroll .collection-card {
+    flex: 0 0 75% !important;
+    max-width: 75% !important;
+    margin-right: 16px !important;
+    scroll-snap-align: start !important;
+  }
+
+  body.home .products-scroll .collection-card video {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    max-height: 65vh !important;
+  }
+
+  /* Reduce vertical spacing between homepage sections */
+  .content.home-content > section {
+    margin-bottom: 16px !important;
+  }
+}
+
+
 
 
 
