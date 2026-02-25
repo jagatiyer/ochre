@@ -431,7 +431,6 @@ body.home .content.home-content > div {
 .content.home-content .products-section,
 .content.home-content .story-content {
   margin-top: 0 !important;
-  padding-top: 8px !important;
   padding-bottom: 8px !important;
 }
 
@@ -1120,22 +1119,6 @@ section.home-hero.content.home-content {
 
 @media (max-width: 480px) {
 
-  /* FORCE collections to stay vertical on mobile */
-  .collections-page .products-scroll {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 18px !important;
-    overflow-x: visible !important;
-    padding-left: 0 !important;
-    scroll-snap-type: none !important;
-  }
-
-  .collections-page .products-scroll .collection-card {
-    flex: none !important;
-    max-width: 100% !important;
-    margin-right: 0 !important;
-  }
-
 
 }
 
@@ -1218,13 +1201,9 @@ section.home-hero.content.home-content {
 }
 
 /* Remove vertical padding on the collections header so there's no
-   green padding band between the hero and the collections section. */
-.content.home-content .collections-page:first-of-type .collections-header,
-.collections-header {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  margin-top: 0 !important;
-}
+  green padding band between the hero and the collections section. */
+
+ 
 
 /* Text spacing */
 #commercials-modal .modal-content h3 {
@@ -1283,50 +1262,7 @@ body.home .carousel-slide img {
 /* ensure CTA buttons area has no extra top margin */
 body.home .home-cta-buttons { margin-top: 8px !important; margin-bottom: 12px !important; }
 
-/* HOME: Play overlay (scoped to home products-scroll only) */
-.products-scroll .home-play-overlay {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.55);
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 3;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.products-scroll .home-play-overlay i,
-.products-scroll .home-play-overlay svg {
-  color: #ffffff;
-  font-size: 22px;
-}
-
-.products-scroll .home-play-overlay:hover {
-  background: rgba(0, 0, 0, 0.75);
-  transform: scale(1.05);
-}
-
-.products-scroll .home-play-overlay:active {
-  transform: scale(0.96);
-}
-
-@media (max-width: 640px) {
-  .products-scroll .home-play-overlay {
-    width: 52px;
-    height: 52px;
-  }
-
-  .products-scroll .home-play-overlay i,
-  .products-scroll .home-play-overlay svg {
-    font-size: 18px;
-  }
-}
+/* Play overlay styles removed (absolute 64px circular button) */
 
 /* =========================================================
    COMMERCIALS — CARD-FLOW OVERRIDES (SCOPED)
@@ -1854,7 +1790,6 @@ body.society .story-page.society-page {
 /* Tighten header spacing inside the society page */
 body.society .story-page.society-page .story-header.society-hero {
   margin: 0 !important;
-  padding-top: 8px !important;
   padding-bottom: 8px !important;
   text-align: left !important;
 }
