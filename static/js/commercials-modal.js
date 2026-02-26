@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // Build a consistent modal inside the dedicated root
   function removeExistingModal() {
     var root = document.getElementById('video-modal-root');
+    try {
+      const modalRoot = document.getElementById('video-modal-root');
+      if (modalRoot) modalRoot.setAttribute('aria-hidden', 'true');
+    } catch (e) {}
     if (!root) return;
     var oldOverlay = document.getElementById('video-overlay');
     var oldModal = document.getElementById('videoModal');
@@ -139,6 +143,11 @@ document.addEventListener('DOMContentLoaded', function () {
     root.appendChild(modal);
 
     overlay.addEventListener('click', function () { removeExistingModal(); });
+
+    try {
+      const modalRoot = document.getElementById('video-modal-root');
+      if (modalRoot) modalRoot.setAttribute('aria-hidden', 'false');
+    } catch (e) {}
 
     return {
       root: root,
