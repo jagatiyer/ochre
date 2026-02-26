@@ -60,3 +60,58 @@ document.addEventListener("DOMContentLoaded", function () {
     // Fail silently to avoid breaking non-video pages
   }
 });
+
+// Mobile navigation overlay toggling: explicit state control
+document.addEventListener('DOMContentLoaded', function () {
+  try {
+    const toggle = document.getElementById('mobile-nav-toggle') || document.querySelector('.mobile-nav-toggle');
+    const menu = document.getElementById('main-menu') || document.querySelector('.menu');
+    const overlay = document.getElementById('mobile-nav-overlay') || document.querySelector('.mobile-nav-overlay');
+    const closeBtn = menu ? menu.querySelector('.mobile-close-btn') : null;
+
+    if (!toggle || !menu) return;
+
+    function setOverlayState(isOpen) {
+      if (!overlay) return;
+      try {
+        overlay.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        // rely on CSS to show/hide when the '.open' class is present
+        try { overlay.classList.toggle('open', !!isOpen); } catch (e) {}
+      } catch (e) {}
+    }
+
+    toggle.addEventListener('click', function () {
+      try {
+        const isOpen = menu.classList.toggle('open');
+        // update aria-expanded on the toggle for accessibility
+        try { toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false'); } catch (e) {}
+        setOverlayState(isOpen);
+      } catch (e) {}
+    });
+
+    if (overlay) {
+      overlay.addEventListener('click', function () {
+        try {
+          menu.classList.remove('open');
+          try { toggle.setAttribute('aria-expanded', 'false'); } catch (e) {}
+          // remove overlay open class; CSS controls visibility
+          try { overlay.classList.remove('open'); } catch (e) {}
+          setOverlayState(false);
+        } catch (e) {}
+      });
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function () {
+        try {
+          menu.classList.remove('open');
+          try { toggle.setAttribute('aria-expanded', 'false'); } catch (e) {}
+          try { overlay.classList.remove('open'); } catch (e) {}
+          setOverlayState(false);
+        } catch (e) {}
+      });
+    }
+  } catch (err) {
+    // fail silently
+  }
+});

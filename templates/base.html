@@ -211,49 +211,6 @@
   })();
 </script>
 <script>
-  (function(){
-    const toggleBtn = document.getElementById("mobile-nav-toggle");
-    const menu = document.getElementById("main-menu");
-    const overlay = document.getElementById("mobile-nav-overlay");
-    const closeBtn = document.querySelector('.mobile-close-btn');
-
-    if (!toggleBtn || !menu || !overlay) return;
-
-    // Prevent double-initialization
-    if (window.__ochreMobileMenuInit) return;
-    window.__ochreMobileMenuInit = true;
-
-    function openMenu() {
-      menu.classList.add("open");
-      overlay.classList.add("open");
-      overlay.setAttribute('aria-hidden', 'false');
-      menu.setAttribute('aria-hidden', 'false');
-      toggleBtn.setAttribute("aria-expanded", "true");
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeMenu() {
-      menu.classList.remove("open");
-      overlay.classList.remove("open");
-      overlay.setAttribute('aria-hidden', 'true');
-      menu.setAttribute('aria-hidden', 'true');
-      toggleBtn.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = "";
-    }
-
-    toggleBtn.addEventListener("click", () => {
-      if (menu.classList.contains("open")) closeMenu(); else openMenu();
-    });
-
-    overlay.addEventListener("click", closeMenu);
-    if (closeBtn) closeBtn.addEventListener("click", closeMenu);
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeMenu();
-    });
-  })();
-</script>
-<script>
 (function(){
   // helper to update or create cart badge
   function updateCartBadge(count) {
@@ -305,15 +262,36 @@
     (function(){
       // Age gate: show on first visit, store acceptance in localStorage.
       try {
-        var key = 'ochre_age_verified_v1';
-        if (localStorage && localStorage.getItem && localStorage.getItem(key)) {
-          return; // already accepted
+        // Hard guard: if the legacy or current verification flag exists,
+        // short-circuit before we inject any DOM for the modal.
+        if (localStorage && localStorage.getItem) {
+          try {
+            if (localStorage.getItem('ochre_age_verified') === 'true') {
+              try { console.log('Age already verified — not creating modal.'); } catch (e) {}
+              return; // already accepted (new key)
+            }
+          } catch (e) {}
+
+          var key = 'ochre_age_verified_v1';
+          if (localStorage.getItem(key)) {
+            return; // already accepted (legacy key)
+          }
         }
       } catch (e) { /* localStorage unavailable; proceed to show gate */ }
 
       function buildModal() {
+        // create the root dynamically so we only inject DOM when needed
         var root = document.getElementById('ochre-age-modal-root');
-        if (!root) return null;
+        if (!root) {
+          try {
+            root = document.createElement('div');
+            root.id = 'ochre-age-modal-root';
+            root.setAttribute('aria-hidden', 'true');
+            document.body.appendChild(root);
+          } catch (e) {
+            return null; // bail if DOM unavailable
+          }
+        }
         // overlay
         var overlay = document.createElement('div');
         overlay.setAttribute('id','ochre-age-overlay');
@@ -431,10 +409,11 @@
                 var age = currentYear - year;
                 if (age >= 18) {
                   try { localStorage.setItem('ochre_age_verified_v1','1'); } catch(e){}
-                  removeModal(modalObj);
+                  try { console.log('Calling destroyAgeModal'); } catch (ex) {}
+                  destroyAgeModal();
                 } else {
                   // show underage message
-                  groupsContainer.style.display = 'none';
+                  try { if (groupsContainer) groupsContainer.style.display = 'none'; } catch (e) {}
                   yearsContainer.style.display = 'none';
                   underageMsg.style.display = '';
                 }
@@ -460,6 +439,9 @@
             yearsContainer.style.justifyContent = 'center';
             yearsContainer.style.alignItems = 'center';
             yearsContainer.setAttribute('aria-hidden','false');
+            // remove the ranges container (non-reusable one-time UI) to avoid
+            // leaving stacking/context ghosts in the DOM
+            try { if (groupsContainer && typeof groupsContainer.remove === 'function') groupsContainer.remove(); } catch (e) {}
           });
         });
 
@@ -468,7 +450,7 @@
           entryRow.style.display = 'none';
           underageMsg.style.display = 'none';
           // show groups as centered flex
-          groupsContainer.style.display = 'flex';
+          try { if (groupsContainer) groupsContainer.style.display = 'flex'; } catch (e) {}
           // re-enable background page scroll while keeping modal/overlay
           try { document.body.style.overflow = ''; } catch (e) {}
           // focus first group
@@ -476,7 +458,7 @@
         });
         noBtn.addEventListener('click', function(){
           entryRow.style.display = 'none';
-          groupsContainer.style.display = 'none';
+          try { if (groupsContainer) groupsContainer.style.display = 'none'; } catch (e) {}
           yearsContainer.style.display = 'none';
           underageMsg.style.display = '';
         });
@@ -495,6 +477,10 @@
         return {root: root, overlay: overlay, modal: modal, groupsContainer: groupsContainer, yearsContainer: yearsContainer};
       }
 
+      // handler references so we can remove them when tearing down the modal
+      var trapFocusHandler = null;
+      var overlayClickHandler = null;
+
       function showModal(m) {
         if (!m) return;
         // prefer CSS-based styling: add an 'open' state so the appended stylesheet can scope styles
@@ -508,12 +494,29 @@
           } catch (e) { /* ignore focus errors */ }
       }
 
-      function removeModal(m) {
-        if (!m) return;
-        if (m.root && m.root.parentNode) {
-          m.root.parentNode.removeChild(m.root);
+      function destroyAgeModal() {
+        var root = null;
+        try { root = document.getElementById('ochre-age-modal-root'); } catch (e) { root = null; }
+        if (!root) return;
+
+        try { document.removeEventListener('focus', trapFocusHandler, true); } catch (e) {}
+
+        try {
+          var overlay = root.querySelector('#ochre-age-overlay');
+          if (overlay && overlayClickHandler) {
+            overlay.removeEventListener('click', overlayClickHandler);
+          }
+        } catch (e) {}
+
+        try { root.remove(); } catch (e) {
+          try { if (root.parentNode) root.parentNode.removeChild(root); } catch (ex) {}
         }
-        try { document.body.style.overflow = ''; } catch (e) {}
+
+        try { console.log('AGE MODAL DESTROYED'); } catch (e) {}
+
+        trapFocusHandler = null;
+        overlayClickHandler = null;
+        try { modalObj = null; } catch (e) {}
       }
 
       var modalObj = buildModal();
@@ -524,29 +527,30 @@
       try { document.body.style.overflow = 'hidden'; } catch (e) {}
       showModal(modalObj);
 
-      // provide decline path if someone wants to leave immediately (click outside overlay)
-      modalObj.overlay.addEventListener('click', function(){
-        window.location.href = 'https://www.google.com';
-      });
+      // prevent overlay from dismissing the modal (non-dismissible modal)
+      overlayClickHandler = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        // intentionally do nothing: modal must remain until confirmed
+      };
+      try { modalObj.overlay.addEventListener('click', overlayClickHandler); } catch (e) {}
 
       // prevent tabbing into background content while modal is open
-      document.addEventListener('focus', function trapFocus(e){
+      trapFocusHandler = function trapFocus(e){
         if (!modalObj.modal.contains(e.target)) {
           e.stopPropagation();
           // focus first interactive element: first entry button
           var fg = modalObj.modal.querySelector('button');
           if (fg && typeof fg.focus === 'function') fg.focus();
         }
-      }, true);
+      };
+      try { document.addEventListener('focus', trapFocusHandler, true); } catch (e) {}
     })();
   });
   </script>
 
   <script src="{% static 'js/main.js' %}"></script>
   {% block extra_js %}{% endblock %}
-
-  {# Place modal root at document end so it escapes layout stacking contexts #}
-  <div id="ochre-age-modal-root" aria-hidden="true"></div>
 
   {# Video modal root for commercials/videos #}
   <div id="video-modal-root" aria-hidden="true"></div>

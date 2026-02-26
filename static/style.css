@@ -933,7 +933,6 @@ body > #ochre-age-modal-root {
   position: fixed !important;
   inset: 0 !important;
   z-index: 2147483647 !important; /* max safe z-index */
-  pointer-events: none;
 }
 
 /* Off-canvas mobile navigation ------------------------------------------------- */
@@ -5119,7 +5118,11 @@ footer,
   color: var(--text-main);
   padding: 22px;
   z-index: 9999;
+  width: 92vw;
   max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
   border-radius: 10px;
   font-family: 'Satoshi', sans-serif;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);

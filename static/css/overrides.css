@@ -106,8 +106,7 @@ body > .main {
 }
 
 /* Commercials overrides moved to static/css/commercials-overrides.css */
-  display: block;
-}
+/* Commercials overrides moved to static/css/commercials-overrides.css */
 
 
 /* ============================================================
@@ -1026,9 +1025,8 @@ body.commercials .commercial-media img {
   .content.home-content > .buttons.home-cta-buttons {
     margin-top: 24px !important;
     padding: 0 !important;
+    gap: 16px;
   }
-  gap: 16px;
-}
 
 /* FINAL OVERRIDE: ensure hero is reduced so CTAs appear without scrolling
    Keep this low enough for typical desktop viewports while preserving
@@ -1952,6 +1950,31 @@ header {
   .content.home-content > section {
     margin-bottom: 16px !important;
   }
+}
+
+
+
+
+
+
+
+/* Restore interactivity for age verification modal only
+   - Keep #ochre-age-modal-root pointer-events: none intact
+   - Re-enable pointer events on overlay and modal themselves */
+#ochre-age-overlay,
+#ochre-age-modal {
+  pointer-events: auto;
+}
+
+/* Re-enable pointer events on modal root so the modal blocks page clicks */
+body > #ochre-age-modal-root {
+  pointer-events: auto;
+}
+
+/* Prevent hidden video modal root from blocking UI */
+#video-modal-root[aria-hidden="true"] {
+  display: none !important;
+  pointer-events: none !important;
 }
 
 
