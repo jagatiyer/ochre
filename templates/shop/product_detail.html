@@ -140,7 +140,7 @@
                     <label for="quantity">Quantity</label>
                     <div class="option-control">
                         <div class="select-wrapper">
-                                                        <select id="quantity" name="quantity" class="select-input">
+                                                        <select id="quantity" name="quantity" class="select-input product-unit-selector">
                                                             {% for i in "12345678910"|make_list %}
                                                                 <option value="{{ forloop.counter }}" {% if selected_quantity == forloop.counter|stringformat:"s" %}selected{% endif %}>{{ forloop.counter }}</option>
                                                             {% endfor %}
@@ -160,7 +160,7 @@
                                         <label for="quantity">Quantity</label>
                                         <div class="option-control">
                                                 <div class="select-wrapper">
-                                                        <select id="quantity" name="quantity" class="select-input">
+                                                        <select id="quantity" name="quantity" class="select-input product-unit-selector">
                                                             {% for i in "12345678910"|make_list %}
                                                                 <option value="{{ forloop.counter }}" {% if selected_quantity == forloop.counter|stringformat:"s" %}selected{% endif %}>{{ forloop.counter }}</option>
                                                             {% endfor %}

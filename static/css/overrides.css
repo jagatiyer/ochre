@@ -23,6 +23,8 @@ body.home {
 }
 
 
+
+
 /* ============================================================
   HOME — Allow Sticky Header
   Ensures body does not block sticky behavior.
@@ -1976,6 +1978,48 @@ body > #ochre-age-modal-root {
   display: none !important;
   pointer-events: none !important;
 }
+
+/* ============================================================
+   PRODUCT UNIT SELECT — Component Styling
+   Applies to any select intentionally marked
+   ============================================================ */
+
+.product-unit-selector,
+#product-unit-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  background-color: var(--bg-card, #1a1d1f);
+  border: 1px solid #2a2d2f;
+  color: var(--text-main, #ffffff);
+
+  font-family: 'Satoshi', sans-serif;
+  font-size: 15px;
+
+  padding: 12px 36px 12px 16px;
+  border-radius: 6px;
+  min-width: 80px;
+
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25em 1.25em;
+}
+
+.product-unit-selector:focus,
+#product-unit-select:focus {
+  border-color: var(--accent-red, #ff5b5f);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 91, 95, 0.1);
+}
+
+/* ============================================================
+   PRODUCT DETAIL — Restore QTY Select Styling
+   Scoped only to shop/product pages
+   ============================================================ */
+
+ 
 
 
 
