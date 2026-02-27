@@ -3,6 +3,52 @@
    Purpose: Safe, scoped UI fixes without touching style.css
    ========================================================= */
 
+/* ============================================================
+   MOBILE UX CORRECTIONS (SHOP & COLLECTIONS)
+   Target: <= 768px
+   Clean & Stable
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* --- ISSUE 1: FILTER BAR SCROLLING --- */
+  .product-filters,
+  .article-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    justify-content: flex-start;
+    padding-bottom: 12px;
+  }
+
+  .product-filters > *,
+  .article-filters > * {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* --- ISSUE 2: SHOP BUTTON STACKING --- */
+  .card-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .card-actions .left-action,
+  .card-actions .right-action {
+    width: 100%;
+    margin: 0;
+  }
+
+  .card-actions a,
+  .card-actions button {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+
+}
+
 /* Homepage video overlay state */
 .collection-card.is-playing .home-play-overlay {
   opacity: 0;
