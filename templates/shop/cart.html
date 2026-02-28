@@ -57,13 +57,13 @@
                 <span class="qty-pill">{{ qty }}</span>
               </td>
 
-              <!-- UNIT -->
+              <!-- UNIT PRICE -->
               <td class="price-cell">
                 {% if unit_obj %}
                   <div>{{ unit_obj.label }}</div>
-                  <div>₹ {{ unit }}</div>
+                  <div>₹ {{ unit|floatformat:2 }}</div>
                 {% else %}
-                  ₹ {{ unit }}
+                  ₹ {{ unit|floatformat:2 }}
                 {% endif %}
               </td>
 

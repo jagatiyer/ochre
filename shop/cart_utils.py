@@ -68,14 +68,26 @@ def session_cart_to_items(request):
             if not p or not u:
                 continue
             line_total = (u.price or 0) * int(qty)
-            rows.append({"product": p, "product_unit": u, "qty": qty, "line_total": line_total})
+            rows.append({
+                "product": p,
+                "product_unit": u,
+                "qty": qty,
+                "unit_price": u.price,
+                "line_total": line_total,
+            })
         else:
             pid = int(key)
             p = products_map.get(pid)
             if not p:
                 continue
             line_total = (p.price or 0) * int(qty)
-            rows.append({"product": p, "product_unit": None, "qty": qty, "line_total": line_total})
+            rows.append({
+                "product": p,
+                "product_unit": None,
+                "qty": qty,
+                "unit_price": p.price,
+                "line_total": line_total,
+            })
 
     return rows
 

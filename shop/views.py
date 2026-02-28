@@ -5,7 +5,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse
+from django.urls import reverse, NoReverseMatch
 
 from .models import (
     ShopItem,
@@ -171,11 +171,11 @@ def add_to_cart(request):
         )
 
     messages.success(request, "Item added to cart successfully.")
-    return redirect(
-        request.POST.get("next")
-        or request.META.get("HTTP_REFERER")
-        or reverse("shop:shop_index")
-    )
+    try:
+        cart_url = reverse("shop:cart_view")
+    except NoReverseMatch:
+        cart_url = "/shop/cart/"
+    return redirect(cart_url)
 
 
 # ============================================================
@@ -231,7 +231,11 @@ def cart_view(request):
                     "product": ci.product,
                     "product_unit": ci.product_unit,
                     "qty": ci.qty,
-                    "unit_price": ci.unit_price,
+                    "unit_price": (
+                        ci.unit_price
+                        if ci.unit_price is not None
+                        else (ci.product_unit.price if ci.product_unit else ci.product.price)
+                    ),
                     "line_total": line_total,
                 })
                 subtotal += line_total
