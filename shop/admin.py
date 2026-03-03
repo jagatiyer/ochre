@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django import forms
+from django_ckeditor_5.widgets import CKEditor5Widget
 from .models import (
     ShopCategory,
     ShopItem,
@@ -43,6 +45,18 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(ShopItem)
 class ShopItemAdmin(admin.ModelAdmin):
+    # Use a custom ModelForm to enable CKEditor for `description` only
+    class ShopItemForm(forms.ModelForm):
+        description = forms.CharField(
+            widget=CKEditor5Widget(config_name="blog"),
+            required=False,
+        )
+
+        class Meta:
+            model = ShopItem
+            fields = "__all__"
+
+    form = ShopItemForm
     # ✅ FEATURED FLAG VISIBLE + EDITABLE
     list_display = (
         "title",

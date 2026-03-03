@@ -198,7 +198,7 @@
 
             {% if item.description %}
             <div class="product-description">
-                {{ item.description|linebreaks }}
+                {{ item.description|safe }}
             </div>
             {% endif %}
 
