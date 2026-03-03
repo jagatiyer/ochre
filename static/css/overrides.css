@@ -399,6 +399,25 @@ div.products-scroll[style] {
   margin-bottom: 24px !important;
 }
 
+
+/* ============================================================
+   PRODUCT DETAIL SPACING FIX
+   Explicit vertical spacing between quantity, button, description
+   ============================================================ */
+
+.product-option {
+  margin-bottom: 16px;
+}
+
+button.cn.shop {
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+
+.product-description {
+  margin-top: 24px;
+}
+
 /* Footer: equal-width three-column layout across all pages */
 .footer .footer-main {
   display: flex !important;
