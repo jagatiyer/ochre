@@ -116,25 +116,27 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-// Cookie consent banner behavior
+// Cookie consent banner behavior (persisted)
 document.addEventListener("DOMContentLoaded", function () {
+  var banner = document.getElementById('cookie-consent-bar');
+  var btn = document.querySelector('.cookie-accept-btn');
+  if (!banner) return;
+
   try {
     var consent = null;
     try { consent = localStorage.getItem('ochre_cookie_consent'); } catch (e) { consent = null; }
-    var bar = document.getElementById('cookie-consent-bar');
-    if (!consent && bar) {
-      bar.hidden = false;
-      bar.setAttribute('aria-hidden','false');
+
+    if (consent !== 'true') {
+      try { banner.removeAttribute('hidden'); banner.setAttribute('aria-hidden', 'false'); } catch (e) {}
     }
 
-    var btn = document.querySelector('.cookie-accept-btn');
-    if (btn && bar) {
+    if (btn) {
       btn.addEventListener('click', function () {
-        try { localStorage.setItem('ochre_cookie_consent', 'true'); } catch (e) {}
-        try { bar.style.display = 'none'; bar.hidden = true; bar.setAttribute('aria-hidden','true'); } catch (e) {}
+        try { localStorage.setItem('ochre_cookie_consent', 'true'); } catch (e) { console.warn('Cookie consent storage unavailable', e); }
+        try { banner.setAttribute('hidden', 'true'); banner.setAttribute('aria-hidden', 'true'); } catch (e) {}
       });
     }
   } catch (e) {
-    // fail silently
+    console.warn('Cookie consent initialization failed', e);
   }
 });
