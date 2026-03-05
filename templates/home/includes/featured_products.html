@@ -55,35 +55,20 @@
         <div class="card-actions">
           <div class="left-action">
             {% if product.is_experience %}
-              <a href="{% url 'shop:product_detail' product.slug %}"
-                 class="collection-card-btn">
-                Book Now
-              </a>
+              <a href="{% url 'shop:product_detail' product.slug %}" class="collection-card-btn">Book Now</a>
             {% else %}
-              <a href="{% url 'shop:product_detail' product.slug %}"
-                 class="collection-card-btn">
-                View Details
-              </a>
+              <a href="{% url 'shop:product_detail' product.slug %}" class="collection-card-btn">View Details</a>
             {% endif %}
           </div>
 
           <div class="right-action">
             {% if not product.is_experience %}
-              <form method="post"
-                    action="{% url 'shop:add_to_cart' %}"
-                    class="index-add-form"
-                    data-product-id="{{ product.id }}">
+              <form method="post" action="{% url 'shop:add_to_cart' %}" class="index-add-form" data-product-id="{{ product.id }}">
                 {% csrf_token %}
                 <input type="hidden" name="product_id" value="{{ product.id }}">
                 <input type="hidden" name="quantity" value="1">
-                <input type="hidden"
-                       name="product_unit_id"
-                       value="{% if product.default_unit %}{{ product.default_unit.id }}{% endif %}">
-                <button type="submit"
-                        class="cn shop index-add-btn"
-                        {% if product.has_units and not product.default_unit %}disabled{% endif %}>
-                  Add to Cart
-                </button>
+                <input type="hidden" name="product_unit_id" value="{% if product.default_unit %}{{ product.default_unit.id }}{% endif %}">
+                <button type="submit" class="cn shop index-add-btn" {% if product.has_units and not product.default_unit %}disabled{% endif %}>Add to Cart</button>
               </form>
             {% endif %}
           </div>

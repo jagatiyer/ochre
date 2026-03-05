@@ -1,13 +1,11 @@
 /* =========================================================
    OCHRE UI OVERRIDES
    Purpose: Safe, scoped UI fixes without touching style.css
-   ========================================================= */
-
-/* ============================================================
-   MOBILE UX CORRECTIONS (SHOP & COLLECTIONS)
-   Target: <= 768px
-   Clean & Stable
-   ============================================================ */
+  /* ============================================================
+  MOBILE UX CORRECTIONS (SHOP & COLLECTIONS)
+  Target: <= 768px
+  Clean & Stable
+  ============================================================ */
 @media (max-width: 768px) {
 
   /* --- ISSUE 1: FILTER BAR SCROLLING --- */
@@ -27,27 +25,17 @@
     white-space: nowrap;
   }
 
-  /* --- ISSUE 2: SHOP BUTTON STACKING --- */
-  .card-actions {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .card-actions .left-action,
-  .card-actions .right-action {
-    width: 100%;
-    margin: 0;
-  }
-
-  .card-actions a,
-  .card-actions button {
-    width: 100%;
-    display: block;
-    text-align: center;
-  }
-
 }
+
+/* ============================================================
+     PRODUCT DETAIL — Restore QTY Select Styling
+     Scoped only to shop/product pages
+     ============================================================ */
+
+
+  /* (shop image overrides were moved to the end of this file) */
+
+  
 
 /* Homepage video overlay state */
 .collection-card.is-playing .home-play-overlay {
@@ -397,6 +385,107 @@ body.home .collections-page .experience-section {
 div.products-scroll[style] {
   padding-bottom: 24px !important;
   margin-bottom: 24px !important;
+}
+
+/* ============================================================ */
+/* SHOP CARD IMAGE — ensure consistent card heights when images */
+/* Scoped to collection/shop cards to avoid global conflicts     */
+/* Appended: enforces a fixed image container and cover-fit images */
+/* ============================================================ */
+
+.collection-card .card-image,
+.shop-card .card-image {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.collection-card .card-image img,
+.shop-card .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* End of shop image overrides */
+
+/* ============================================================ */
+/* PRODUCT PLACEHOLDER — dark themed placeholder for missing images */
+/* Uses existing theme variables only; keeps same height as .card-image */
+/* ============================================================ */
+
+.collection-card .card-image .product-placeholder,
+.shop-card .card-image .product-placeholder {
+  width: 100%;
+  height: 100%; /* inherits .card-image height (220px) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border-radius: 12px;
+}
+
+.collection-card .card-image .product-placeholder .placeholder-content,
+.shop-card .card-image .product-placeholder .placeholder-content {
+  text-align: center;
+  opacity: 0.85;
+}
+
+.collection-card .card-image .placeholder-title,
+.shop-card .card-image .placeholder-title {
+  display: block;
+  font-size: 16px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.collection-card .card-image .placeholder-subtitle,
+.shop-card .card-image .placeholder-subtitle {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+/* Ensure images still cover the container */
+.collection-card .card-image img,
+.shop-card .card-image img {
+  display: block;
+}
+/* shop card action layout overrides removed — restoring site defaults */
+
+/* ------------------------------------------------------------
+   PRODUCT DETAIL PLACEHOLDER
+   Uses theme variables, matches card placeholder but larger
+   ------------------------------------------------------------ */
+.product-placeholder {
+  width: 100%;
+  height: 320px;
+  background: var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.product-placeholder .placeholder-content {
+  text-align: center;
+  opacity: 0.85;
+}
+
+.product-placeholder .placeholder-title {
+  display: block;
+  font-size: 18px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.product-placeholder .placeholder-subtitle {
+  display: block;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 6px;
 }
 
 

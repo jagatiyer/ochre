@@ -65,13 +65,12 @@
                         >
                     {% endfor %}
                 {% else %}
-                    <img
-                        id="ochreMainImage"
-                        src="{% static 'img/placeholder.png' %}"
-                        alt="{{ item.title }}"
-                        loading="lazy"
-                        style="max-width:100%;height:auto;border-radius:8px;"
-                    >
+                    <div class="product-placeholder">
+                        <div class="placeholder-content">
+                            <span class="placeholder-title">Product Image</span>
+                            <span class="placeholder-subtitle">Image coming soon</span>
+                        </div>
+                    </div>
                 {% endif %}
 
                 {% if item.gallery_images.all %}
