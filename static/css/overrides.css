@@ -656,8 +656,7 @@ body.home .content.home-content .collections-page * {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
-
-
+/* COOKIE CONSENT BAR (duplicate removed — fixed-position block kept at EOF) */
 /* Strong zeroing for the small band that can appear between
    the collections section and inner story text on the homepage.
    Scoped to `body.home .content.home-content` to avoid affecting
@@ -2174,6 +2173,67 @@ body > #ochre-age-modal-root {
    ============================================================ */
 
  
+
+
+
+
+
+
+
+
+
+/* ============================================================
+COOKIE CONSENT BAR — fixed viewport positioning
+Ensures banner overlays page instead of appearing after footer
+Safe for full-bleed hero and existing layout
+============================================================ */
+
+#cookie-consent-bar {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 9999;
+
+  background: var(--bg-card);
+  border-top: 1px solid rgba(255,255,255,0.08);
+
+  display: flex;
+  justify-content: center;
+  padding: 14px 20px;
+}
+
+#cookie-consent-bar .cookie-consent-inner {
+  width: 100%;
+  max-width: 1200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+#cookie-consent-bar .cookie-text {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  #cookie-consent-bar .cookie-consent-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  #cookie-consent-bar .cookie-accept-btn {
+    width: 100%;
+  }
+
+}
+
+
 
 
 
