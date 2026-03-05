@@ -133,6 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (btn) {
       btn.addEventListener('click', function () {
         try { localStorage.setItem('ochre_cookie_consent', 'true'); } catch (e) { console.warn('Cookie consent storage unavailable', e); }
+        try { btn.blur(); } catch (e) {}
         try { banner.setAttribute('hidden', 'true'); banner.setAttribute('aria-hidden', 'true'); } catch (e) {}
       });
     }
