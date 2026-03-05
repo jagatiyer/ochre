@@ -115,3 +115,26 @@ document.addEventListener('DOMContentLoaded', function () {
     // fail silently
   }
 });
+
+// Cookie consent banner behavior
+document.addEventListener("DOMContentLoaded", function () {
+  try {
+    var consent = null;
+    try { consent = localStorage.getItem('ochre_cookie_consent'); } catch (e) { consent = null; }
+    var bar = document.getElementById('cookie-consent-bar');
+    if (!consent && bar) {
+      bar.hidden = false;
+      bar.setAttribute('aria-hidden','false');
+    }
+
+    var btn = document.querySelector('.cookie-accept-btn');
+    if (btn && bar) {
+      btn.addEventListener('click', function () {
+        try { localStorage.setItem('ochre_cookie_consent', 'true'); } catch (e) {}
+        try { bar.style.display = 'none'; bar.hidden = true; bar.setAttribute('aria-hidden','true'); } catch (e) {}
+      });
+    }
+  } catch (e) {
+    // fail silently
+  }
+});
