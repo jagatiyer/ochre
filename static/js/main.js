@@ -122,26 +122,27 @@ document.addEventListener("DOMContentLoaded", function () {
   var btn = document.querySelector('.cookie-accept-btn');
   if (!banner) return;
 
-  try {
-    var consent = null;
-    try { consent = localStorage.getItem('ochre_cookie_consent'); } catch (e) { consent = null; }
+  /* check stored consent */
+  var consent = null;
+  try { consent = localStorage.getItem('ochre_cookie_consent'); } catch (e) { consent = null; }
 
-    if (consent !== 'true') {
-      try { banner.removeAttribute('hidden'); banner.setAttribute('aria-hidden', 'false'); } catch (e) {}
-    }
+  /* if already accepted, never show banner */
+  if (consent === 'true') {
+    try { banner.style.display = 'none'; } catch (e) {}
+    return;
+  }
 
-    if (btn) {
-      btn.addEventListener('click', function () {
-        try { localStorage.setItem('ochre_cookie_consent', 'true'); } catch (e) {}
+  /* otherwise show banner */
+  try { banner.removeAttribute('hidden'); banner.setAttribute('aria-hidden', 'false'); } catch (e) {}
 
-        /* remove focus before hiding */
-        try { document.activeElement.blur(); } catch (e) {}
+  /* accept handler */
+  if (btn) {
+    btn.addEventListener('click', function () {
+      try { localStorage.setItem('ochre_cookie_consent', 'true'); } catch (e) {}
 
-        /* hide banner */
-        try { banner.style.display = 'none'; banner.removeAttribute('aria-hidden'); } catch (e) {}
-      });
-    }
-  } catch (e) {
-    console.warn('Cookie consent initialization failed', e);
+      try { document.activeElement.blur(); } catch (e) {}
+
+      try { banner.style.display = 'none'; } catch (e) {}
+    });
   }
 });
