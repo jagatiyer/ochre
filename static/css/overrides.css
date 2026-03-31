@@ -2253,6 +2253,30 @@ Ensures banner sits above all layers and receives pointer events
   pointer-events: auto !important;
 }
 
+/* ============================================================
+   CONTACT FORM — Form Row Layout Fix
+   Ensures Name + Email combined width matches Message textarea
+   Uses calc() to account for grid gap in width calculation
+   Gap: 18px (half = 9px per column)
+   ============================================================ */
+.contact-form .form-row {
+  display: grid;
+  grid-template-columns: calc(50% - 9px) calc(50% - 9px);
+  gap: 18px;
+}
+
+/* Ensure inputs fill grid cells */
+.contact-form .form-row input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive: Stack form rows on mobile */
+@media (max-width: 880px) {
+  .contact-form .form-row {
+    grid-template-columns: 1fr;
+  }
+}
 
 
 
