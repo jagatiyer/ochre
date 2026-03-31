@@ -2389,6 +2389,11 @@ Ensures banner sits above all layers and receives pointer events
     gap: 20px;  /* Further reduce on small mobile */
   }
 
+  /* CRITICAL: Remove desktop alignment margin on mobile */
+  .contact-page .contact-right {
+    margin-top: 0 !important;  /* Override 250px desktop margin */
+  }
+
   .contact-form-section {
     margin-bottom: 0;
   }
