@@ -17,11 +17,11 @@ def collections_index(request):
     # Filtering logic: prefer the FK relation when present, otherwise fall
     # back to the legacy string `category` for older rows.
     if category == "all":
-        items = CollectionItem.objects.filter(published=True)
+        items = CollectionItem.objects.filter(published=True).order_by('display_order', '-id')
     else:
         # Only filter by the authoritative FK relation. Ignore the legacy
         # `category` CharField entirely to avoid accidental matches.
-        items = CollectionItem.objects.filter(published=True, category_fk__slug=category)
+        items = CollectionItem.objects.filter(published=True, category_fk__slug=category).order_by('display_order', '-id')
 
     context = {
         "items": items,
@@ -40,10 +40,10 @@ def collections_index(request):
 def collectionitem_detail(request, pk):
     item = get_object_or_404(CollectionItem, pk=pk)
 
-    # Build ordered list for navigation (ascending by created_at)
+    # Build ordered list for navigation using display_order (same as listing)
     # NOTE: do NOT filter by `published` here so tests with limited data still
     # present previous/next navigation. Listing views still filter by published.
-    items = list(CollectionItem.objects.order_by("created_at"))
+    items = list(CollectionItem.objects.order_by('display_order', '-id'))
 
     # Find current index and compute cyclic previous/next
     current_index = next(
@@ -86,7 +86,7 @@ def collections_by_category(request, category):
 
     qs = (
         CollectionItem.objects.filter(published=True, category_fk__slug=category)
-        .order_by("-created_at")
+        .order_by('display_order', '-id')
     )
 
     # Debug: count of matching items
