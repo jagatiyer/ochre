@@ -2300,7 +2300,7 @@ Ensures banner sits above all layers and receives pointer events
   flex-wrap: wrap;
   padding: 22px 0;              /* Vertical rhythm: spacing between items */
   border-bottom: 1px solid #2a2d2f;  /* Separator line */
-  cursor: pointer;
+  cursor: default;              /* ← Changed: NOT clickable (button is) */
   transition: background 0.25s ease;
 }
 
@@ -2373,6 +2373,31 @@ Ensures banner sits above all layers and receives pointer events
   background: #ff5b5f !important;
   color: #ffffff !important;
 }
+
+/* ============================================================
+   MOBILE RESPONSIVE — Contact Form Spacing Fix
+   Reduces excessive gaps on smaller screens
+   ============================================================ */
+@media (max-width: 900px) {
+  .contact-container {
+    gap: 30px;  /* Reduce gap from 40px to 30px */
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-container {
+    gap: 20px;  /* Further reduce on small mobile */
+  }
+
+  .contact-form-section {
+    margin-bottom: 0;
+  }
+
+  .faq-section {
+    padding: 60px 20px 80px;  /* Reduce padding on mobile */
+  }
+}
+
 
 
 

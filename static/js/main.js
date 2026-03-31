@@ -160,8 +160,14 @@ document.addEventListener('DOMContentLoaded', function () {
       
       if (!btn) return;
       
-      btn.addEventListener('click', function (e) {
+      // Click handler for entire FAQ row (better UX)
+      item.addEventListener('click', function (e) {
         try {
+          // Prevent double toggle if button was clicked
+          if (e.target.closest('.expand-btn') && e.target !== btn && !e.target.closest('i')) {
+            return;
+          }
+          
           e.preventDefault();
           e.stopPropagation();
           
