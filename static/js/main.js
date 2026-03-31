@@ -146,3 +146,57 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+// FAQ Accordion Toggle
+document.addEventListener('DOMContentLoaded', function () {
+  try {
+    const faqItems = document.querySelectorAll('.faq-list-item');
+    
+    if (faqItems.length === 0) return; // No FAQ on this page
+    
+    faqItems.forEach(item => {
+      const btn = item.querySelector('.expand-btn');
+      const icon = btn?.querySelector('i');
+      
+      if (!btn) return;
+      
+      btn.addEventListener('click', function (e) {
+        try {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          // Close all other items (accordion behavior)
+          faqItems.forEach(otherItem => {
+            if (otherItem !== item && otherItem.classList.contains('active')) {
+              otherItem.classList.remove('active');
+              const otherIcon = otherItem.querySelector('.expand-btn i');
+              if (otherIcon) {
+                otherIcon.classList.remove('fa-minus');
+                otherIcon.classList.add('fa-plus');
+              }
+            }
+          });
+          
+          // Toggle current item
+          const isActive = item.classList.toggle('active');
+          
+          // Toggle icon: + ↔ -
+          if (icon) {
+            if (isActive) {
+              icon.classList.remove('fa-plus');
+              icon.classList.add('fa-minus');
+            } else {
+              icon.classList.remove('fa-minus');
+              icon.classList.add('fa-plus');
+            }
+          }
+        } catch (err) {
+          // Fail silently
+        }
+      });
+    });
+  } catch (err) {
+    // Fail silently to avoid breaking page
+  }
+});
+

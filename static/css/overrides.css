@@ -2278,6 +2278,103 @@ Ensures banner sits above all layers and receives pointer events
   }
 }
 
+/* ============================================================
+   FAQ ACCORDION — Complete Layout + Spacing Fix
+   Selector alignment: HTML uses .faq-list-item, not .faq-item
+   Enables expand/collapse functionality with proper rhythm
+   ============================================================ */
+
+/* FAQ List Container */
+.faq-list {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Enable flex wrapping so .faq-answer breaks to new line */
+.faq-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 22px 0;              /* Vertical rhythm: spacing between items */
+  border-bottom: 1px solid #2a2d2f;  /* Separator line */
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+/* Hover effect on item */
+.faq-list-item:hover {
+  background: rgba(255, 91, 95, 0.03);
+}
+
+/* Item content takes available space, pushes button right */
+.faq-list-item .item-content {
+  flex: 1;
+}
+
+/* Question text styling */
+.faq-list-item .item-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 300;
+  color: #fff;
+  margin: 0;
+  text-align: left;
+}
+
+/* CIRCULAR BUTTON — Override global button reset */
+.expand-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50% !important;
+  border: 1px solid #ff5b5f !important;
+  background: transparent !important;
+  color: #ff5b5f !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.expand-btn:hover,
+.expand-btn:focus {
+  background: #ff5b5f !important;
+  color: #ffffff !important;
+}
+
+.expand-btn i {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Force answer to full width on new line */
+.faq-answer {
+  flex-basis: 100%;
+  order: 3;
+  margin-top: 14px;             /* Space from question to answer (original: 14px) */
+  font-family: 'Satoshi', sans-serif;
+  font-size: 15px;
+  color: #9ca3af;
+  line-height: 1.6;             /* Text breathing room */
+  text-align: left;
+}
+
+/* Answer visibility toggle */
+.faq-list-item.active .faq-answer {
+  display: block;
+}
+
+/* Button styling on active state */
+.faq-list-item.active .expand-btn {
+  background: #ff5b5f !important;
+  color: #ffffff !important;
+}
+
+
 
 
 
