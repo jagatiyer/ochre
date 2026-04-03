@@ -246,8 +246,20 @@ def cart_view(request):
             items.append(row)
             subtotal += row["line_total"]
 
-    gst = (subtotal * Decimal("0.18")).quantize(Decimal("0.01"))
-    grand_total = subtotal + gst
+    # Calculate GST per item based on product's tax_percent
+    total_gst = Decimal("0.00")
+    for item in items:
+        product = item.get("product")
+        line_total = item.get("line_total", Decimal("0.00"))
+        tax_rate = product.tax_percent if product else Decimal("0.00")
+        item_gst = (line_total * (tax_rate / Decimal("100"))).quantize(Decimal("0.01"))
+        total_gst += item_gst
+        # Store per-item GST and item total with GST for display
+        item["gst_amount"] = item_gst
+        item["item_subtotal"] = line_total
+        item["item_total_with_gst"] = (line_total + item_gst).quantize(Decimal("0.01"))
+
+    grand_total = subtotal + total_gst
 
     return render(
         request,
@@ -255,7 +267,7 @@ def cart_view(request):
         {
             "items": items,
             "subtotal": subtotal,
-            "gst": gst,
+            "gst": total_gst,
             "grand_total": grand_total,
         },
     )

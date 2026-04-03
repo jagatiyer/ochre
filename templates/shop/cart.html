@@ -21,6 +21,7 @@
               <th class="col-item">Item</th>
               <th class="col-qty">Qty</th>
               <th class="col-price">Unit Price</th>
+              <th class="col-price">GST</th>
               <th class="col-price">Total</th>
               <th class="col-remove"></th>
             </tr>
@@ -28,7 +29,7 @@
 
           <tbody>
             {% for row in items %}
-            {% with product=row.product qty=row.qty unit=row.unit_price total=row.line_total unit_obj=row.product_unit %}
+            {% with product=row.product qty=row.qty unit=row.unit_price line_subtotal=row.line_total gst=row.gst_amount item_total=row.item_total_with_gst unit_obj=row.product_unit %}
             <tr>
 
               <!-- ITEM -->
@@ -67,9 +68,14 @@
                 {% endif %}
               </td>
 
-              <!-- TOTAL -->
+              <!-- GST -->
               <td class="price-cell">
-                ₹ {{ total }}
+                ₹ {{ gst|floatformat:2 }}
+              </td>
+
+              <!-- TOTAL (with GST) -->
+              <td class="price-cell">
+                ₹ {{ item_total|floatformat:2 }}
               </td>
 
               <!-- REMOVE -->
@@ -107,7 +113,7 @@
           </div>
 
           <div class="summary-row">
-            <span>GST (18%)</span>
+            <span>Total GST</span>
             <span>₹ {{ gst }}</span>
           </div>
 
