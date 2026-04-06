@@ -69,7 +69,7 @@
                             ₹ {% with d=item.default_unit %}{% if d %}{{ d.price }}{% else %}{{ item.price }}{% endif %}{% endwith %}
                         </p>
                         <p style="color:#fff; font-size:14px; margin:6px 0 4px;">Unit:</p>
-                        <select class="product-unit-selector" data-product-id="{{ item.id }}" style="margin-bottom:8px; width:100%;">
+                        <select class="product-unit-selector" data-product-id="{{ item.id }}" style="margin-bottom:8px;">
                             {% for u in item.active_units %}
                                 <option value="{{ u.id }}" data-price="{{ u.price }}" {% if u.is_default %}selected{% endif %}>{{ u.label }}</option>
                             {% endfor %}

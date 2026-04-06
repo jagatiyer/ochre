@@ -1,18 +1,85 @@
 <style>
 /* Product unit select styling (match site form controls) */
 .product-unit-selector, #product-unit-select {
-    background: var(--bg-main);
-    border: 1px solid #222428;
-    color: #ffffff;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 15px;
-    width: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
+
+    background-color: var(--bg-card, #1a1d1f);
+    border: 1px solid #2a2d2f;
+    color: var(--text-main, #ffffff);
+
+    font-family: 'Satoshi', sans-serif;
+    font-size: 15px;
+
+    padding: 12px 36px 12px 16px;
+    border-radius: 6px;
+    min-width: 80px;
+    width: 100%;
+
+    line-height: 1;
+    box-sizing: border-box;
+    height: 48px;
+
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25em 1.25em;
 }
 .product-unit-selector:focus, #product-unit-select:focus {
-    border-color: var(--accent-red);
+    border-color: var(--accent-red, #ff5b5f);
     outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 91, 95, 0.1);
+}
+
+/* ============================================================
+   DROPDOWN RENDERING — Prevent clipping/stacking issues
+   ============================================================ */
+.collection-card {
+    overflow: visible;
+    position: relative;
+}
+
+.collection-card .product-unit-selector,
+.collection-card .product-unit-selector,
+.collection-card select {
+    position: relative;
+    z-index: 10;
+    overflow: visible;
+}
+
+/* ============================================================
+   VERTICAL SPACING — Tight, premium card layout
+   ============================================================ */
+.collection-card .collection-card-category {
+    margin-top: 0;
+    margin-bottom: 6px;
+}
+
+.collection-card .collection-card-title {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.collection-card .product-caption {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.collection-card .product-price {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.collection-card .product-unit-selector {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+/* Ensure no extra margins from base element styling */
+.collection-card h3,
+.collection-card p {
+    margin-top: 0;
 }
 
 /* Card actions: left = view link, right = add-to-cart */
@@ -26,5 +93,22 @@
 @media (max-width:720px){
     .collection-card .card-actions{ flex-direction:column; align-items:stretch; }
     .collection-card .card-actions .right-action{ text-align:right; }
+}
+
+/* ============================================================
+   MOBILE — Adjust spacing for smaller screens
+   ============================================================ */
+@media (max-width:600px) {
+    .collection-card .product-price {
+        margin-bottom: 10px;
+    }
+    
+    .collection-card .product-unit-selector {
+        margin-bottom: 10px;
+    }
+    
+    .collection-card .collection-card-category {
+        margin-bottom: 4px;
+    }
 }
 </style>

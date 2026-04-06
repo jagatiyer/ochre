@@ -12,32 +12,14 @@ def index(request):
     context = {
         'carousel_slides': slides,
     }
-    # featured products: prefer explicit featured flag if present, otherwise fall back to recent published products
-    shop_fields = [f.name for f in ShopItem._meta.get_fields()]
-    featured_qs = ShopItem.objects.filter(published=True)
-    if 'is_featured' in shop_fields:
-        featured_qs = featured_qs.filter(is_featured=True)
-    elif 'featured' in shop_fields:
-        featured_qs = featured_qs.filter(featured=True)
-    else:
-        # no explicit featured flag — show recent non-experience published items
-        featured_qs = featured_qs.exclude(is_experience=True)
-
-    # NOTE: Featured product selection:
-    # - If the project uses an explicit `is_featured` flag, admins expect
-    #   the item to appear immediately after toggling the flag. Ordering
-    #   purely by `created_at` can hide older products that are newly
-    #   marked featured (they'll be sorted by original creation time).
-    #
-    # Minimal, non-invasive approach: when `is_featured` exists, order
-    # by primary key descending to provide a deterministic, recent-first
-    # ordering for featured items (avoids adding fields/migrations).
-    # For a robust solution, add an `updated_at` timestamp to `ShopItem`
-    # and order by it when prioritising admin edits.
-    if 'is_featured' in shop_fields:
-        featured_products = featured_qs.select_related('category').order_by('-pk')[:8]
-    else:
-        featured_products = featured_qs.select_related('category').order_by('-created_at')[:8]
+    # featured products: STRICT logic
+    # Only show products explicitly marked as featured by admin
+    featured_products = (
+        ShopItem.objects
+        .filter(published=True, is_featured=True)
+        .select_related('category')
+        .order_by('-id')[:8]
+    )
     context['featured_products'] = featured_products
     # home videos: only active, ordered by `order`, limit 6
     home_videos = HomePageVideo.objects.filter(is_active=True).order_by('order')[:6]
