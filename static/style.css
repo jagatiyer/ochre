@@ -3797,7 +3797,15 @@ color: #2b0f10;
    ============================================================ */
 
 .contact-page .contact-container {
+  display: flex;
+  justify-content: center;
   align-items: flex-start;
+}
+
+/* Center the single form column */
+.contact-page .contact-left {
+  max-width: 500px;
+  width: 100%;
 }
 
 /* Right column vertical alignment (as before) */

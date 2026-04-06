@@ -2413,3 +2413,163 @@ Ensures banner sits above all layers and receives pointer events
 
 
 
+
+/* ============================================================
+   SIGNUP FORM — 2-COLUMN GRID LAYOUT
+   Desktop: 2 columns (email|username, password|password-confirm)
+   Mobile: 1 column (stacked)
+   ============================================================ */
+
+.signup-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.signup-form-grid .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.signup-form-grid .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-form-grid .form-group label {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 400;
+}
+
+.signup-form-grid .form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #2a2d2f;
+  border-radius: 6px;
+  background: var(--bg-card);
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.signup-form-grid .form-group input::placeholder {
+  color: #6b7280;
+}
+
+.signup-form-grid .form-group input:focus {
+  border-color: var(--accent-red);
+  outline: none;
+}
+
+.signup-form-grid .form-group .field-error {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #ff5b5f;
+}
+
+/* Mobile: Stack to single column */
+@media (max-width: 768px) {
+  .signup-form-grid .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* ============================================================
+   SIGNUP PAGE SPACING FINE-TUNE
+   Scoped to signup page only via .contact-page context
+   ============================================================ */
+
+/* Reduce gap between description and form section heading */
+.contact-page .contact-description {
+  margin-bottom: 16px !important;
+}
+
+/* Tighten spacing on "Get started with Ochre" heading */
+.contact-page .contact-form-section h3 {
+  margin-bottom: 12px;
+  margin-top: 0;
+}
+
+/* Add clean breathing room before form fields start */
+.contact-page .signup-form-grid {
+  margin-top: 10px;
+}
+
+/* ============================================================
+   HERO CTA BUTTONS — VERTICAL ALIGNMENT FIX (AUTHORITATIVE)
+   
+   PROBLEM ANALYSIS:
+   1. style.css has TWO separate .cn definitions (lines 1654, 3386)
+   2. Second definition (line 3386) overrides first
+   3. .cn a has NO display/height/line-height control (text baseline issues)
+   
+   SOLUTION STRATEGY:
+   - Use !important to guarantee override of style.css rules
+   - Target ALL button variants (.cn, .cn a, container)
+   - Ensure <a> tag fills button and centers text perfectly
+   ============================================================ */
+
+/* ============================================================
+   HERO CTA BUTTONS — PROPER STRUCTURAL FIX
+   
+   SOLUTION:
+   - Changed from nested <button><a> to direct <a> styled as button
+   - Removes nested element causing text baseline shift
+   - <a> tags are semantic for navigation
+   - Text now perfectly centered identically in both buttons
+   
+   CSS now controls:
+   - Flex container (button wrapper)
+   - Direct <a> tag styling (no nesting issues)
+   ============================================================ */
+
+/* AUTHORITATIVE: <a> tag styled as button */
+.content .buttons .cn,
+.home-cta-buttons .cn,
+.buttons .cn,
+a.cn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  
+  height: 48px !important;
+  padding: 0 28px !important;
+  box-sizing: border-box !important;
+  border: 2px solid transparent !important;
+  
+  font-size: 14px !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* Default filled button style */
+.cn.shop,
+a.cn.shop {
+  background: #ff5b5f !important;
+  color: #2b0f10 !important;
+}
+
+/* Outline button style */
+.content .buttons .cn.stories,
+.home-cta-buttons .cn.stories,
+.buttons .cn.stories,
+a.cn.stories {
+  border: 2px solid #ffffff !important;
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+/* Container centers buttons vertically */
+.content .buttons,
+.home-cta-buttons,
+.buttons {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
