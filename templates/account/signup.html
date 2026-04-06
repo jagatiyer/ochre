@@ -4,27 +4,21 @@
 
 {% block content %}
 
-<div class="contact-page">
-  <div class="contact-container">
+<div class="signup-page">
+  <main class="auth-page">
+    <div class="auth-card">
 
-    <div class="contact-left">
-
-      <p class="contact-label">
-        <span class="dash">—</span> ACCOUNT <span class="dash">—</span>
-      </p>
+      <div class="account-label">ACCOUNT</div>
 
       <h1>Create Account</h1>
 
-      <p class="contact-description">
+      <p class="auth-subtext">
         Join Ochre to explore our collections and shop with ease.
       </p>
 
-      <div class="contact-form-section">
-        <h3>Get started with <span class="highlight-cyan">Ochre</span></h3>
-
-        <form class="contact-form" method="POST" action="{% url 'account_signup' %}">
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ request.GET.next }}">
+      <form method="post" class="auth-form" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
 
           {# ---- HIDDEN/HONEYPOT FIELDS ---- #}
           {% if form.email %}
@@ -56,14 +50,38 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
-                {{ form.password1 }}
+                <div class="password-field">
+                  {{ form.password1 }}
+                  <button type="button" class="password-toggle" aria-label="Show/hide password">
+                    <svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg class="eye-closed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                      <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                  </button>
+                </div>
                 {% if form.password1.errors %}
                   <p class="field-error">{{ form.password1.errors|striptags }}</p>
                 {% endif %}
               </div>
               <div class="form-group">
                 <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
-                {{ form.password2 }}
+                <div class="password-field">
+                  {{ form.password2 }}
+                  <button type="button" class="password-toggle" aria-label="Show/hide password">
+                    <svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg class="eye-closed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                      <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                  </button>
+                </div>
                 {% if form.password2.errors %}
                   <p class="field-error">{{ form.password2.errors|striptags }}</p>
                 {% endif %}
@@ -80,33 +98,65 @@
           {% endif %}
 
           {# ---- ACTION BUTTONS ROW ---- #}
-          <div style="margin-top:14px; display:flex; gap:12px; align-items:center;">
+          <div class="auth-buttons-row">
 
-            <button type="submit" class="cn">
+            <button type="submit" class="btn-primary">
               CREATE ACCOUNT
             </button>
 
             {% get_providers as socialaccount_providers %}
             {% for provider in socialaccount_providers %}
               {% if provider.id == "google" %}
-                <a href="{% provider_login_url 'google' %}" class="cn">
+                <a href="{% provider_login_url 'google' %}" class="google-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                  </svg>
                   Continue with Google
                 </a>
               {% endif %}
             {% endfor %}
 
           </div>
-        </form>
+      </form>
 
-        <p style="margin-top:16px;">
+      <div style="margin-top:24px; text-align:center;">
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 8px;">
           Already registered?
-          <a href="{% url 'account_login' %}?next={{ request.GET.next }}">Sign in</a>
         </p>
+        <a href="{% url 'account_login' %}?next={{ request.GET.next }}" class="auth-link">
+          Sign in
+        </a>
       </div>
 
     </div>
 
-  </div>
+  </main>
+
 </div>
+
+<script>
+  // Password visibility toggle (works on both signup and login pages)
+  document.querySelectorAll('.password-toggle').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const input = btn.closest('.password-field').querySelector('input');
+      const eyeOpen = btn.querySelector('.eye-open');
+      const eyeClosed = btn.querySelector('.eye-closed');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        eyeOpen.style.display = 'none';
+        eyeClosed.style.display = 'block';
+      } else {
+        input.type = 'password';
+        eyeOpen.style.display = 'block';
+        eyeClosed.style.display = 'none';
+      }
+    });
+  });
+</script>
 
 {% endblock %}

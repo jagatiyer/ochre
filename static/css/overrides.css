@@ -2513,6 +2513,290 @@ Ensures banner sits above all layers and receives pointer events
    ============================================================ */
 
 /* ============================================================
+   AUTHENTICATION PAGES — PREMIUM LAYOUT REFINEMENT
+   ============================================================ */
+
+/* ---- Page vertical positioning (align signup with login) ---- */
+
+.auth-page,
+.contact-page {
+  padding-top: 80px !important;
+}
+
+/* ---- Unified form width (consistent world-class look) ---- */
+
+.auth-card,
+.contact-left {
+  max-width: 520px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+
+/* ---- Account label with eyelash separators (inline-flex) ---- */
+
+.account-label,
+.contact-page .contact-label {
+  color: var(--accent-red) !important;
+  font-size: 12px !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+  margin-bottom: 16px !important;
+}
+
+.account-label::before,
+.account-label::after,
+.contact-page .contact-label::before,
+.contact-page .contact-label::after {
+  content: "" !important;
+  width: 24px !important;
+  height: 1px !important;
+  background: var(--accent-red) !important;
+  display: inline-block !important;
+  margin: 0 8px !important;
+}
+
+/* Auth card account label (pixel-perfect styling) */
+.auth-card .account-label {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--accent-red) !important;
+  font-size: 12px !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  margin-bottom: 16px !important;
+}
+
+/* ---- Input + Button width consistency ---- */
+
+.auth-form input,
+.signup-form-grid input {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.auth-buttons-row {
+  width: 100% !important;
+}
+
+/* ---- Password eye icon (premium look) ---- */
+
+.password-toggle {
+  opacity: 0.6 !important;
+  transition: all 0.2s ease !important;
+}
+
+.password-toggle svg {
+  stroke: #9ca3af !important;
+}
+
+.password-toggle:hover,
+.password-toggle:focus {
+  opacity: 1 !important;
+}
+
+.password-toggle:hover svg,
+.password-toggle:focus svg {
+  stroke: #ffffff !important;
+}
+
+/* ============================================================
+   UNIFIED BUTTON STYLING (IDENTICAL HEIGHTS + ALIGNMENT)
+   ============================================================ */
+
+.btn-primary,
+.google-btn {
+  height: 48px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  flex: 1 !important;              /* Equal width buttons in row */
+  min-width: 0 !important;          /* Allow flex to shrink */
+}
+
+.btn-primary {
+  padding: 0 24px !important;
+  background: #ff5b5f !important;
+  color: #2b0f10 !important;
+  border: none !important;
+  font-family: 'Satoshi', sans-serif !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  letter-spacing: 0.4px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  white-space: nowrap !important;
+}
+
+.btn-primary:hover {
+  background: #ff4647 !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-primary:active {
+  transform: translateY(0) !important;
+}
+
+/* ---- GOOGLE BUTTON (CLEAN, NO OVERRIDES) ---- */
+
+.google-btn {
+  background: #ffffff !important;
+  color: #111 !important;
+  border: 1px solid #ddd !important;
+  height: 48px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  padding: 0 16px !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+}
+
+.google-btn:hover {
+  background: #f7f8f8 !important;
+  border-color: #c6c7c8 !important;
+}
+
+.google-btn img {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.google-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* ================================================
+   BUTTONS ROW (DESKTOP + MOBILE ALIGNMENT FIX)
+   ================================================ */
+
+.auth-buttons-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-top: 20px !important;
+  width: 100% !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Mobile: Stack buttons vertically with full width */
+@media (max-width: 600px) {
+  .auth-buttons-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  .auth-buttons-row .btn-primary,
+  .auth-buttons-row .google-btn {
+    width: 100% !important;
+    flex: unset !important;
+  }
+}
+
+/* ================================================
+   PASSWORD FIELD WITH TOGGLE (FIXED ALIGNMENT)
+   ================================================ */
+
+.password-field {
+  position: relative !important;
+}
+
+.password-toggle {
+  position: absolute !important;
+  right: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 18px !important;
+  height: 18px !important;
+  cursor: pointer !important;
+  color: rgba(255,255,255,0.7) !important;
+  z-index: 2 !important;
+  background: none !important;
+  border: none !important;
+  padding: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: color 0.2s ease !important;
+}
+
+.password-toggle:hover {
+  color: #fff !important;
+}
+
+.password-toggle svg {
+  width: 18px !important;
+  height: 18px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Create space for icon inside password input */
+.password-field input[type="password"],
+.password-field input[type="text"] {
+  padding-right: 44px !important;
+}
+
+/* ================================================
+   AUTH FORM INPUTS (CONSISTENCY + PROPER PADDING)
+   ================================================ */
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="username"] {
+  width: 100% !important;
+  height: 44px !important;
+  padding: 12px 14px !important;
+  border: 1px solid #2a2d2f !important;
+  border-radius: 6px !important;
+  background: var(--bg-card) !important;
+  color: #ffffff !important;
+  font-family: 'Satoshi', sans-serif !important;
+  font-size: 14px !important;
+  box-sizing: border-box !important;
+}
+
+.auth-form input::placeholder {
+  color: #6b7280 !important;
+}
+
+.auth-form input:focus {
+  border-color: var(--accent-red) !important;
+  outline: none !important;
+  background: var(--bg-card) !important;
+}
+
+/* ---- Sign up page button unification ---- */
+
+.contact-form button.btn-primary {
+  display: inline-flex !important;
+  height: 44px !important;
+  padding: 0 24px !important;
+}
+
+/* ---- Error message styling ---- */
+
+.field-error {
+  font-size: 12px !important;
+  color: #ff5b5f !important;
+  margin-top: 4px !important;
+  display: block !important;
+}
+
+/* ============================================================
    HERO CTA BUTTONS — PROPER STRUCTURAL FIX
    
    SOLUTION:
@@ -2520,10 +2804,6 @@ Ensures banner sits above all layers and receives pointer events
    - Removes nested element causing text baseline shift
    - <a> tags are semantic for navigation
    - Text now perfectly centered identically in both buttons
-   
-   CSS now controls:
-   - Flex container (button wrapper)
-   - Direct <a> tag styling (no nesting issues)
    ============================================================ */
 
 /* AUTHORITATIVE: <a> tag styled as button */
@@ -2572,4 +2852,278 @@ a.cn.stories {
   justify-content: center !important;
   align-items: center !important;
   gap: 20px !important;
+}
+
+/* ============================================================
+   SIGNUP PAGE UNIFICATION WITH AUTH-CARD SYSTEM
+   Ensures signup uses identical layout to login page
+   ============================================================ */
+
+/* Auth subtitle text (used on both login and signup) */
+.auth-subtext {
+  color: var(--text-muted) !important;
+  font-size: 15px !important;
+  margin-bottom: 10px !important;
+  line-height: 1.5 !important;
+}
+
+/* Signup page wrapper (scoped rules) */
+.signup-page .auth-page {
+  padding-top: 80px !important;
+}
+
+.signup-page .auth-card {
+  max-width: 480px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+}
+
+.signup-page .auth-form {
+  margin-top: 12px !important;
+}
+
+/* Signup form grid: 2-column layout with rows */
+.signup-form-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 16px !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.signup-form-grid .form-row {
+  display: contents !important;  /* Let grid manage children directly */
+}
+
+.signup-form-grid .form-group {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.signup-form-grid .form-group label {
+  margin-bottom: 8px !important;
+  font-size: 14px !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.3px !important;
+}
+
+.signup-form-grid .form-group input {
+  padding: 12px 16px !important;
+  border: 1px solid #2a2d2f !important;
+  border-radius: 6px !important;
+  background: var(--bg-card) !important;
+  color: #ffffff !important;
+  font-size: 15px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.signup-form-grid .form-group input::placeholder {
+  color: #6b7280 !important;
+}
+
+.signup-form-grid .form-group input:focus {
+  border-color: var(--accent-red) !important;
+  outline: none !important;
+  background: var(--bg-card) !important;
+}
+
+.signup-form-grid .form-group .field-error {
+  margin-top: 6px !important;
+  font-size: 12px !important;
+  color: #ff5b5f !important;
+}
+
+/* Mobile: Stack to single column */
+@media (max-width: 600px) {
+  .signup-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .signup-form-grid .form-row {
+    display: contents !important;
+  }
+}
+
+/* Auth link styling (used for "Sign in" / "Create account" links) */
+.auth-link {
+  color: var(--accent-red) !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  transition: opacity 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.auth-link:hover {
+  opacity: 0.8 !important;
+  text-decoration: underline !important;
+}
+
+/* Auth card typography consistency */
+.auth-card h1 {
+  font-weight: 500 !important;
+  letter-spacing: 0.2px !important;
+  margin-bottom: 8px !important;
+}
+
+/* ============================================================
+   FIX 1: LOGIN PAGE ACCOUNT LABEL (RED + DASHES)
+   Unify login page (.craft-spirits) with signup page (.account-label)
+   ============================================================ */
+
+.auth-card .craft-spirits,
+.auth-card p.craft-spirits {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--accent-red) !important;
+  font-size: 12px !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  margin-bottom: 16px !important;
+}
+
+/* Hide existing dash text spans (they'll be replaced by pseudo-elements) */
+.auth-card .craft-spirits span.dash,
+.auth-card p.craft-spirits span.dash {
+  display: none !important;
+}
+
+/* Add clean dashes using pseudo-elements */
+.auth-card .craft-spirits::before,
+.auth-card p.craft-spirits::before {
+  content: "" !important;
+  width: 24px !important;
+  height: 1px !important;
+  background: var(--accent-red) !important;
+  margin: 0 8px !important;
+  display: inline-block !important;
+}
+
+.auth-card .craft-spirits::after,
+.auth-card p.craft-spirits::after {
+  content: "" !important;
+  width: 24px !important;
+  height: 1px !important;
+  background: var(--accent-red) !important;
+  margin: 0 8px !important;
+  display: inline-block !important;
+}
+
+/* ============================================================
+   FIX 2: INCREASE SIGNUP FORM WIDTH (~20%)
+   Make signup form wider while keeping login unchanged
+   ============================================================ */
+
+.signup-page .auth-card {
+  max-width: 580px !important;
+}
+
+/* ============================================================
+   FIX 3: ENSURE GRID SCALES CLEANLY WITH WIDER CARD
+   Maintain proper alignment and spacing
+   ============================================================ */
+
+.signup-page .signup-form-grid {
+  width: 100% !important;
+  column-gap: 16px !important;
+}
+
+.signup-page .form-group input {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVENESS (CRITICAL)
+   Stack forms on small screens without breaking
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .signup-page .auth-card {
+    max-width: 100% !important;
+    padding: 20px !important;
+  }
+
+  .signup-page .signup-form-grid {
+    grid-template-columns: 1fr !important;
+    column-gap: 0 !important;
+  }
+
+  .auth-card .craft-spirits::before,
+  .auth-card p.craft-spirits::before {
+    width: 16px !important;
+  }
+
+  .auth-card .craft-spirits::after,
+  .auth-card p.craft-spirits::after {
+    width: 16px !important;
+  }
+}
+
+/* ============================================================
+   FIX 1: CONSISTENT GAP BELOW ACCOUNT LABEL
+   Normalize spacing between label and heading for both pages
+   ============================================================ */
+
+.auth-card .account-label,
+.auth-card .contact-label {
+  margin-bottom: 18px !important;
+}
+
+.auth-card h1 {
+  margin-top: 0 !important;
+}
+
+/* ============================================================
+   FIX 2: UNIFY HEADING FONT (CRITICAL)
+   Force Sign In and Create Account to use same font family
+   ============================================================ */
+
+.auth-card h1 {
+  font-family: var(--font-heading, inherit) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.2px !important;
+}
+
+/* ============================================================
+   FIX 3: BUTTON VERTICAL ALIGNMENT
+   Ensure buttons align perfectly under input fields
+   ============================================================ */
+
+.auth-card .auth-buttons-row {
+  margin-top: 16px !important;
+}
+
+/* ============================================================
+   FIX 4: PREVENT GOOGLE BUTTON TEXT WRAP
+   Ensure "Continue with Google" stays on one line on desktop
+   ============================================================ */
+
+.auth-card .google-btn {
+  white-space: nowrap !important;
+  padding: 0 16px !important;
+}
+
+/* Mobile: Allow text wrap for better layout on small screens */
+@media (max-width: 600px) {
+  .auth-card .google-btn {
+    white-space: normal !important;
+    text-align: center !important;
+  }
+}
+
+/* ============================================================
+   SAFETY HARDENING
+   Ensure consistent box-sizing across all auth elements
+   ============================================================ */
+
+.auth-card h1,
+.auth-card .account-label,
+.auth-card .contact-label,
+.auth-card .auth-buttons-row,
+.auth-card .google-btn {
+  box-sizing: border-box !important;
 }
