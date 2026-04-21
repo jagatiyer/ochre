@@ -5,6 +5,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import os
 import sys
 from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv(BASE_DIR / ".env")
 
 # Expected environment: local | test | live
 # Default to 'local' when not provided to keep developer
@@ -338,7 +342,7 @@ EMAIL_CONFIGURED = bool(EMAIL_HOST and EMAIL_HOST_USER and EMAIL_HOST_PASSWORD)
 # Razorpay keys: read from env, expose a boolean indicating if test keys provided
 RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "")
 RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "")
-RAZORPAY_TEST_KEYS_PROVIDED = bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET)
+RAZORPAY_CONFIGURED = bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET)
 
 # MSG91 (OTP) placeholders
 MSG91_AUTH_KEY = os.environ.get("MSG91_AUTH_KEY", "")

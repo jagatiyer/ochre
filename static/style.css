@@ -5779,6 +5779,29 @@ footer img.footer-site-logo {
 
 
 
+/* === Checkout table alignment polish === */
 
+.cart-table {
+    table-layout: fixed;
+}
+
+.cart-table td,
+.cart-table th {
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 14px 8px; /* tighter spacing */
+}
+
+.cart-table td.text-right {
+    font-variant-numeric: tabular-nums;
+}
+
+.cart-table th {
+    letter-spacing: 0.5px;
+}
+
+.cart-table tr:last-child td {
+    border-bottom: none;
+}
 
 

@@ -6,6 +6,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse, NoReverseMatch
+import logging
 
 from .models import (
     ShopItem,
@@ -24,6 +25,8 @@ from .cart_utils import (
 )
 from django.conf import settings
 import razorpay
+
+logger = logging.getLogger(__name__)
 
 
 def _sanitize_product_image(product):
@@ -283,14 +286,17 @@ def checkout_view(request):
     if not cart or not cart.items.exists():
         return redirect("shop:shop_index")
 
-    # create internal Order record (guard against duplicate creation on refresh)
+    # totals
     subtotal = cart.subtotal()
     tax_total = cart.total_tax()
     total = cart.total()
 
-    # Reuse an existing recent order in CREATED or PAYMENT_PENDING state
+    # reuse existing order
     existing_order = (
-        Order.objects.filter(user=request.user, status__in=[Order.STATUS_CREATED, Order.STATUS_PAYMENT_PENDING])
+        Order.objects.filter(
+            user=request.user,
+            status__in=[Order.STATUS_CREATED, Order.STATUS_PAYMENT_PENDING],
+        )
         .order_by("-created_at")
         .first()
     )
@@ -308,36 +314,45 @@ def checkout_view(request):
             status=Order.STATUS_CREATED,
         )
 
+    # Razorpay setup
     razorpay_order_id = None
-    razorpay_amount = int((total * 100).quantize(Decimal("1"))) if hasattr(total, 'quantize') else int(total * 100)
+    razorpay_amount = int(float(total) * 100)
 
-    if settings.RAZORPAY_TEST_KEYS_PROVIDED:
-        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+    print("Using Razorpay Key:", settings.RAZORPAY_KEY_ID)
+    print("🔑 KEY:", settings.RAZORPAY_KEY_ID)
+    print("🔐 SECRET LENGTH:", len(settings.RAZORPAY_KEY_SECRET))
+    print("✅ CONFIGURED:", settings.RAZORPAY_CONFIGURED)
+    if settings.RAZORPAY_CONFIGURED:
         try:
-            # If an order already has a razorpay_order_id, reuse it (idempotent)
-            if order.razorpay_order_id:
-                razorpay_order_id = order.razorpay_order_id
-                order.status = Order.STATUS_PAYMENT_PENDING
-                order.save()
-            else:
-                rp_order = client.order.create(
-                    dict(amount=razorpay_amount, currency="INR", receipt=str(order.uuid), payment_capture=1)
-                )
-                razorpay_order_id = rp_order.get("id")
-                order.razorpay_order_id = razorpay_order_id
-                order.status = Order.STATUS_PAYMENT_PENDING
-                order.save()
-        except Exception:
-            # keep order in CREATED state; template will hide pay button
-            razorpay_order_id = None
+            client = razorpay.Client(
+                auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+            )
 
+            if not order.razorpay_order_id:
+                rp_order = client.order.create({
+                    "amount": razorpay_amount,
+                    "currency": "INR",
+                    "receipt": str(order.uuid),
+                    "payment_capture": 1
+                })
+                order.razorpay_order_id = rp_order.get("id")
+                print("Razorpay Order Created:", order.razorpay_order_id)
+
+            razorpay_order_id = order.razorpay_order_id
+            order.status = Order.STATUS_PAYMENT_PENDING
+            order.save()
+
+        except Exception as e:
+            print("🔥 RAZORPAY ERROR:", str(e))
+            raise e
+
+    # FINAL RENDER (ALWAYS OUTSIDE TRY)
     return render(
         request,
         "shop/checkout.html",
         {
             "cart": cart,
             "items": cart.items.select_related("product"),
-            # Provide explicit cart_items list for template rendering (product, product_unit, qty, line_total)
             "cart_items": [
                 {
                     "product": ci.product,
@@ -354,10 +369,9 @@ def checkout_view(request):
             "razorpay_order_id": razorpay_order_id,
             "razorpay_amount": razorpay_amount,
             "order_internal_id": str(order.uuid),
-            "RAZORPAY_AVAILABLE": settings.RAZORPAY_TEST_KEYS_PROVIDED,
+            "RAZORPAY_AVAILABLE": settings.RAZORPAY_CONFIGURED,
         },
     )
-
 
 # ============================================================
 # EXPERIENCE BOOKING

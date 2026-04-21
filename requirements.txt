@@ -23,7 +23,6 @@ l18n==2021.3
 oauthlib==3.3.1
 openpyxl==3.1.5
 pillow==10.2.0
-pillow_heif==0.22.0
 pycparser==2.23
 PyJWT==2.10.1
 python3-openid==3.2.0
@@ -41,3 +40,5 @@ webencodings==0.5.1
 Willow==1.6.3
 django-ckeditor-5==0.2.12
 sorl-thumbnail==12.8.0
+python-dotenv==1.0.0
+razorpay==1.4.1

@@ -3,122 +3,227 @@
 
 {% block extra_head %}
 <style>
-  /* Scoped checkout centering: small, safe, local to this template */
-  .checkout-container { max-width: 640px; margin: 0 auto; padding: 0 16px; }
-  @media (max-width: 640px) { .checkout-container { max-width: 100%; padding: 0 12px; } }
+.checkout-main-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+    color: #fff;
+}
+
+.cart-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.cart-items-box,
+.cart-summary-box {
+    background: rgba(255,255,255,0.03);
+    padding: 24px;
+    border-radius: 12px;
+}
+
+.cart-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* ===== TABLE ===== */
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.cart-table th {
+    font-size: 12px;
+    color: #9ca3af;
+    padding: 12px 8px;
+    border-bottom: 1px solid #333;
+    letter-spacing: 0.5px;
+}
+
+.cart-table td {
+    padding: 14px 8px;
+    border-bottom: 1px solid #222;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/* COLUMN ALIGNMENT */
+.cart-table th:nth-child(1),
+.cart-table td:nth-child(1) {
+    text-align: left;
+    width: 40%;
+}
+
+.cart-table th:nth-child(2),
+.cart-table td:nth-child(2) {
+    text-align: center;
+    width: 10%;
+}
+
+.cart-table th:nth-child(3),
+.cart-table td:nth-child(3),
+.cart-table th:nth-child(4),
+.cart-table td:nth-child(4),
+.cart-table th:nth-child(5),
+.cart-table td:nth-child(5) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.cart-table th:nth-child(3),
+.cart-table td:nth-child(3) { width: 15%; }
+
+.cart-table th:nth-child(4),
+.cart-table td:nth-child(4) { width: 15%; }
+
+.cart-table th:nth-child(5),
+.cart-table td:nth-child(5) { width: 20%; }
+
+.cart-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* ===== SUMMARY ===== */
+
+.summary-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.summary-row.grand {
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+/* ===== BUTTON ===== */
+
+#rzp-pay-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    background: #ff5b5f;
+    border: none;
+    color: #000;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+}
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="shop-checkout-page">
-  <div class="container">
-    <div class="checkout-container">
-    <header class="page-header">
-      <h1>Checkout</h1>
-    </header>
+<div class="checkout-main-container">
 
-    <section class="cart-summary">
-      {% comment %}Reuse existing cart context if available: `cart_items` with `product`, `product_unit`, `qty`, `line_total`{% endcomment %}
-      {% if cart_items %}
-        <div class="cart-summary-list">
-          {% for row in cart_items %}
-            <div class="cart-row" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
-              <div class="cart-item" style="flex:1;min-width:0;">
-                <div class="cart-meta">
-                  <div class="cart-item-title">{{ row.product.title }}</div>
-                  {% if row.product_unit %}
-                    <div class="cart-item-unit">{{ row.product_unit.label }}</div>
-                  {% endif %}
-                </div>
-              </div>
-              <div class="cart-qty" style="width:80px;text-align:center;">Qty: {{ row.qty }}</div>
-              <div class="cart-price" style="width:120px;text-align:right;">₹{{ row.line_total }}</div>
-            </div>
-          {% endfor %}
+<h1 style="font-size:48px; margin-bottom:30px;">Checkout</h1>
+
+{% if cart_items %}
+<div class="cart-grid">
+
+    <!-- LEFT: ORDER TABLE -->
+    <div class="cart-items-box">
+        <h2 class="cart-title">Your Order</h2>
+
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>GST</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in cart_items %}
+                <tr>
+                    <td>{{ row.product.title }}</td>
+                    <td>{{ row.qty }}</td>
+                    <td>₹ {{ row.product.price|floatformat:2 }}</td>
+                    <td>₹ {{ row.product.tax_percent|default:0|floatformat:2 }}</td>
+                    <td>₹ {{ row.line_total|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- RIGHT: SUMMARY -->
+    <div class="cart-summary-box">
+        <h2 class="summary-title">Order Summary</h2>
+
+        <div class="summary-row">
+            <span>Subtotal</span>
+            <span>₹ {{ subtotal|floatformat:2 }}</span>
         </div>
-      {% else %}
-        <p>Your cart is empty.</p>
-      {% endif %}
-    </section>
 
-    <section class="cart-total">
-      <h2>Total</h2>
-      {% if cart_total is not None %}
-        <div class="total-amount">{{ cart_total }}</div>
-      {% else %}
-        <div class="total-amount">{{ cart_total_amount|default:total|default:"-" }}</div>
-      {% endif %}
-    </section>
+        <div class="summary-row">
+            <span>GST</span>
+            <span>₹ {{ tax_total|floatformat:2 }}</span>
+        </div>
 
-    <section class="payment-placeholder">
-      <h3>Payment</h3>
-      {% if RAZORPAY_AVAILABLE and razorpay_order_id %}
-        <p>Amount: ₹{{ total }}</p>
-        <button id="rzp-pay-btn" class="cn">Pay Now</button>
-      {% else %}
-        <p>Payment is not configured. Please contact site administrator.</p>
-      {% endif %}
-    </section>
+        <div class="summary-row grand">
+            <span>Total</span>
+            <span>₹ {{ total|floatformat:2 }}</span>
+        </div>
+
+        {% if RAZORPAY_AVAILABLE and razorpay_order_id %}
+            <button id="rzp-pay-btn">Pay Now</button>
+        {% else %}
+            <p style="color:#ff5b5f; margin-top:20px;">Payment not available</p>
+        {% endif %}
     </div>
-    </div>
-  </div>
+
+</div>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+
 </div>
 {% endblock %}
 
 {% block extra_js %}
-  {{ block.super }}
-  {% if RAZORPAY_AVAILABLE and razorpay_order_id %}
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script>
-    (function(){
-      function getCookie(name) {
-        var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-        if (match) return match[2];
-        return null;
-      }
+{{ block.super }}
 
-      var payBtn = document.getElementById('rzp-pay-btn');
-      if (!payBtn) return;
+{% if RAZORPAY_AVAILABLE and razorpay_order_id %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-      payBtn.addEventListener('click', function(e){
-        e.preventDefault();
-        var options = {
-          key: "{{ razorpay_key_id }}",
-          order_id: "{{ razorpay_order_id }}",
-          amount: "{{ razorpay_amount }}",
-          currency: "INR",
-          name: "Ochre",
-          description: "Order {{ order_internal_id }}",
-          handler: function (response){
-            // POST to server to verify signature and update order
+<script>
+document.getElementById("rzp-pay-btn")?.addEventListener("click", function(e) {
+    e.preventDefault();
+
+    var options = {
+        key: "{{ razorpay_key_id }}",
+        amount: "{{ razorpay_amount }}",
+        currency: "INR",
+        name: "Ochre",
+        order_id: "{{ razorpay_order_id }}",
+
+        handler: function(response) {
             fetch("/payments/verify/", {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': getCookie('csrftoken')
-              },
-              body: new URLSearchParams({
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_signature: response.razorpay_signature,
-                order_internal_id: "{{ order_internal_id }}"
-              })
-            }).then(function(res){
-              return res.json();
-            }).then(function(data){
-              if (data && data.ok) {
-                window.location.href = window.location.href + '?paid=1';
-              } else {
-                alert('Payment verification failed.');
-              }
-            }).catch(function(){ alert('Payment verification failed.'); });
-          },
-          modal: { ondismiss: function(){ /* noop */ } }
-        };
-        var rzp = new Razorpay(options);
-        rzp.open();
-      });
-    })();
-  </script>
-  {% endif %}
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": document.cookie.match(/csrftoken=([^;]+)/)?.[1]
+                },
+                body: new URLSearchParams(response)
+            }).then(() => location.reload());
+        }
+    };
+
+    new Razorpay(options).open();
+});
+</script>
+{% endif %}
 {% endblock %}

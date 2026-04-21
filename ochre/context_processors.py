@@ -6,7 +6,8 @@ def feature_flags(request):
             getattr(settings, "GOOGLE_CLIENT_ID", "")
         ),
         "RAZORPAY_AVAILABLE": bool(
-            getattr(settings, "RAZORPAY_KEY_ID", "")
+            getattr(settings, "RAZORPAY_KEY_ID", "") and
+            getattr(settings, "RAZORPAY_KEY_SECRET", "")
         ),
         "EMAIL_ENABLED": bool(
             getattr(settings, "EMAIL_HOST_USER", "")
