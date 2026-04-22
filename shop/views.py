@@ -408,3 +408,7 @@ def experience_booking_create(request):
     return redirect(
         f"{reverse('shop:product_detail', args=[experience.slug])}?booked=1"
     )
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'account/orders.html', {'orders': orders})

@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.conf import settings
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 import razorpay
 import logging
 
@@ -12,16 +13,22 @@ logger = logging.getLogger(__name__)
 
 
 def send_order_email(order):
-    """Send a simple order confirmation email. Non-blocking; errors are logged."""
-    subject = f"Order received: {order.uuid}"
-    message = f"Thank you for your order. Order id: {order.uuid}\nAmount: {order.total_amount} {order.currency}\nStatus: {order.status}"
-    from_email = settings.EMAIL_HOST_USER or settings.CONTACT_EMAIL or "noreply@example.com"
-    recipient = [order.user.email] if order.user and getattr(order.user, 'email', None) else [settings.CONTACT_EMAIL]
+    subject = f"Ochre Order Confirmation - {order.uuid}"
+
+    items = order.items.all() if hasattr(order, "items") else []
+
+    message = render_to_string("emails/order_confirmation.txt", {
+        "order": order,
+        "items": items,
+    })
+
+    from_email = settings.DEFAULT_FROM_EMAIL or settings.EMAIL_HOST_USER
+    recipient = [order.user.email] if order.user and order.user.email else [settings.CONTACT_EMAIL]
+
     try:
         send_mail(subject, message, from_email, recipient, fail_silently=True)
     except Exception as e:
         logger.exception("send_order_email failed: %s", e)
-
 
 def send_order_sms(order):
     """Placeholder SMS hook for MSG91 or similar. Non-blocking."""
@@ -79,12 +86,20 @@ def verify(request):
     order.status = Order.STATUS_PAID
     order.save()
 
-    # Fire non-blocking hooks
+    # Clear cart safely
+    if order.user and hasattr(order.user, "cart"):
+        try:
+            order.user.cart.items.all().delete()
+        except Exception:
+            logger.exception("Cart clear failed")
+
+    # Send email
     try:
         send_order_email(order)
     except Exception:
         logger.exception("send_order_email hook failed")
 
+    # SMS (leave as-is)
     try:
         send_order_sms(order)
     except Exception:

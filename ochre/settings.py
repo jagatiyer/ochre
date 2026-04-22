@@ -330,11 +330,33 @@ OTP_PROVIDER_API_KEY = os.environ.get("OTP_PROVIDER_API_KEY", "")
 OTP_PROVIDER_CONFIGURED = bool(OTP_PROVIDER_BACKEND or OTP_PROVIDER_API_KEY)
 
 # SMTP / Email readiness (no live-only exceptions here; just flags)
-EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
-EMAIL_CONFIGURED = bool(EMAIL_HOST and EMAIL_HOST_USER and EMAIL_HOST_PASSWORD)
+# ============================================================
+# EMAIL / SMTP CONFIGURATION
+# ============================================================
 
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.smtp.EmailBackend"
+)
+
+EMAIL_HOST = os.getenv("EMAIL_HOST", "")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
+
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False") == "True"
+
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    EMAIL_HOST_USER
+)
+
+# Flag for safe usage in code
+EMAIL_CONFIGURED = bool(
+    EMAIL_HOST and EMAIL_HOST_USER and EMAIL_HOST_PASSWORD
+)
 # NOTE: SMTP is intentionally pending due to DNS/DLT delays for this deployment.
 # Email sending is guarded by `EMAIL_CONFIGURED` — the codebase will not fail
 # when SMTP is not configured; email hooks are non-blocking and logged.

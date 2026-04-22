@@ -45,7 +45,6 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(ShopItem)
 class ShopItemAdmin(admin.ModelAdmin):
-    # Use a custom ModelForm to enable CKEditor for `description` only
     class ShopItemForm(forms.ModelForm):
         description = forms.CharField(
             widget=CKEditor5Widget(config_name="blog"),
@@ -57,7 +56,7 @@ class ShopItemAdmin(admin.ModelAdmin):
             fields = "__all__"
 
     form = ShopItemForm
-    # ✅ FEATURED FLAG VISIBLE + EDITABLE
+
     list_display = (
         "title",
         "category",
@@ -73,7 +72,6 @@ class ShopItemAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_at",)
 
-    # Fields shown on edit page
     fields = (
         "title",
         "caption",
@@ -84,11 +82,10 @@ class ShopItemAdmin(admin.ModelAdmin):
         "price",
         "tax_percent",
         "is_experience",
-        "is_featured",   # ✅ FEATURED CHECKBOX
+        "is_featured",
         "published",
     )
 
-    # Inlines
     inlines = [
         ProductUnitInline,
         ProductImageInline,
@@ -132,14 +129,15 @@ class CartItemAdmin(admin.ModelAdmin):
     list_display = ("cart", "product", "product_unit", "qty", "unit_price")
 
 
+# ✅ ORDERS ADMIN (FINAL CLEAN VERSION)
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ("uuid", "user", "status", "created_at", "total_amount")
-    list_filter = ("status",)
+    list_filter = ("status", "created_at")
+    search_fields = ("user__email",)  # ✅ added
     readonly_fields = ("created_at", "updated_at")
 
     def get_readonly_fields(self, request, obj=None):
-        # Once an order is paid, prevent editing of razorpay payment fields.
         ro = list(self.readonly_fields)
         if obj and obj.status == obj.STATUS_PAID:
             ro += ["razorpay_order_id", "razorpay_payment_id", "razorpay_signature"]

@@ -8,10 +8,8 @@ from django.conf.urls.static import static
 from home import views as home_views
 from story import views as story_views
 from pages import views as pages_views
+from shop import views as shop_views   # ✅ correct import
 
-# --------------------------------------------------
-# URL PATTERNS (MUST BE DEFINED FIRST)
-# --------------------------------------------------
 
 urlpatterns = [
     path("", home_views.index, name="home"),
@@ -26,24 +24,24 @@ urlpatterns = [
     path("contact/", include("contact.urls", namespace="contact")),
     path("shop/", include("shop.urls", namespace="shop")),
     path("payments/", include("payments.urls", namespace="payments")),
-    # Static pages (editable via admin) — explicit isolated route
+
+    # Static pages
     path("pages/<slug:slug>/", pages_views.staticpage_detail, name="static_page"),
 
-    # CKEditor5    
+    # CKEditor5
     path("ckeditor5/", include("django_ckeditor_5.urls")),
-
 
     # Auth / users
     path("profile/", include("users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
+    
+    # ✅ Orders route (ONLY ONCE)
+    path("account/orders/", shop_views.my_orders, name="my_orders"),
 
     # Admin
     path("admin/", admin.site.urls),
 ]
 
-# --------------------------------------------------
-# MEDIA FILES (ONLY APPEND AFTER urlpatterns EXISTS)
-# --------------------------------------------------
 
 if settings.DEBUG:
     urlpatterns += static(

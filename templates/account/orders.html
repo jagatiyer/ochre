@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="collections-page">
+    <div class="cart-page-container" style="padding-top: 80px;">
+        <h1 class="cart-title">My Orders</h1>
+
+        <div class="cart-items-box">
+                <p style="color:white;">DEBUG: Orders count = {{ orders|length }}</p>
+
+            {% if orders %}
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>#{{ order.id }}</td>
+                            <td>{{ order.created_at|date:"M d, Y" }}</td>
+                            <td>{{ order.status|upper }}</td>
+                            <td>₹ {{ order.total|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No orders yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

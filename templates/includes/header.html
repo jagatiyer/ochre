@@ -99,6 +99,7 @@
                 <span class="u-email">{{ user.email }}</span>
               </div>
               <a href="{% url 'users:profile' %}" class="dropdown-item">Profile</a>
+              <a href="{% url 'my_orders' %}" class="dropdown-item">My Orders</a>
               <form method="post" action="{% url 'account_logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="logout-btn">Logout</button>
