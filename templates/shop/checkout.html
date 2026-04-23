@@ -28,8 +28,6 @@
     margin-bottom: 20px;
 }
 
-/* ===== TABLE ===== */
-
 .cart-table {
     width: 100%;
     border-collapse: collapse;
@@ -51,18 +49,11 @@
     white-space: nowrap;
 }
 
-/* COLUMN ALIGNMENT */
 .cart-table th:nth-child(1),
-.cart-table td:nth-child(1) {
-    text-align: left;
-    width: 40%;
-}
+.cart-table td:nth-child(1) { text-align: left; width: 40%; }
 
 .cart-table th:nth-child(2),
-.cart-table td:nth-child(2) {
-    text-align: center;
-    width: 10%;
-}
+.cart-table td:nth-child(2) { text-align: center; width: 10%; }
 
 .cart-table th:nth-child(3),
 .cart-table td:nth-child(3),
@@ -74,20 +65,9 @@
     font-variant-numeric: tabular-nums;
 }
 
-.cart-table th:nth-child(3),
-.cart-table td:nth-child(3) { width: 15%; }
-
-.cart-table th:nth-child(4),
-.cart-table td:nth-child(4) { width: 15%; }
-
-.cart-table th:nth-child(5),
-.cart-table td:nth-child(5) { width: 20%; }
-
 .cart-table tr:last-child td {
     border-bottom: none;
 }
-
-/* ===== SUMMARY ===== */
 
 .summary-title {
     font-size: 22px;
@@ -105,8 +85,6 @@
     font-size: 18px;
     margin-top: 20px;
 }
-
-/* ===== BUTTON ===== */
 
 #rzp-pay-btn {
     width: 100%;
@@ -130,7 +108,6 @@
 {% if cart_items %}
 <div class="cart-grid">
 
-    <!-- LEFT: ORDER TABLE -->
     <div class="cart-items-box">
         <h2 class="cart-title">Your Order</h2>
 
@@ -159,7 +136,6 @@
         </table>
     </div>
 
-    <!-- RIGHT: SUMMARY -->
     <div class="cart-summary-box">
         <h2 class="summary-title">Order Summary</h2>
 
@@ -217,8 +193,21 @@ document.getElementById("rzp-pay-btn")?.addEventListener("click", function(e) {
                     "Content-Type": "application/x-www-form-urlencoded",
                     "X-CSRFToken": document.cookie.match(/csrftoken=([^;]+)/)?.[1]
                 },
-                body: new URLSearchParams(response)
-            }).then(() => location.reload());
+                body: new URLSearchParams({
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature,
+                    order_internal_id: "{{ order.uuid }}"
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.ok) {
+                    window.location.href = "/account/orders/";
+                } else {
+                    alert("Payment verification failed");
+                }
+            });
         }
     };
 
