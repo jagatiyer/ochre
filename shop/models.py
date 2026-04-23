@@ -48,6 +48,10 @@ class ShopItem(models.Model):
     )
     is_experience = models.BooleanField(default=False)
     image = models.ImageField(upload_to="shop/", blank=True, null=True)
+    allowed_pincodes = models.TextField(
+        blank=True,
+        help_text="Comma-separated pincodes where this product is available. Leave empty for all locations."
+    )
 
     # ✅ FEATURED FLAG (NEW)
     is_featured = models.BooleanField(default=False)

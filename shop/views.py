@@ -130,6 +130,20 @@ def add_to_cart(request):
 
     product = get_object_or_404(ShopItem, id=product_id, published=True)
 
+    pincode = request.POST.get("pincode")
+
+    # If product has restriction
+    if product.allowed_pincodes:
+        if not pincode:
+            messages.error(request, "Please check availability before adding to cart")
+            return redirect(request.META.get("HTTP_REFERER", "/"))
+
+        allowed = [p.strip() for p in product.allowed_pincodes.split(",")]
+
+        if pincode not in allowed:
+            messages.error(request, "Product not available in your area")
+            return redirect(request.META.get("HTTP_REFERER", "/"))
+
     product_unit = None
     if product_unit_id:
         try:
@@ -369,6 +383,7 @@ def checkout_view(request):
             "razorpay_order_id": razorpay_order_id,
             "razorpay_amount": razorpay_amount,
             "order_internal_id": str(order.uuid),
+            "order": order,
             "RAZORPAY_AVAILABLE": settings.RAZORPAY_CONFIGURED,
         },
     )
@@ -412,3 +427,22 @@ def experience_booking_create(request):
 def my_orders(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'account/orders.html', {'orders': orders})
+
+@require_POST
+def check_availability(request):
+    product_id = request.POST.get("product_id")
+    pincode = request.POST.get("pincode")
+
+    if not product_id or not pincode:
+        return JsonResponse({"available": False})
+
+    product = get_object_or_404(ShopItem, id=product_id)
+
+    if not product.allowed_pincodes:
+        return JsonResponse({"available": True})
+
+    allowed = [p.strip() for p in product.allowed_pincodes.split(",")]
+
+    return JsonResponse({
+        "available": pincode in allowed
+    })

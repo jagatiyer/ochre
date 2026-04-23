@@ -84,6 +84,7 @@ class ShopItemAdmin(admin.ModelAdmin):
         "is_experience",
         "is_featured",
         "published",
+        "allowed_pincodes",
     )
 
     inlines = [
