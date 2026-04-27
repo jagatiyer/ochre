@@ -309,8 +309,8 @@ def checkout_view(request):
     tax_total = cart.total_tax()
     total = cart.total()
 
-    # Step 2: Enforce Safe Minimum Payment Amount (₹10)
-    total = max(total, Decimal("10.00"))
+    # Removed: Temporary minimum payment amount override
+    # total remains unchanged (no min override)
 
     # reuse existing order
     existing_order = (
