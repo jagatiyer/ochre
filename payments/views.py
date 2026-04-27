@@ -8,6 +8,7 @@ import razorpay
 import logging
 
 from shop.models import Order
+from shop.utils.invoice import generate_invoice
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +46,9 @@ def verify(request):
 
     Expected POST fields: razorpay_payment_id, razorpay_order_id, razorpay_signature, order_internal_id
     """
+    print("===== VERIFY HIT =====")
+    print(request.POST)
+
     payment_id = request.POST.get("razorpay_payment_id")
     rp_order_id = request.POST.get("razorpay_order_id")
     signature = request.POST.get("razorpay_signature")
@@ -54,12 +58,6 @@ def verify(request):
         return HttpResponseBadRequest("Missing required fields")
 
     order = get_object_or_404(Order, uuid=order_internal_id)
-
-    if not settings.RAZORPAY_TEST_KEYS_PROVIDED:
-        order.status = Order.STATUS_FAILED
-        order.save()
-        return JsonResponse({"ok": False, "error": "Razorpay keys not configured"}, status=500)
-
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
     # ensure the posted razorpay_order_id matches the one created for this Order
@@ -70,21 +68,31 @@ def verify(request):
         return JsonResponse({"ok": False, "error": "order_id_mismatch"}, status=400)
 
     try:
-        client.utility.verify_payment_signature(
-            {"razorpay_order_id": rp_order_id, "razorpay_payment_id": payment_id, "razorpay_signature": signature}
-        )
+        client.utility.verify_payment_signature({
+            'razorpay_order_id': rp_order_id,
+            'razorpay_payment_id': payment_id,
+            'razorpay_signature': signature
+        })
+        print("SIGNATURE VERIFIED")
     except Exception as e:
         # signature verification failed
         order.status = Order.STATUS_FAILED
         order.save()
-        logger.exception("Razorpay signature verification failed: %s", e)
+        print("SIGNATURE FAILED:", str(e))
         return JsonResponse({"ok": False, "error": "signature_verification_failed"}, status=400)
 
     # success
     order.razorpay_payment_id = payment_id
     order.razorpay_signature = signature
+    order.payment_ref = payment_id
     order.status = Order.STATUS_PAID
     order.save()
+
+    try:
+        generate_invoice(order)
+        print("INVOICE OK")
+    except Exception as e:
+        print("INVOICE ERROR:", str(e))
 
     # Clear cart safely
     if order.user and hasattr(order.user, "cart"):
@@ -96,8 +104,9 @@ def verify(request):
     # Send email
     try:
         send_order_email(order)
+        print("EMAIL OK")
     except Exception:
-        logger.exception("send_order_email hook failed")
+        print("EMAIL ERROR: Hook failed")
 
     # SMS (leave as-is)
     try:

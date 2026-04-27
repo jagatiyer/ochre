@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -296,6 +296,10 @@ def cart_view(request):
 
 @login_required(login_url="account_login")
 def checkout_view(request):
+    # Step 3: Temporary Checkout Access Lock (Admin Only)
+    if not request.user.is_superuser:
+        return HttpResponse("Checkout temporarily disabled", status=403)
+
     cart = getattr(request.user, "cart", None)
     if not cart or not cart.items.exists():
         return redirect("shop:shop_index")
@@ -304,6 +308,9 @@ def checkout_view(request):
     subtotal = cart.subtotal()
     tax_total = cart.total_tax()
     total = cart.total()
+
+    # Step 2: Enforce Safe Minimum Payment Amount (₹10)
+    total = max(total, Decimal("10.00"))
 
     # reuse existing order
     existing_order = (
@@ -330,7 +337,7 @@ def checkout_view(request):
 
     # Razorpay setup
     razorpay_order_id = None
-    razorpay_amount = int(float(total) * 100)
+    razorpay_amount = int(total * 100)
 
     print("Using Razorpay Key:", settings.RAZORPAY_KEY_ID)
     print("🔑 KEY:", settings.RAZORPAY_KEY_ID)
@@ -342,15 +349,15 @@ def checkout_view(request):
                 auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
             )
 
-            if not order.razorpay_order_id:
-                rp_order = client.order.create({
-                    "amount": razorpay_amount,
-                    "currency": "INR",
-                    "receipt": str(order.uuid),
-                    "payment_capture": 1
-                })
-                order.razorpay_order_id = rp_order.get("id")
-                print("Razorpay Order Created:", order.razorpay_order_id)
+            # Always create a new Razorpay order to prevent "400 Bad Request" from stale IDs
+            rp_order = client.order.create({
+                "amount": razorpay_amount,
+                "currency": "INR",
+                "receipt": str(order.uuid),
+                "payment_capture": 1
+            })
+            order.razorpay_order_id = rp_order.get("id")
+            print("NEW ORDER CREATED:", rp_order["id"])
 
             razorpay_order_id = order.razorpay_order_id
             order.status = Order.STATUS_PAYMENT_PENDING

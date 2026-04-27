@@ -39,34 +39,12 @@
     color: #9ca3af;
     padding: 12px 8px;
     border-bottom: 1px solid #333;
-    letter-spacing: 0.5px;
 }
 
 .cart-table td {
     padding: 14px 8px;
     border-bottom: 1px solid #222;
-    vertical-align: middle;
     white-space: nowrap;
-}
-
-.cart-table th:nth-child(1),
-.cart-table td:nth-child(1) { text-align: left; width: 40%; }
-
-.cart-table th:nth-child(2),
-.cart-table td:nth-child(2) { text-align: center; width: 10%; }
-
-.cart-table th:nth-child(3),
-.cart-table td:nth-child(3),
-.cart-table th:nth-child(4),
-.cart-table td:nth-child(4),
-.cart-table th:nth-child(5),
-.cart-table td:nth-child(5) {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-}
-
-.cart-table tr:last-child td {
-    border-bottom: none;
 }
 
 .summary-title {
@@ -121,7 +99,6 @@
                     <th>Total</th>
                 </tr>
             </thead>
-
             <tbody>
                 {% for row in cart_items %}
                 <tr>
@@ -175,14 +152,31 @@
 {% if RAZORPAY_AVAILABLE and razorpay_order_id %}
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-
 <script>
-document.getElementById("rzp-pay-btn")?.addEventListener("click", function(e) {
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+document.getElementById("rzp-pay-btn").addEventListener("click", function(e) {
     e.preventDefault();
+
+    console.log("ORDER ID:", "{{ razorpay_order_id }}");
+    console.log("AMOUNT:", {{ razorpay_amount }});
 
     var options = {
         key: "{{ razorpay_key_id }}",
-        amount: "{{ razorpay_amount }}",
+        amount: {{ razorpay_amount }},
         currency: "INR",
         name: "Ochre",
         order_id: "{{ razorpay_order_id }}",
@@ -192,7 +186,7 @@ document.getElementById("rzp-pay-btn")?.addEventListener("click", function(e) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
-                    "X-CSRFToken": document.cookie.match(/csrftoken=([^;]+)/)?.[1]
+                    "X-CSRFToken": getCookie("csrftoken")
                 },
                 body: new URLSearchParams({
                     razorpay_payment_id: response.razorpay_payment_id,
@@ -208,11 +202,16 @@ document.getElementById("rzp-pay-btn")?.addEventListener("click", function(e) {
                 } else {
                     alert("Payment verification failed");
                 }
+            })
+            .catch(err => {
+                console.error("Verification Error:", err);
+                alert("Error verifying payment");
             });
         }
     };
 
-    new Razorpay(options).open();
+    var rzp = new Razorpay(options);
+    rzp.open();
 });
 </script>
 {% endif %}
