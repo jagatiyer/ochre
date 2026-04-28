@@ -75,6 +75,39 @@
     border-radius: 8px;
     cursor: pointer;
 }
+
+.checkout-form-section {
+    margin-top: 30px;
+    border-top: 1px solid #333;
+    padding-top: 24px;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #9ca3af;
+    margin-bottom: 8px;
+}
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.form-group textarea {
+    height: 80px;
+    resize: vertical;
+}
+.form-group input:focus, .form-group textarea:focus {
+    border-color: #ff5b5f;
+    outline: none;
+}
 </style>
 {% endblock %}
 
@@ -84,6 +117,8 @@
 <h1 style="font-size:48px; margin-bottom:30px;">Checkout</h1>
 
 {% if cart_items %}
+<form method="POST">
+    {% csrf_token %}
 <div class="cart-grid">
 
     <div class="cart-items-box">
@@ -111,6 +146,30 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <div class="checkout-form-section">
+            <h2 class="summary-title">Customer Details</h2>
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="full_name" value="{{ order.full_name|default:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label>Phone *</label>
+                <input type="text" name="phone" value="{{ order.phone|default:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label>Billing Address *</label>
+                <textarea name="billing_address" required>{{ order.billing_address|default:'' }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Shipping Address *</label>
+                <textarea name="shipping_address" required>{{ order.shipping_address|default:'' }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>GST Number (Optional)</label>
+                <input type="text" name="gst_number" value="{{ order.gst_number|default:'' }}">
+            </div>
+        </div>
     </div>
 
     <div class="cart-summary-box">
@@ -132,13 +191,18 @@
         </div>
 
         {% if RAZORPAY_AVAILABLE and razorpay_order_id %}
-            <button id="rzp-pay-btn">Pay Now</button>
+            <button id="rzp-pay-btn" type="button">Pay Now</button>
+        {% elif RAZORPAY_AVAILABLE %}
+            <button type="submit" style="width: 100%; margin-top: 20px; padding: 14px; background: #ff5b5f; border: none; color: #000; font-weight: 700; border-radius: 8px; cursor: pointer;">
+                Proceed to Payment
+            </button>
         {% else %}
             <p style="color:#ff5b5f; margin-top:20px;">Payment not available</p>
         {% endif %}
     </div>
 
 </div>
+</form>
 {% else %}
 <p>Your cart is empty.</p>
 {% endif %}

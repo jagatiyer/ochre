@@ -296,9 +296,7 @@ def cart_view(request):
 
 @login_required(login_url="account_login")
 def checkout_view(request):
-    # Step 3: Temporary Checkout Access Lock (Admin Only)
-    if not request.user.is_superuser:
-        return HttpResponse("Checkout temporarily disabled", status=403)
+   
 
     cart = getattr(request.user, "cart", None)
     if not cart or not cart.items.exists():
@@ -324,6 +322,11 @@ def checkout_view(request):
 
     if existing_order and existing_order.total == total:
         order = existing_order
+
+        # Reset Razorpay state to prevent stale order mismatch
+        order.razorpay_order_id = None
+        order.status = Order.STATUS_CREATED
+        order.save()
     else:
         order = Order.objects.create(
             user=request.user,
@@ -339,33 +342,50 @@ def checkout_view(request):
     razorpay_order_id = None
     razorpay_amount = int(total * 100)
 
-    print("Using Razorpay Key:", settings.RAZORPAY_KEY_ID)
-    print("🔑 KEY:", settings.RAZORPAY_KEY_ID)
-    print("🔐 SECRET LENGTH:", len(settings.RAZORPAY_KEY_SECRET))
-    print("✅ CONFIGURED:", settings.RAZORPAY_CONFIGURED)
-    if settings.RAZORPAY_CONFIGURED:
-        try:
-            client = razorpay.Client(
-                auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
-            )
+    if request.method == "POST":
+        full_name = request.POST.get("full_name")
+        phone = request.POST.get("phone")
+        billing_address = request.POST.get("billing_address")
+        shipping_address = request.POST.get("shipping_address")
+        gst_number = request.POST.get("gst_number") or None
 
-            # Always create a new Razorpay order to prevent "400 Bad Request" from stale IDs
-            rp_order = client.order.create({
-                "amount": razorpay_amount,
-                "currency": "INR",
-                "receipt": str(order.uuid),
-                "payment_capture": 1
-            })
-            order.razorpay_order_id = rp_order.get("id")
-            print("NEW ORDER CREATED:", rp_order["id"])
-
-            razorpay_order_id = order.razorpay_order_id
-            order.status = Order.STATUS_PAYMENT_PENDING
+        if not all([full_name, phone, billing_address, shipping_address]):
+            messages.error(request, "Please fill in all required customer details")
+        else:
+            # Save order data
+            order.full_name = full_name
+            order.phone = phone
+            order.billing_address = billing_address
+            order.shipping_address = shipping_address
+            order.gst_number = gst_number
             order.save()
 
-        except Exception as e:
-            print("🔥 RAZORPAY ERROR:", str(e))
-            raise e
+            # ✅ ONLY NOW create Razorpay order
+            if settings.RAZORPAY_CONFIGURED:
+                try:
+                    client = razorpay.Client(
+                        auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+                    )
+
+                    # Always create a new Razorpay order to prevent "400 Bad Request" from stale IDs
+                    rp_order = client.order.create({
+                        "amount": razorpay_amount,
+                        "currency": "INR",
+                        "receipt": str(order.uuid),
+                        "payment_capture": 1
+                    })
+                    order.razorpay_order_id = rp_order.get("id")
+                    print("NEW ORDER CREATED:", rp_order["id"])
+
+                    razorpay_order_id = order.razorpay_order_id
+                    order.status = Order.STATUS_PAYMENT_PENDING
+                    order.save()
+
+                
+                except Exception as e:
+                    logger.exception("Razorpay error: %s", e)
+                    messages.error(request, "Payment initialization failed. Please try again.")
+                    razorpay_order_id = None
 
     # FINAL RENDER (ALWAYS OUTSIDE TRY)
     return render(
@@ -386,7 +406,7 @@ def checkout_view(request):
             "subtotal": subtotal,
             "tax_total": tax_total,
             "total": total,
-            "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+            "razorpay_key_id": settings.RAZORPAY_KEY_ID if settings.RAZORPAY_CONFIGURED else None,
             "razorpay_order_id": razorpay_order_id,
             "razorpay_amount": razorpay_amount,
             "order_internal_id": str(order.uuid),

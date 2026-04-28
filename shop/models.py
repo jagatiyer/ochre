@@ -308,6 +308,13 @@ class Order(models.Model):
     razorpay_payment_id = models.CharField(max_length=255, blank=True, null=True)
     razorpay_signature = models.CharField(max_length=255, blank=True, null=True)
 
+    # Customer Details
+    full_name = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=30, blank=True, null=True)
+    billing_address = models.TextField(blank=True, null=True)
+    shipping_address = models.TextField(blank=True, null=True)
+    gst_number = models.CharField(max_length=50, blank=True, null=True)
+
     payment_ref = models.CharField(max_length=255, blank=True, null=True)
     invoice_file = models.FileField(upload_to="invoices/", blank=True, null=True)
     metadata = models.JSONField(blank=True, null=True)
