@@ -23,7 +23,39 @@ def send_order_email(order):
         return
 
     subject = f"Ochre Order Confirmation - {order.uuid}"
-    message = "Your order has been successfully placed."
+    message = f"""
+Hi {order.full_name or "Customer"},
+
+Thank you for your order with Ochre.
+
+Your payment has been successfully received.
+
+----------------------------------------
+ORDER DETAILS
+----------------------------------------
+Order ID: {order.uuid}
+Amount Paid: ₹{order.total_amount}
+Payment Reference: {order.payment_ref}
+
+----------------------------------------
+SHIPPING DETAILS
+----------------------------------------
+Name: {order.full_name}
+Phone: {order.phone}
+Address:
+{order.shipping_address}
+
+----------------------------------------
+
+What happens next?
+
+• Your order is being processed
+• You will receive a dispatch email with tracking details
+• Invoice will be shared at dispatch
+
+Regards,  
+Ochre Team
+"""
 
     from_email = settings.DEFAULT_FROM_EMAIL or settings.EMAIL_HOST_USER
     recipient = [order.user.email]
@@ -35,6 +67,86 @@ def send_order_email(order):
         logger.info("EMAIL: sent successfully for order %s", order.uuid)
     except Exception as e:
         logger.exception("EMAIL FAILED for order %s: %s", order.uuid, e)
+        raise
+
+
+def send_dispatch_email(order):
+    logger.info("EMAIL: start dispatch for order %s", order.uuid)
+
+    if not order.user or not order.user.email:
+        logger.warning("EMAIL: no recipient for dispatch %s", order.uuid)
+        return
+
+    subject = f"Your Ochre Order has been Dispatched - {order.uuid}"
+    message = f"""
+Hi {order.full_name},
+
+Your order has been dispatched.
+
+----------------------------------------
+ORDER DETAILS
+----------------------------------------
+Order ID: {order.uuid}
+Invoice Number: {order.invoice_number or "To be assigned"}
+
+----------------------------------------
+TRACKING DETAILS
+----------------------------------------
+Tracking ID: {order.tracking_id or 'N/A'}
+Carrier: {order.carrier_name or 'N/A'}
+
+----------------------------------------
+
+Your invoice is attached with this email.
+
+Regards,  
+Ochre Team
+"""
+
+    from_email = settings.DEFAULT_FROM_EMAIL or settings.EMAIL_HOST_USER
+    recipient = [order.user.email]
+
+    email = EmailMessage(subject, message, from_email, recipient)
+
+    if order.invoice_file and hasattr(order.invoice_file, "path"):
+        email.attach_file(order.invoice_file.path)
+
+    try:
+        email.send(fail_silently=False)
+        logger.info("EMAIL: dispatch sent successfully for order %s", order.uuid)
+    except Exception as e:
+        logger.exception("EMAIL FAILED for dispatch order %s: %s", order.uuid, e)
+        raise
+
+
+def send_delivery_email(order):
+    logger.info("EMAIL: start delivery for order %s", order.uuid)
+
+    if not order.user or not order.user.email:
+        return
+
+    subject = f"Order Delivered - {order.uuid}"
+    message = f"""
+Hi {order.full_name},
+
+Your order has been successfully delivered.
+
+We hope you enjoy your purchase.
+
+Regards,  
+Ochre Team
+"""
+
+    from_email = settings.DEFAULT_FROM_EMAIL or settings.EMAIL_HOST_USER
+    recipient = [order.user.email]
+
+    email = EmailMessage(subject, message, from_email, recipient)
+
+    try:
+        email.send(fail_silently=False)
+        logger.info("EMAIL: delivery sent successfully for order %s", order.uuid)
+    except Exception as e:
+        logger.exception("EMAIL FAILED for delivery order %s: %s", order.uuid, e)
         raise
 
 
