@@ -1,8 +1,8 @@
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.conf import settings
-from django.core.mail import send_mail
-from django.shortcuts import get_object_or_404
+from django.core.mail import EmailMessage
+from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
 import razorpay
 import logging
@@ -14,22 +14,37 @@ logger = logging.getLogger(__name__)
 
 
 def send_order_email(order):
+    print("REACHED EMAIL BLOCK")
+    if not order.user or not order.user.email: # Check for user and email
+        print("NO EMAIL FOUND") # Log if no email is found
+        return # Exit early if no recipient email
+
+    print("USER EMAIL:", order.user.email) # Log the recipient email
+    
     subject = f"Ochre Order Confirmation - {order.uuid}"
 
-    items = order.items.all() if hasattr(order, "items") else []
+    # Use a static message as per instructions
+    message = "Your order has been successfully placed."
 
-    message = render_to_string("emails/order_confirmation.txt", {
-        "order": order,
-        "items": items,
-    })
+    from_email = settings.DEFAULT_FROM_EMAIL or settings.EMAIL_HOST_USER # Sender email
+    recipient = [order.user.email] # Recipient is strictly the user's email
 
-    from_email = settings.DEFAULT_FROM_EMAIL or settings.EMAIL_HOST_USER
-    recipient = [order.user.email] if order.user and order.user.email else [settings.CONTACT_EMAIL]
+    email = EmailMessage(subject, message, from_email, recipient)
+
+    # Attach invoice if it exists
+    if order.invoice_file and hasattr(order.invoice_file, "path"):
+        try:
+            email.attach_file(order.invoice_file.path)
+            print("ATTACHMENT OK")
+        except Exception as e:
+            print("ATTACHMENT ERROR:", str(e))
 
     try:
-        send_mail(subject, message, from_email, recipient, fail_silently=True)
+        email.send(fail_silently=False)
+        print("SMTP SEND OK")
     except Exception as e:
-        logger.exception("send_order_email failed: %s", e)
+        print("EMAIL ERROR:", str(e)) # Log here to avoid duplication in verify()
+        raise e
 
 def send_order_sms(order):
     """Placeholder SMS hook for MSG91 or similar. Non-blocking."""
@@ -104,9 +119,10 @@ def verify(request):
     # Send email
     try:
         send_order_email(order)
+    except Exception as e:
+        print("EMAIL ERROR:", str(e))
+    else: # Only print "EMAIL OK" if no exception was raised by send_order_email
         print("EMAIL OK")
-    except Exception:
-        print("EMAIL ERROR: Hook failed")
 
     # SMS (leave as-is)
     try:
