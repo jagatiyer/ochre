@@ -227,6 +227,7 @@ class ExperienceBooking(models.Model):
         (STATUS_CONFIRMED, "Confirmed"),
         (STATUS_PAID, "Paid"),
         (STATUS_CANCELLED, "Cancelled"),
+        
     )
 
     user = models.ForeignKey(
@@ -280,6 +281,8 @@ class Order(models.Model):
     STATUS_PAID = "paid"
     STATUS_FAILED = "failed"
     STATUS_CANCELLED = "cancelled"
+    STATUS_DISPATCHED = "dispatched"
+    STATUS_DELIVERED = "delivered"
 
     STATUS_CHOICES = (
         (STATUS_CREATED, "Created"),
@@ -287,6 +290,9 @@ class Order(models.Model):
         (STATUS_PAID, "Paid"),
         (STATUS_FAILED, "Failed"),
         (STATUS_CANCELLED, "Cancelled"),
+         # ✅ ADD THESE TWO
+        (STATUS_DISPATCHED, "Dispatched"),
+        (STATUS_DELIVERED, "Delivered"),
     )
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -314,6 +320,11 @@ class Order(models.Model):
     billing_address = models.TextField(blank=True, null=True)
     shipping_address = models.TextField(blank=True, null=True)
     gst_number = models.CharField(max_length=50, blank=True, null=True)
+
+    invoice_number = models.CharField(max_length=100, blank=True, null=True, unique=True)
+    tracking_id = models.CharField(max_length=100, blank=True, null=True)
+    carrier_name = models.CharField(max_length=100, blank=True, null=True)
+    dispatch_date = models.DateTimeField(blank=True, null=True)
 
     payment_ref = models.CharField(max_length=255, blank=True, null=True)
     invoice_file = models.FileField(upload_to="invoices/", blank=True, null=True)

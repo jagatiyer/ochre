@@ -1,6 +1,10 @@
 from django.contrib import admin
 from django import forms
+from django.contrib import messages
+from django.utils import timezone
 from django_ckeditor_5.widgets import CKEditor5Widget
+import logging
+
 from .models import (
     ShopCategory,
     ShopItem,
@@ -15,7 +19,15 @@ from .models import (
     OrderItem,
 )
 
+from payments.views import send_dispatch_email, send_delivery_email
+from shop.utils.invoice import generate_invoice
 
+logger = logging.getLogger(__name__)
+
+
+# ---------------------------
+# CATEGORY
+# ---------------------------
 @admin.register(ShopCategory)
 class ShopCategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "slug")
@@ -23,6 +35,9 @@ class ShopCategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
+# ---------------------------
+# INLINES
+# ---------------------------
 class ProductUnitInline(admin.TabularInline):
     model = ProductUnit
     extra = 1
@@ -43,6 +58,9 @@ class ProductImageInline(admin.TabularInline):
     ordering = ("order",)
 
 
+# ---------------------------
+# SHOP ITEM
+# ---------------------------
 @admin.register(ShopItem)
 class ShopItemAdmin(admin.ModelAdmin):
     class ShopItemForm(forms.ModelForm):
@@ -93,6 +111,9 @@ class ShopItemAdmin(admin.ModelAdmin):
     ]
 
 
+# ---------------------------
+# EXPERIENCE BOOKING
+# ---------------------------
 @admin.register(ExperienceBooking)
 class ExperienceBookingAdmin(admin.ModelAdmin):
     list_display = (
@@ -107,6 +128,9 @@ class ExperienceBookingAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at", "updated_at")
 
 
+# ---------------------------
+# PRODUCT TYPES
+# ---------------------------
 @admin.register(ProductType)
 class ProductTypeAdmin(admin.ModelAdmin):
     list_display = ("name", "slug")
@@ -119,6 +143,9 @@ class UnitTypeAdmin(admin.ModelAdmin):
     search_fields = ("name", "code")
 
 
+# ---------------------------
+# CART
+# ---------------------------
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "updated_at")
@@ -130,13 +157,141 @@ class CartItemAdmin(admin.ModelAdmin):
     list_display = ("cart", "product", "product_unit", "qty", "unit_price")
 
 
-# ✅ ORDERS ADMIN (FINAL CLEAN VERSION)
+# ---------------------------
+# DISPATCH ACTION
+# ---------------------------
+def mark_as_dispatched(modeladmin, request, queryset):
+    for order in queryset:
+
+        if order.status != Order.STATUS_PAID:
+            continue
+
+        if not order.full_name or not order.billing_address:
+            modeladmin.message_user(
+                request,
+                f"Order {order.uuid} missing customer details",
+                level=messages.WARNING
+            )
+            continue
+
+        if not order.tracking_id:
+            modeladmin.message_user(
+                request,
+                f"Order {order.uuid} missing tracking ID",
+                level=messages.ERROR
+            )
+            continue
+
+        if not order.invoice_number:
+            modeladmin.message_user(
+                request,
+                f"Order {order.uuid} missing invoice number",
+                level=messages.ERROR
+            )
+            continue
+
+        # Prevent duplicate invoice numbers
+        if Order.objects.filter(invoice_number=order.invoice_number).exclude(id=order.id).exists():
+            modeladmin.message_user(
+                request,
+                f"Invoice number {order.invoice_number} already used",
+                level=messages.ERROR
+            )
+            continue
+
+        # ✅ Generate invoice FIRST
+        if not order.invoice_file:
+            generate_invoice(order)
+            logger.info("INVOICE GENERATED: %s", order.uuid)
+
+        # ✅ Mark dispatched
+        order.status = Order.STATUS_DISPATCHED
+        order.dispatch_date = timezone.now()
+        order.save()
+
+        # ✅ Send email with invoice
+        try:
+            send_dispatch_email(order)
+        except Exception as e:
+            logger.error("EMAIL FAILED for Order %s: %s", order.uuid, e)
+            modeladmin.message_user(
+                request,
+                f"Order {order.uuid} marked dispatched, but notification email failed to send.",
+                level=messages.WARNING
+            )
+
+        logger.info("ORDER DISPATCHED: %s", order.uuid)
+
+
+mark_as_dispatched.short_description = "Mark selected as Dispatched"
+
+
+# ---------------------------
+# DELIVERY ACTION
+# ---------------------------
+def mark_as_delivered(modeladmin, request, queryset):
+    for order in queryset:
+
+        if order.status != Order.STATUS_DISPATCHED:
+            continue
+
+        order.status = Order.STATUS_DELIVERED
+        order.save()
+
+        send_delivery_email(order)
+
+        logger.info("DELIVERED: %s", order.uuid)
+
+
+mark_as_delivered.short_description = "Mark selected as Delivered"
+
+
+# ---------------------------
+# ORDER ADMIN
+# ---------------------------
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ("uuid", "user", "status", "created_at", "total_amount")
+    list_display = (
+        "uuid",
+        "user",
+        "status",
+        "invoice_number",
+        "tracking_id",
+        "created_at",
+        "total_amount",
+    )
     list_filter = ("status", "created_at")
-    search_fields = ("user__email",)  # ✅ added
-    readonly_fields = ("created_at", "updated_at")
+    search_fields = ("user__email",)
+    readonly_fields = ("uuid", "created_at", "updated_at")
+
+    fields = (
+        "uuid",
+        "user",
+        "status",
+
+        # 🔹 dispatch + invoice inputs
+        "invoice_number",
+        "tracking_id",
+        "carrier_name",
+
+        # 🔹 customer details
+        "full_name",
+        "phone",
+        "billing_address",
+        "shipping_address",
+        "gst_number",
+
+        # 🔹 financials
+        "total_amount",
+
+        # 🔹 system
+        "invoice_file",
+        "dispatch_date",
+        "created_at",
+        "updated_at",
+    )
+
+    actions = [mark_as_dispatched, mark_as_delivered]
 
     def get_readonly_fields(self, request, obj=None):
         ro = list(self.readonly_fields)
@@ -145,6 +300,9 @@ class OrderAdmin(admin.ModelAdmin):
         return ro
 
 
+# ---------------------------
+# ORDER ITEMS
+# ---------------------------
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ("order", "title", "qty", "unit_price")
