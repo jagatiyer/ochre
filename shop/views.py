@@ -15,6 +15,7 @@ from .models import (
     CartItem,
     ExperienceBooking,
     ProductUnit,
+    Address, # Import the new Address model
 )
 from .models import Order
 from .cart_utils import (
@@ -302,10 +303,18 @@ def checkout_view(request):
     if not cart or not cart.items.exists():
         return redirect("shop:shop_index")
 
+    # Prefill logic for logged-in users
+    default_address = None
+    if request.user.is_authenticated:
+        # Get the default address, or the most recently updated one if no explicit default
+        default_address = Address.objects.filter(user=request.user, is_default=True).first() or \
+                          Address.objects.filter(user=request.user).order_by('-updated_at').first()
     # totals
     subtotal = cart.subtotal()
     tax_total = cart.total_tax()
     total = cart.total()
+
+    save_address_checked = False
 
     # Removed: Temporary minimum payment amount override
     # total remains unchanged (no min override)
@@ -348,6 +357,8 @@ def checkout_view(request):
         billing_address = request.POST.get("billing_address")
         shipping_address = request.POST.get("shipping_address")
         gst_number = request.POST.get("gst_number") or None
+        save_address = request.POST.get("save_address") == 'on'
+        save_address_checked = save_address
 
         if not all([full_name, phone, billing_address, shipping_address]):
             messages.error(request, "Please fill in all required customer details")
@@ -359,6 +370,34 @@ def checkout_view(request):
             order.shipping_address = shipping_address
             order.gst_number = gst_number
             order.save()
+
+            # Save address to user profile if checkbox is checked and user is authenticated
+            if request.user.is_authenticated and save_address:
+                # For simplicity, save the shipping address as the default user address
+                # This is a minimal implementation as per requirements.
+                
+                # Find existing default address or create a new one
+                user_address, created = Address.objects.get_or_create(
+                    user=request.user,
+                    is_default=True, # Try to get the existing default
+                    defaults={ # If creating, set these defaults
+                        'full_name': full_name,
+                        'phone': phone,
+                        'full_address_text': shipping_address,
+                        'gst_number': gst_number,
+                        'label': 'Default Shipping' # Default label
+                    }
+                )
+                
+                if not created:
+                    # Update existing default address
+                    user_address.full_name = full_name
+                    user_address.phone = phone
+                    user_address.full_address_text = shipping_address
+                    user_address.gst_number = gst_number
+                    user_address.save() # This will also unset other defaults
+
+                messages.success(request, "Address saved to your account.")
 
             # ✅ ONLY NOW create Razorpay order
             if settings.RAZORPAY_CONFIGURED:
@@ -410,6 +449,8 @@ def checkout_view(request):
             "razorpay_amount": razorpay_amount,
             "order_internal_id": str(order.uuid),
             "order": order,
+            "default_address": default_address, # Pass default address for prefilling
+            "save_address_checked": save_address_checked,
             "RAZORPAY_AVAILABLE": settings.RAZORPAY_CONFIGURED,
         },
     )

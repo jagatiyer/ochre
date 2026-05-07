@@ -46,11 +46,11 @@ def generate_invoice(order):
     
     meta_data = [
         ["Invoice No.", str(order.uuid.hex[:8].upper()), "Dated", val(order.created_at.strftime('%d-%b-%y') if order.created_at else "-")],
-        ["Delivery Note", val(getattr(order, "delivery_note", "")), "Mode/Terms of Payment", val(getattr(order, "mode_of_payment", ""))],
-        ["Reference No & Date", val(getattr(order, "reference_no", "")), "Other References", val(getattr(order, "other_references", ""))],
-        ["Buyer's Order No.", val(getattr(order, "buyer_order_no", "")), "Dated", val(getattr(order, "delivery_note_date", ""))],
-        ["Dispatch Doc No.", val(getattr(order, "dispatch_doc_no", "")), "Delivery Note Date", val(getattr(order, "delivery_note_date", ""))],
-        ["Dispatched through", val(getattr(order, "dispatched_through", "")), "Destination", val(getattr(order, "destination", ""))],
+        ["Delivery Note", val(getattr(order, "delivery_note", "")), "Mode/Terms of Payment", val(getattr(order, "mode_of_payment", ""))], # type: ignore
+        ["Reference No & Date", val(getattr(order, "reference_no", "")), "Other References", val(getattr(order, "other_references", ""))], # type: ignore
+        ["Buyer's Order No.", val(getattr(order, "buyer_order_no", "")), "Dated", val(getattr(order, "delivery_note_date", ""))], # type: ignore
+        ["Dispatch Doc No.", val(getattr(order, "dispatch_doc_no", "")), "Delivery Note Date", val(getattr(order, "delivery_note_date", ""))], # type: ignore
+        ["Dispatched through", val(getattr(order, "dispatched_through", "")), "Destination", val(getattr(order, "destination", ""))], # type: ignore
     ]
     
     meta_table = Table(meta_data, colWidths=[30*mm, 35*mm, 40*mm, 35*mm])

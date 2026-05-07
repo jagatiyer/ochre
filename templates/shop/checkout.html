@@ -16,6 +16,12 @@
     gap: 30px;
 }
 
+@media (max-width: 1024px) {
+    .cart-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .cart-items-box,
 .cart-summary-box {
     background: rgba(255,255,255,0.03);
@@ -151,24 +157,30 @@
             <h2 class="summary-title">Customer Details</h2>
             <div class="form-group">
                 <label>Full Name *</label>
-                <input type="text" name="full_name" value="{{ order.full_name|default:'' }}" required>
+                <input type="text" name="full_name" value="{{ default_address.full_name|default:order.full_name|default:'' }}" required>
             </div>
             <div class="form-group">
                 <label>Phone *</label>
-                <input type="text" name="phone" value="{{ order.phone|default:'' }}" required>
+                <input type="text" name="phone" value="{{ default_address.phone|default:order.phone|default:'' }}" required>
             </div>
             <div class="form-group">
                 <label>Billing Address *</label>
-                <textarea name="billing_address" required>{{ order.billing_address|default:'' }}</textarea>
+                <textarea name="billing_address" required>{{ default_address.full_address_text|default:order.billing_address|default:'' }}</textarea>
             </div>
             <div class="form-group">
                 <label>Shipping Address *</label>
-                <textarea name="shipping_address" required>{{ order.shipping_address|default:'' }}</textarea>
+                <textarea name="shipping_address" required>{{ default_address.full_address_text|default:order.shipping_address|default:'' }}</textarea>
             </div>
             <div class="form-group">
                 <label>GST Number (Optional)</label>
-                <input type="text" name="gst_number" value="{{ order.gst_number|default:'' }}">
+                <input type="text" name="gst_number" value="{{ default_address.gst_number|default:order.gst_number|default:'' }}">
             </div>
+            {% if request.user.is_authenticated %}
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="save_address" name="save_address" style="width: auto; margin: 0;" {% if save_address_checked %}checked{% endif %}>
+                <label for="save_address" style="margin: 0; color: #fff;">Save this address to my account</label>
+            </div>
+            {% endif %}
         </div>
     </div>
 

@@ -267,6 +267,34 @@ class ExperienceBooking(models.Model):
 
 
 # ---------------------------
+# Customer Addresses
+# ---------------------------
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses')
+    label = models.CharField(max_length=100, blank=True, help_text="e.g., Home, Work, Default")
+    full_name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=30)
+    full_address_text = models.TextField() # Stores the full address string from checkout form
+    gst_number = models.CharField(max_length=50, blank=True, null=True)
+    is_default = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Addresses"
+        ordering = ['-is_default', '-updated_at'] # Default addresses first, then most recent
+
+    def __str__(self):
+        return f"{self.full_name} - {self.full_address_text[:50]}..."
+
+    def save(self, *args, **kwargs):
+        if self.is_default:
+            # Ensure only one address per user is marked as default
+            Address.objects.filter(user=self.user, is_default=True).exclude(pk=self.pk).update(is_default=False)
+        super().save(*args, **kwargs)
+
+
+# ---------------------------
 # Orders
 # ---------------------------
 class Order(models.Model):

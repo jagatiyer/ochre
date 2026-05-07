@@ -17,6 +17,7 @@ from .models import (
     ExperienceBooking,
     Order,
     OrderItem,
+    Address, # Import the new Address model
 )
 
 from payments.views import send_dispatch_email, send_delivery_email
@@ -306,3 +307,26 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ("order", "title", "qty", "unit_price")
+
+
+# ---------------------------
+# ADDRESS ADMIN
+# ---------------------------
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ('user', 'label', 'full_name', 'phone', 'is_default', 'updated_at')
+    list_filter = ('is_default', 'created_at')
+    search_fields = ('user__email', 'full_name', 'full_address_text', 'gst_number')
+    raw_id_fields = ('user',) # Use raw_id_fields for ForeignKey to User for better performance
+    actions = ['mark_as_default']
+
+    def mark_as_default(self, request, queryset):
+        if queryset.count() == 1:
+            address = queryset.first()
+            Address.objects.filter(user=address.user).update(is_default=False) # Unset other defaults
+            address.is_default = True
+            address.save()
+            self.message_user(request, f"Address '{address}' marked as default for {address.user}.")
+        else:
+            self.message_user(request, "Please select exactly one address to mark as default.", level=messages.ERROR)
+    mark_as_default.short_description = "Mark selected address as default"
