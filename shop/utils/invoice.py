@@ -45,7 +45,7 @@ def generate_invoice(order):
     ]
     
     meta_data = [
-        ["Invoice No.", f"<b>{order.uuid.hex[:8].upper()}</b>", "Dated", val(order.created_at.strftime('%d-%b-%y') if order.created_at else "-")],
+        ["Invoice No.", str(order.uuid.hex[:8].upper()), "Dated", val(order.created_at.strftime('%d-%b-%y') if order.created_at else "-")],
         ["Delivery Note", val(getattr(order, "delivery_note", "")), "Mode/Terms of Payment", val(getattr(order, "mode_of_payment", ""))],
         ["Reference No & Date", val(getattr(order, "reference_no", "")), "Other References", val(getattr(order, "other_references", ""))],
         ["Buyer's Order No.", val(getattr(order, "buyer_order_no", "")), "Dated", val(getattr(order, "delivery_note_date", ""))],
@@ -53,18 +53,18 @@ def generate_invoice(order):
         ["Dispatched through", val(getattr(order, "dispatched_through", "")), "Destination", val(getattr(order, "destination", ""))],
     ]
     
-    meta_table = Table(meta_data, colWidths=[30*mm, 35*mm, 30*mm, 35*mm])
+    meta_table = Table(meta_data, colWidths=[30*mm, 35*mm, 40*mm, 35*mm])
     meta_table.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
         ('FONTSIZE', (0,0), (-1,-1), 8),
-        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
     ]))
 
     header_data = [
         [Table(company_info, colWidths=[60*mm]), meta_table]
     ]
     
-    header_table = Table(header_data, colWidths=[65*mm, 130*mm])
+    header_table = Table(header_data, colWidths=[65*mm, 140*mm])
     header_table.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 0.5, colors.black),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
@@ -117,7 +117,7 @@ def generate_invoice(order):
 
     item_rows.append(["", "CGST", "", "", "", "", "", f"{tax_amt/2:.2f}"])
     item_rows.append(["", "SGST", "", "", "", "", "", f"{tax_amt/2:.2f}"])
-    item_rows.append(["", Paragraph("<b>Total</b>", style_b), "", f"<b>{sum(getattr(i,'qty',1) for i in items)} Nos</b>", "", "", "", f"<b>{grand_total:.2f}</b>"])
+    item_rows.append(["", Paragraph("Total", style_b), "", f"{sum(getattr(i,'qty',1) for i in items)} Nos", "", "", "", f"{grand_total:.2f}"])
 
     item_table = Table(item_rows, colWidths=[10*mm, 70*mm, 20*mm, 20*mm, 20*mm, 15*mm, 15*mm, 25*mm])
     item_table.setStyle(TableStyle([
