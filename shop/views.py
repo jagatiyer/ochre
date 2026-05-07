@@ -375,7 +375,6 @@ def checkout_view(request):
                         "payment_capture": 1
                     })
                     order.razorpay_order_id = rp_order.get("id")
-                    print("NEW ORDER CREATED:", rp_order["id"])
 
                     razorpay_order_id = order.razorpay_order_id
                     order.status = Order.STATUS_PAYMENT_PENDING
@@ -454,6 +453,18 @@ def experience_booking_create(request):
 def my_orders(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'account/orders.html', {'orders': orders})
+
+@login_required
+def download_invoice(request, order_uuid):
+    """Securely serve the generated invoice PDF to the order owner."""
+    order = get_object_or_404(Order, uuid=order_uuid, user=request.user)
+    if not order.invoice_file:
+        messages.error(request, "Invoice is not available for this order.")
+        return redirect("shop:my_orders")
+    
+    response = HttpResponse(order.invoice_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="Invoice_{order.uuid.hex[:8].upper()}.pdf"'
+    return response
 
 @require_POST
 def check_availability(request):
