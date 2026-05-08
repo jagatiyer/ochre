@@ -40,19 +40,6 @@
     table-layout: fixed;
 }
 
-.cart-table th {
-    font-size: 12px;
-    color: #9ca3af;
-    padding: 12px 8px;
-    border-bottom: 1px solid #333;
-}
-
-.cart-table td {
-    padding: 14px 8px;
-    border-bottom: 1px solid #222;
-    white-space: nowrap;
-}
-
 .summary-title {
     font-size: 22px;
     margin-bottom: 20px;
@@ -131,29 +118,36 @@
         <h2 class="cart-title">Your Order</h2>
 
         <table class="cart-table">
+            <colgroup>
+                <col style="width: 45%;">
+                <col style="width: 10%;">
+                <col style="width: 20%;">
+                <col style="width: 10%;">
+                <col style="width: 15%;">
+            </colgroup>
             <thead>
                 <tr>
-                    <th>Item</th>
-                    <th>Qty</th>
-                    <th>Unit Price</th>
-                    <th>GST</th>
-                    <th>Total</th>
+                    <th class="col-item">Item</th>
+                    <th class="col-qty">Qty</th>
+                    <th class="col-price">Unit Price</th>
+                    <th class="col-gst">GST</th>
+                    <th class="col-total">Total</th>
                 </tr>
             </thead>
             <tbody>
                 {% for row in cart_items %}
                 <tr>
-                    <td>{{ row.product.title }}</td>
-                    <td>{{ row.qty }}</td>
-                    <td>₹ {{ row.unit_price|floatformat:2 }}</td>
-                    <td>
+                    <td class="item-info">{{ row.product.title }}</td>
+                    <td class="qty-cell">{{ row.qty }}</td>
+                    <td class="price-cell">₹ {{ row.unit_price|floatformat:2 }}</td>
+                    <td class="gst-cell">
                         {% if row.gst_rate > 0 %}
                             {{ row.gst_rate|floatformat:0 }}%
                         {% else %}
                             -
                         {% endif %}
                     </td>
-                    <td>
+                    <td class="total-cell">
                         ₹ {{ row.item_total_with_gst|floatformat:2 }}
                     </td>
                 </tr>

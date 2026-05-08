@@ -16,13 +16,21 @@
         <h1 class="cart-title">Your Cart</h1>
 
         <table class="cart-table">
+          <colgroup>
+            <col style="width: 40%;">
+            <col style="width: 10%;">
+            <col style="width: 20%;">
+            <col style="width: 10%;">
+            <col style="width: 15%;">
+            <col style="width: 5%;">
+          </colgroup>
           <thead>
             <tr>
               <th class="col-item">Item</th>
               <th class="col-qty">Qty</th>
               <th class="col-price">Unit Price</th>
-              <th class="col-price">GST</th>
-              <th class="col-price">Total</th>
+              <th class="col-gst">GST</th>
+              <th class="col-total">Total</th>
               <th class="col-remove"></th>
             </tr>
           </thead>
@@ -69,7 +77,7 @@
               </td>
 
               <!-- GST -->
-              <td class="price-cell">
+              <td class="gst-cell">
                 {% if row.gst_rate_percent > 0 %}
                   {{ row.gst_rate_percent|floatformat:0 }}%
                 {% else %}
@@ -78,7 +86,7 @@
               </td>
 
               <!-- TOTAL (with GST) -->
-              <td class="price-cell">
+              <td class="total-cell">
                 ₹ {{ item_total|floatformat:2 }}
               </td>
 
