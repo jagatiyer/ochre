@@ -276,6 +276,7 @@ def cart_view(request):
         item["gst_amount"] = item_gst
         item["item_subtotal"] = line_total
         item["item_total_with_gst"] = (line_total + item_gst).quantize(Decimal("0.01"))
+        item["gst_rate_percent"] = tax_rate
 
     grand_total = subtotal + total_gst
 
