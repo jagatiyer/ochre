@@ -70,7 +70,11 @@
 
               <!-- GST -->
               <td class="price-cell">
-                ₹ {{ gst|floatformat:2 }}
+                {% if row.gst_rate_percent > 0 %}
+                  {{ row.gst_rate_percent|floatformat:0 }}%
+                {% else %}
+                  —
+                {% endif %}
               </td>
 
               <!-- TOTAL (with GST) -->

@@ -347,6 +347,30 @@ def checkout_view(request):
             status=Order.STATUS_CREATED,
         )
 
+    # Prepare cart_items with detailed pricing for display in the left table
+    display_cart_items = []
+    for ci in cart.items.select_related("product", "product_unit"):
+        # Determine the correct unit price for display
+        unit_price_for_display = (
+            ci.unit_price
+            if ci.unit_price is not None
+            else (ci.product_unit.price if ci.product_unit else ci.product.price)
+        )
+        
+        line_subtotal = ci.line_total() # This is (unit_price * qty)
+        product = ci.product
+        tax_rate = product.tax_percent if product else Decimal("0.00")
+        item_gst_amount = (line_subtotal * (tax_rate / Decimal("100"))).quantize(Decimal("0.01"))
+        item_total_with_gst = (line_subtotal + item_gst_amount).quantize(Decimal("0.01"))
+
+        display_cart_items.append({
+            "product": ci.product,
+            "qty": ci.qty,
+            "unit_price": unit_price_for_display,
+            "gst_rate": tax_rate,
+            "item_total_with_gst": item_total_with_gst,
+        })
+
     # Razorpay setup
     razorpay_order_id = None
     razorpay_amount = int(total * 100)
@@ -431,16 +455,7 @@ def checkout_view(request):
         "shop/checkout.html",
         {
             "cart": cart,
-            "items": cart.items.select_related("product"),
-            "cart_items": [
-                {
-                    "product": ci.product,
-                    "product_unit": ci.product_unit,
-                    "qty": ci.qty,
-                    "line_total": ci.line_total(),
-                }
-                for ci in cart.items.select_related("product", "product_unit")
-            ],
+            "cart_items": display_cart_items,
             "subtotal": subtotal,
             "tax_total": tax_total,
             "total": total,

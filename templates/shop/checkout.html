@@ -145,9 +145,17 @@
                 <tr>
                     <td>{{ row.product.title }}</td>
                     <td>{{ row.qty }}</td>
-                    <td>₹ {{ row.product.price|floatformat:2 }}</td>
-                    <td>₹ {{ row.product.tax_percent|default:0|floatformat:2 }}</td>
-                    <td>₹ {{ row.line_total|floatformat:2 }}</td>
+                    <td>₹ {{ row.unit_price|floatformat:2 }}</td>
+                    <td>
+                        {% if row.gst_rate > 0 %}
+                            {{ row.gst_rate|floatformat:0 }}%
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        ₹ {{ row.item_total_with_gst|floatformat:2 }}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
