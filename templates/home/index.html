@@ -149,30 +149,9 @@
     </div>
 
     <!-- ===============================
-      HANDPICKED SELECTION
+      THE OCHRE WORLD (Ochre Ethos)
       =============================== -->
-    {% if False %}  {# Temporarily disabled for production closeout #}
-    {% if featured_products %}
-  <section class="collections-page">
-    <div class="collections-header">
-      <div class="craft-spirits">
-        <span class="dash">—</span> HANDPICKED SELECTION <span class="dash">—</span>
-      </div>
-
-      <h1 style="text-align: left;">The House Favourites</h1>
-      <p class="subtitle" style="text-align: left;"><em>Bar-quality, without compromise.</em></p>
-
-      <p class="description" style="white-space: normal; overflow-wrap: normal; word-break: keep-all; hyphens: none;">
-        Our most poured cocktail premixes are crafted with precision, balanced for clarity,
-        and designed to deliver a consistent, refined serve every time.
-        No excess. No shortcuts. Just the cocktail, as it should be.
-      </p>
-    </div>
-
-    {% include "home/includes/featured_products.html" with products=featured_products %}
-  </section>
-    {% endif %}
-    {% endif %}
+  {% include "home/includes/home_content_sections.html" with home_content_sections=home_content_sections %}
 
     <!-- ===============================
       VIDEO COMMERCIALS
@@ -201,9 +180,30 @@ Ochre integrates brand storytelling with conscious celebration. Every film refle
   </section>
 
     <!-- ===============================
-      THE OCHRE WORLD
+      HANDPICKED SELECTION
       =============================== -->
-  {% include "home/includes/home_content_sections.html" with home_content_sections=home_content_sections %}
+    {% if False %}  {# Temporarily disabled for production closeout #}
+    {% if featured_products %}
+  <section class="collections-page">
+    <div class="collections-header">
+      <div class="craft-spirits">
+        <span class="dash">—</span> HANDPICKED SELECTION <span class="dash">—</span>
+      </div>
+
+      <h1 style="text-align: left;">The House Favourites</h1>
+      <p class="subtitle" style="text-align: left;"><em>Bar-quality, without compromise.</em></p>
+
+      <p class="description" style="white-space: normal; overflow-wrap: normal; word-break: keep-all; hyphens: none;">
+        Our most poured cocktail premixes are crafted with precision, balanced for clarity,
+        and designed to deliver a consistent, refined serve every time.
+        No excess. No shortcuts. Just the cocktail, as it should be.
+      </p>
+    </div>
+
+    {% include "home/includes/featured_products.html" with products=featured_products %}
+  </section>
+    {% endif %}
+    {% endif %}
 
 </div>
 
