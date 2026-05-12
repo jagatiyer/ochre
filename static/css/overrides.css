@@ -2706,6 +2706,16 @@ Ensures banner sits above all layers and receives pointer events
   }
 }
 
+/* ============================================================
+   PRODUCTION CLOSEOUT: Surgical Hide of Shop Entry Points
+   ============================================================ */
+.nav-shop, 
+.cart-link, 
+.navbar a[href*="/shop/"], 
+footer a[href*="/shop/"] {
+  display: none !important;
+}
+
 /* ================================================
    PASSWORD FIELD WITH TOGGLE (FIXED ALIGNMENT)
    ================================================ */
